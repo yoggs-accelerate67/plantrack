@@ -27,6 +27,9 @@ public class Milestone {
     @JoinColumn(name = "plan_id", nullable = false)
     private Plan plan;
 
+    @OneToMany(mappedBy = "milestone", cascade = CascadeType.ALL, orphanRemoval = true)
+    private java.util.List<Initiative> initiatives = new java.util.ArrayList<>();
+
     public Milestone() {
         // Default values
         this.completionPercent = 0.0;
@@ -51,4 +54,7 @@ public class Milestone {
 
     public Plan getPlan() { return plan; }
     public void setPlan(Plan plan) { this.plan = plan; }
+
+    public java.util.List<Initiative> getInitiatives() { return initiatives; }
+    public void setInitiatives(java.util.List<Initiative> initiatives) { this.initiatives = initiatives; }
 }
