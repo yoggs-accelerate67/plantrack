@@ -32,6 +32,9 @@ public class Plan {
     @JoinColumn(name = "user_id", nullable = false) 
     private User user;
 
+    @OneToMany(mappedBy = "plan", cascade = CascadeType.ALL, orphanRemoval = true)
+    private java.util.List<Milestone> milestones = new java.util.ArrayList<>();
+
     public Plan() {}
 
     // --- Getters and Setters ---
@@ -58,4 +61,7 @@ public class Plan {
 
     public User getUser() { return user; }
     public void setUser(User user) { this.user = user; }
+
+    public java.util.List<Milestone> getMilestones() { return milestones; }
+    public void setMilestones(java.util.List<Milestone> milestones) { this.milestones = milestones; }
 }

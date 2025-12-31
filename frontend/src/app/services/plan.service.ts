@@ -1,0 +1,46 @@
+import { Injectable } from '@angular/core';
+import { HttpClient, HttpParams } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { Plan, PlanDetail, PageResponse } from '../models/plan.model';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class PlanService {
+  private apiUrl = 'http://localhost:8080/api';
+
+  constructor(private http: HttpClient) {}
+
+  getAllPlans(page: number = 0, size: number = 10, sort: string = 'planId'): Observable<PageResponse<Plan>> {
+    const params = new HttpParams()
+      .set('page', page.toString())
+      .set('size', size.toString())
+      .set('sort', sort);
+    return this.http.get<PageResponse<Plan>>(`${this.apiUrl}/plans`, { params });
+  }
+
+  getPlansByUser(userId: number, page: number = 0, size: number = 10): Observable<PageResponse<Plan>> {
+    const params = new HttpParams()
+      .set('page', page.toString())
+      .set('size', size.toString());
+    return this.http.get<PageResponse<Plan>>(`${this.apiUrl}/users/${userId}/plans`, { params });
+  }
+
+  getPlanDetail(planId: number): Observable<PlanDetail> {
+    return this.http.get<PlanDetail>(`${this.apiUrl}/plans/${planId}`);
+  }
+
+  createPlan(userId: number, plan: Plan): Observable<Plan> {
+    return this.http.post<Plan>(`${this.apiUrl}/users/${userId}/plans`, plan);
+  }
+
+  updatePlan(planId: number, plan: Plan): Observable<Plan> {
+    return this.http.put<Plan>(`${this.apiUrl}/plans/${planId}`, plan);
+  }
+
+  deletePlan(planId: number): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/plans/${planId}`);
+  }
+}
+
+
