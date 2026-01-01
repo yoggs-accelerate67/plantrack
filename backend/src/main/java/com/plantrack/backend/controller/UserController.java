@@ -31,6 +31,11 @@ public class UserController {
         return userService.getUserById(id);
     }
 
+    @PutMapping("/{id}")
+    public User updateUser(@PathVariable Long id, @Valid @RequestBody User userDetails) {
+        return userService.updateUser(id, userDetails);
+    }
+
     @DeleteMapping("/{id}")
     public void deleteUser(@PathVariable Long id) {
         // This now works because we added deleteUser() to the Service

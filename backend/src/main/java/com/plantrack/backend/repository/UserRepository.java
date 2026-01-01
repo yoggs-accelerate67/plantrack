@@ -8,5 +8,5 @@ import com.plantrack.backend.model.User;
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
     // Add this lookup method
-    User findByEmail(String email);
+    java.util.Optional<User> findByEmail(String email);
 }

@@ -1,5 +1,9 @@
 package com.plantrack.backend.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.plantrack.backend.config.LocalDateTimeDeserializer;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
@@ -16,6 +20,7 @@ public class Milestone {
     @NotBlank(message = "Title is required")
     private String title;
 
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     private LocalDateTime dueDate;
 
     // --- NEW FIELDS NEEDED FOR AUTOMATION ---
@@ -25,9 +30,11 @@ public class Milestone {
 
     @ManyToOne
     @JoinColumn(name = "plan_id", nullable = false)
+    @JsonBackReference // This side will not be serialized (prevents circular reference)
     private Plan plan;
 
-    @OneToMany(mappedBy = "milestone", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "milestone", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    @JsonManagedReference // This side will be serialized
     private java.util.List<Initiative> initiatives = new java.util.ArrayList<>();
 
     public Milestone() {

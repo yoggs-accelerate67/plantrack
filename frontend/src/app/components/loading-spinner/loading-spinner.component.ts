@@ -8,19 +8,20 @@ import { LoadingService } from '../../services/loading.service';
   imports: [CommonModule],
   template: `
     @if (loadingService.isLoading()) {
-      <div class="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center z-50">
-        <div class="bg-white rounded-lg p-8 shadow-xl">
-          <div class="flex flex-col items-center">
-            <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600"></div>
-            <p class="mt-4 text-slate-600 font-medium">Loading...</p>
+      <div class="fixed inset-0 bg-black bg-opacity-30 backdrop-blur-sm z-50 flex items-center justify-center">
+        <div class="bg-white rounded-2xl shadow-2xl p-8 flex flex-col items-center space-y-4">
+          <div class="relative w-16 h-16">
+            <div class="absolute inset-0 border-4 border-teal-200 rounded-full"></div>
+            <div class="absolute inset-0 border-4 border-teal-600 rounded-full border-t-transparent animate-spin"></div>
           </div>
+          <p class="text-slate-700 font-medium">Loading...</p>
         </div>
       </div>
     }
-  `
+  `,
+  styles: []
 })
 export class LoadingSpinnerComponent {
   constructor(public loadingService: LoadingService) {}
 }
-
 

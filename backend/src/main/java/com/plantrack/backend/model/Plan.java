@@ -1,5 +1,9 @@
 package com.plantrack.backend.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.plantrack.backend.config.LocalDateTimeDeserializer;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*; // Import for validation
 import java.time.LocalDateTime;
@@ -25,14 +29,19 @@ public class Plan {
     @Enumerated(EnumType.STRING)
     private PlanStatus status;
 
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     private LocalDateTime startDate;
+    
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     private LocalDateTime endDate;
 
     @ManyToOne 
-    @JoinColumn(name = "user_id", nullable = false) 
+    @JoinColumn(name = "user_id", nullable = false)
+    @JsonIgnoreProperties({"password", "plans"}) // Prevent password and circular references
     private User user;
 
-    @OneToMany(mappedBy = "plan", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "plan", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    @JsonManagedReference // This side will be serialized
     private java.util.List<Milestone> milestones = new java.util.ArrayList<>();
 
     public Plan() {}

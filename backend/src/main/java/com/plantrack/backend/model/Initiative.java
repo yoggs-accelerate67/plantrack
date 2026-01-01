@@ -1,5 +1,7 @@
 package com.plantrack.backend.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -30,11 +32,13 @@ public class Initiative {
     // --- RELATIONSHIP: Initiative belongs to a Milestone ---
     @ManyToOne
     @JoinColumn(name = "milestone_id", nullable = false)
+    @JsonBackReference // This side will not be serialized (prevents circular reference)
     private Milestone milestone;
 
     // --- RELATIONSHIP: Initiative is assigned to a User (Employee) ---
     @ManyToOne
     @JoinColumn(name = "assigned_user_id", nullable = false)
+    @JsonIgnoreProperties({"password", "plans"}) // Prevent password and circular references
     private User assignedUser;
 
     public Initiative() {}

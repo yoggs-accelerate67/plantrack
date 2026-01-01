@@ -21,12 +21,27 @@ export class AuthService {
   login(credentials: LoginRequest): Observable<LoginResponse> {
     return this.http.post<LoginResponse>(`${this.apiUrl}/auth/login`, credentials).pipe(
       tap(response => {
+        console.log('Login response received:', response);
+        
+        if (!response || !response.token) {
+          throw new Error('Invalid response from server');
+        }
+        
         localStorage.setItem(this.tokenKey, response.token);
-        localStorage.setItem('user_email', response.email);
         localStorage.setItem('user_role', response.role);
+        
+        // Extract email from token or use the one from credentials
+        const email = this.extractEmailFromToken(response.token) || credentials.email;
+        localStorage.setItem('user_email', email);
+        
         this.isAuthenticated.set(true);
-        this.currentUser.set(response.email);
-        this.userRole.set(response.role);
+        this.currentUser.set(email);
+        
+        // Remove ROLE_ prefix if present
+        const role = response.role.replace('ROLE_', '');
+        this.userRole.set(role);
+        
+        console.log('User authenticated:', { email, role });
       })
     );
   }
@@ -44,14 +59,52 @@ export class AuthService {
     return localStorage.getItem(this.tokenKey);
   }
 
+  isManager(): boolean {
+    const role = this.userRole();
+    return role === 'MANAGER' || role === 'ADMIN';
+  }
+
+  isAdmin(): boolean {
+    return this.userRole() === 'ADMIN';
+  }
+
+  isEmployee(): boolean {
+    return this.userRole() === 'EMPLOYEE';
+  }
+
   private checkAuthStatus(): void {
     const token = this.getToken();
     if (token) {
       this.isAuthenticated.set(true);
       this.currentUser.set(localStorage.getItem('user_email'));
-      this.userRole.set(localStorage.getItem('user_role'));
+      const role = localStorage.getItem('user_role');
+      this.userRole.set(role ? role.replace('ROLE_', '') : null);
+    }
+  }
+
+  getUserId(): number | null {
+    const token = this.getToken();
+    if (!token) return null;
+    
+    try {
+      const payload = JSON.parse(atob(token.split('.')[1]));
+      // Extract userId from token claims
+      if (payload.userId) {
+        return typeof payload.userId === 'number' ? payload.userId : parseInt(payload.userId, 10);
+      }
+      return null;
+    } catch {
+      return null;
+    }
+  }
+
+  private extractEmailFromToken(token: string): string | null {
+    try {
+      const payload = JSON.parse(atob(token.split('.')[1]));
+      return payload.sub || null;
+    } catch {
+      return null;
     }
   }
 }
-
 
