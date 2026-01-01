@@ -41,6 +41,10 @@ export class PlanService {
   deletePlan(planId: number): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/plans/${planId}`);
   }
-}
 
+  // Get plans with assigned initiatives for employees
+  getPlansWithAssignedInitiatives(userId: number): Observable<Plan[]> {
+    return this.http.get<Plan[]>(`${this.apiUrl}/users/${userId}/assigned-plans`);
+  }
+}
 

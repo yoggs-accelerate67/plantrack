@@ -52,6 +52,11 @@ export interface Initiative {
   milestoneTitle?: string;
   assignedUserId?: number;
   assignedUserName?: string;
+  assignedUser?: {
+    userId?: number;
+    name?: string;
+    email?: string;
+  };
 }
 
 export interface DashboardStats {
@@ -68,7 +73,7 @@ export interface LoginRequest {
 
 export interface LoginResponse {
   token: string;
-  email: string;
+  email?: string;
   role: string;
 }
 
@@ -79,5 +84,4 @@ export interface PageResponse<T> {
   size: number;
   number: number;
 }
-
 

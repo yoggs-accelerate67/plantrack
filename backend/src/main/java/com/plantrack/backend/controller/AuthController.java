@@ -55,20 +55,30 @@ public class AuthController {
         String email = loginData.get("email");
         String password = loginData.get("password");
 
+        if (email == null || password == null || email.isEmpty() || password.isEmpty()) {
+            throw new RuntimeException("Email and password are required");
+        }
+
         try {
             authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(email, password)
             );
+        } catch (org.springframework.security.authentication.BadCredentialsException e) {
+            throw new RuntimeException("Invalid email or password");
         } catch (Exception e) {
-            throw new RuntimeException("Invalid username or password");
+            throw new RuntimeException("Authentication failed: " + e.getMessage());
         }
 
         final UserDetails userDetails = userDetailsService.loadUserByUsername(email);
-        final String jwt = jwtUtil.generateToken(userDetails);
+        // Get the actual User entity to include userId in token
+        com.plantrack.backend.model.User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+        final String jwt = jwtUtil.generateToken(userDetails, user.getUserId());
 
         Map<String, String> response = new HashMap<>();
         response.put("token", jwt);
         response.put("role", userDetails.getAuthorities().iterator().next().getAuthority());
+        response.put("userId", String.valueOf(user.getUserId()));
         return response;
     }
 }
