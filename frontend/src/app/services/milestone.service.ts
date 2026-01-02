@@ -29,5 +29,35 @@ export class MilestoneService {
   deleteMilestone(milestoneId: number): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/milestones/${milestoneId}`);
   }
+
+  /**
+   * Get preview of cascade cancellation for a milestone
+   */
+  getCancelPreview(milestoneId: number): Observable<MilestoneCancelPreviewResponse> {
+    return this.http.get<MilestoneCancelPreviewResponse>(`${this.apiUrl}/milestones/${milestoneId}/cancel-preview`);
+  }
+
+  /**
+   * Cancel a milestone with cascade to all initiatives
+   */
+  cancelMilestoneWithCascade(milestoneId: number): Observable<MilestoneCancelResultResponse> {
+    return this.http.post<MilestoneCancelResultResponse>(`${this.apiUrl}/milestones/${milestoneId}/cancel`, {});
+  }
+}
+
+export interface MilestoneCancelPreviewResponse {
+  milestoneId?: number;
+  milestoneTitle?: string;
+  milestoneStatus?: string;
+  initiativesCount: number;
+  initiativeNames: string[];
+  isAlreadyCancelled: boolean;
+}
+
+export interface MilestoneCancelResultResponse {
+  milestoneId?: number;
+  milestoneTitle?: string;
+  initiativesAffected: number;
+  usersNotified: number;
 }
 

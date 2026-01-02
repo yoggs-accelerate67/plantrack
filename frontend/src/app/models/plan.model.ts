@@ -6,6 +6,20 @@ export enum PlanStatus {
   CANCELLED = 'CANCELLED'
 }
 
+export enum MilestoneStatus {
+  PLANNED = 'PLANNED',
+  IN_PROGRESS = 'IN_PROGRESS',
+  COMPLETED = 'COMPLETED',
+  CANCELLED = 'CANCELLED'
+}
+
+export enum InitiativeStatus {
+  PLANNED = 'PLANNED',
+  IN_PROGRESS = 'IN_PROGRESS',
+  COMPLETED = 'COMPLETED',
+  CANCELLED = 'CANCELLED'
+}
+
 export enum PlanPriority {
   LOW = 'LOW',
   MEDIUM = 'MEDIUM',
@@ -103,5 +117,25 @@ export interface PageResponse<T> {
   totalPages: number;
   size: number;
   number: number;
+}
+
+export interface Comment {
+  commentId?: number;
+  content: string;
+  initiativeId?: number;
+  author?: {
+    userId?: number;
+    name?: string;
+    email?: string;
+  };
+  authorId?: number;
+  createdAt?: string;
+  updatedAt?: string;
+  deleted?: boolean;
+  mentionedUsers?: Array<{
+    userId?: number;
+    name?: string;
+    email?: string;
+  }>;
 }
 

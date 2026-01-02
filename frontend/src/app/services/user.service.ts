@@ -24,6 +24,13 @@ export class UserService {
     return this.http.get<User[]>(`${this.apiUrl}/users`);
   }
 
+  /**
+   * Get users for @mention dropdown - accessible by all authenticated users
+   */
+  getUsersForMentions(): Observable<User[]> {
+    return this.http.get<User[]>(`${this.apiUrl}/users/mentions`);
+  }
+
   getUserById(userId: number): Observable<User> {
     return this.http.get<User>(`${this.apiUrl}/users/${userId}`);
   }

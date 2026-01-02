@@ -46,5 +46,38 @@ export class PlanService {
   getPlansWithAssignedInitiatives(userId: number): Observable<Plan[]> {
     return this.http.get<Plan[]>(`${this.apiUrl}/users/${userId}/assigned-plans`);
   }
+
+  /**
+   * Get preview of cascade cancellation for a plan
+   */
+  getCancelPreview(planId: number): Observable<CancelPreviewResponse> {
+    return this.http.get<CancelPreviewResponse>(`${this.apiUrl}/plans/${planId}/cancel-preview`);
+  }
+
+  /**
+   * Cancel a plan with cascade to all milestones and initiatives
+   */
+  cancelPlanWithCascade(planId: number): Observable<CancelResultResponse> {
+    return this.http.post<CancelResultResponse>(`${this.apiUrl}/plans/${planId}/cancel`, {});
+  }
+}
+
+export interface CancelPreviewResponse {
+  planId?: number;
+  planTitle?: string;
+  planStatus?: string;
+  milestonesCount: number;
+  initiativesCount: number;
+  milestoneNames: string[];
+  initiativeNames: string[];
+  isAlreadyCancelled: boolean;
+}
+
+export interface CancelResultResponse {
+  planId?: number;
+  planTitle?: string;
+  milestonesAffected: number;
+  initiativesAffected: number;
+  usersNotified: number;
 }
 

@@ -78,6 +78,7 @@ import { NotificationCenterComponent } from '../notification-center/notification
                 <option value="PLANNED">Planned</option>
                 <option value="IN_PROGRESS">In Progress</option>
                 <option value="COMPLETED">Completed</option>
+                <option value="CANCELLED">Cancelled</option>
               </select>
               
               <!-- Priority Filter -->
@@ -158,11 +159,11 @@ import { NotificationCenterComponent } from '../notification-center/notification
         <div class="space-y-4">
           @if (filteredInitiatives().length === 0) {
             <div class="card text-center py-12">
-              <svg class="w-16 h-16 mx-auto text-slate-300 dark:text-slate-600 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg class="w-16 h-16 mx-auto text-slate-300 dark:text-slate-500 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
               </svg>
               <h3 class="text-lg font-semibold text-slate-900 dark:text-slate-100 mb-2">No initiatives found</h3>
-              <p class="text-slate-600 dark:text-slate-400">Try adjusting your filters or check back later.</p>
+              <p class="text-slate-600 dark:text-slate-300">Try adjusting your filters or check back later.</p>
             </div>
           } @else {
             @for (initiative of filteredInitiatives(); track initiative.initiativeId) {
@@ -175,9 +176,10 @@ import { NotificationCenterComponent } from '../notification-center/notification
                       <div class="flex-shrink-0 mt-1">
                         <div class="w-3 h-3 rounded-full"
                           [ngClass]="{
-                            'bg-green-500': initiative.status === 'COMPLETED',
-                            'bg-amber-500': initiative.status === 'IN_PROGRESS',
-                            'bg-slate-400': initiative.status === 'PLANNED'
+                            'bg-green-500 dark:bg-green-400': initiative.status === 'COMPLETED',
+                            'bg-amber-500 dark:bg-amber-400': initiative.status === 'IN_PROGRESS',
+                            'bg-slate-400 dark:bg-slate-500': initiative.status === 'PLANNED',
+                            'bg-red-500 dark:bg-red-400': initiative.status === 'CANCELLED'
                           }"
                         ></div>
                       </div>
@@ -186,6 +188,8 @@ import { NotificationCenterComponent } from '../notification-center/notification
                       <div class="flex-1 min-w-0">
                         <div class="flex items-center space-x-3 mb-2">
                           <h3 class="text-lg font-semibold text-slate-900 dark:text-slate-100 hover:text-teal-600 dark:hover:text-teal-400 cursor-pointer"
+                            [class.line-through]="initiative.status === 'CANCELLED'"
+                            [class.text-slate-400]="initiative.status === 'CANCELLED'"
                             (click)="viewPlan(initiative)">
                             {{ initiative.title }}
                           </h3>
@@ -204,30 +208,33 @@ import { NotificationCenterComponent } from '../notification-center/notification
                         </div>
 
                         @if (initiative.description) {
-                          <p class="text-sm text-slate-600 dark:text-slate-400 mb-3 line-clamp-2">
+                          <p class="text-sm text-slate-600 dark:text-slate-300 mb-3 line-clamp-2"
+                            [class.line-through]="initiative.status === 'CANCELLED'"
+                            [class.text-slate-400]="initiative.status === 'CANCELLED'"
+                            [class.dark:text-slate-500]="initiative.status === 'CANCELLED'">
                             {{ initiative.description }}
                           </p>
                         }
 
                         <!-- Metadata -->
-                        <div class="flex flex-wrap items-center gap-4 text-xs text-slate-500 dark:text-slate-400">
+                        <div class="flex flex-wrap items-center gap-4 text-xs text-slate-500 dark:text-slate-300">
                           <!-- Plan Info -->
                           @if (initiative.planTitle) {
                             <div class="flex items-center space-x-1">
-                              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <svg class="w-4 h-4 text-slate-400 dark:text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                               </svg>
-                              <span>{{ initiative.planTitle }}</span>
+                              <span class="text-slate-600 dark:text-slate-300">{{ initiative.planTitle }}</span>
                             </div>
                           }
 
                           <!-- Milestone Info -->
                           @if (initiative.milestoneTitle) {
                             <div class="flex items-center space-x-1">
-                              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <svg class="w-4 h-4 text-slate-400 dark:text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
                               </svg>
-                              <span>{{ initiative.milestoneTitle }}</span>
+                              <span class="text-slate-600 dark:text-slate-300">{{ initiative.milestoneTitle }}</span>
                             </div>
                           }
                         </div>
@@ -239,27 +246,30 @@ import { NotificationCenterComponent } from '../notification-center/notification
                   <div class="flex-shrink-0 ml-6">
                     <div class="flex flex-col items-end space-y-3">
                       <!-- Status Dropdown -->
-                      <select
-                        [value]="initiative.status"
-                        (change)="updateStatus(initiative, $event)"
-                        class="px-4 py-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 text-sm font-medium focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition-all"
-                        [ngClass]="{
-                          'border-green-300 dark:border-green-700 bg-green-50 dark:bg-green-900/20 text-green-700 dark:text-green-400': initiative.status === 'COMPLETED',
-                          'border-amber-300 dark:border-amber-700 bg-amber-50 dark:bg-amber-900/20 text-amber-700 dark:text-amber-400': initiative.status === 'IN_PROGRESS',
-                          'border-slate-300 dark:border-slate-600': initiative.status === 'PLANNED'
-                        }"
-                      >
-                        <option value="PLANNED">Planned</option>
-                        <option value="IN_PROGRESS">In Progress</option>
-                        <option value="COMPLETED">Completed</option>
-                      </select>
+                      @if (initiative.status !== 'CANCELLED') {
+                        <select
+                          [value]="initiative.status"
+                          (change)="updateStatus(initiative, $event)"
+                          class="px-4 py-2 rounded-lg border-2 text-sm font-medium focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition-all bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100"
+                          [ngClass]="{
+                            'border-green-500 dark:border-green-500': initiative.status === 'COMPLETED',
+                            'border-amber-500 dark:border-amber-500': initiative.status === 'IN_PROGRESS',
+                            'border-slate-300 dark:border-slate-600': initiative.status === 'PLANNED'
+                          }"
+                        >
+                          <option value="PLANNED">Planned</option>
+                          <option value="IN_PROGRESS">In Progress</option>
+                          <option value="COMPLETED">Completed</option>
+                        </select>
+                      }
 
                       <!-- Status Badge (Visual) -->
-                      <div class="px-3 py-1 rounded-full text-xs font-medium"
+                      <div class="px-3 py-1 rounded-full text-xs font-semibold"
                         [ngClass]="{
-                          'badge-success': initiative.status === 'COMPLETED',
-                          'badge-warning': initiative.status === 'IN_PROGRESS',
-                          'badge-neutral': initiative.status === 'PLANNED'
+                          'bg-green-100 dark:bg-green-900/40 text-green-700 dark:text-green-300 border border-green-200 dark:border-green-800': initiative.status === 'COMPLETED',
+                          'bg-amber-100 dark:bg-amber-900/40 text-amber-700 dark:text-amber-300 border border-amber-200 dark:border-amber-800': initiative.status === 'IN_PROGRESS',
+                          'bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-600': initiative.status === 'PLANNED',
+                          'bg-red-100 dark:bg-red-900/40 text-red-700 dark:text-red-300 border border-red-200 dark:border-red-800': initiative.status === 'CANCELLED'
                         }">
                         {{ initiative.status }}
                       </div>
@@ -279,6 +289,23 @@ import { NotificationCenterComponent } from '../notification-center/notification
       -webkit-line-clamp: 2;
       -webkit-box-orient: vertical;
       overflow: hidden;
+    }
+    .card {
+      background: white;
+      border: 1px solid rgb(226 232 240);
+      border-radius: 0.75rem;
+      padding: 1.5rem;
+      box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+    }
+    @media (prefers-color-scheme: dark) {
+      .card {
+        background: rgb(30 41 59);
+        border-color: rgb(51 65 85);
+      }
+    }
+    .dark .card {
+      background: rgb(30 41 59);
+      border-color: rgb(51 65 85);
     }
   `]
 })
@@ -307,7 +334,7 @@ export class MyInitiativesComponent implements OnInit {
     // Sort by priority (HIGH first) then by status
     return filtered.sort((a, b) => {
       const priorityOrder = { 'HIGH': 3, 'MEDIUM': 2, 'LOW': 1 };
-      const statusOrder = { 'IN_PROGRESS': 3, 'PLANNED': 2, 'COMPLETED': 1 };
+      const statusOrder = { 'IN_PROGRESS': 3, 'PLANNED': 2, 'COMPLETED': 1, 'CANCELLED': 0 };
       
       const priorityDiff = (priorityOrder[b.planPriority as keyof typeof priorityOrder] || 0) - 
                           (priorityOrder[a.planPriority as keyof typeof priorityOrder] || 0);
