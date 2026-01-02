@@ -11,8 +11,10 @@ export class InitiativeService {
 
   constructor(private http: HttpClient) {}
 
-  createInitiative(milestoneId: number, assignedUserId: number, initiative: Initiative): Observable<Initiative> {
-    const params = new HttpParams().set('userId', assignedUserId.toString());
+  createInitiative(milestoneId: number, assignedUserIds: number[], initiative: Initiative): Observable<Initiative> {
+    // Send comma-separated user IDs as query parameter
+    const userIdsParam = assignedUserIds.join(',');
+    const params = new HttpParams().set('assignedUserIds', userIdsParam);
     return this.http.post<Initiative>(`${this.apiUrl}/milestones/${milestoneId}/initiatives`, initiative, { params });
   }
 

@@ -268,7 +268,26 @@ import { ViewChild } from '@angular/core';
                                       <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                                       </svg>
-                                      <span>Assigned: <strong class="text-slate-700 dark:text-slate-300">{{ initiative.assignedUserName || (initiative.assignedUser?.name) || 'Unassigned' }}</strong></span>
+                                      <span>Assigned: 
+                                        @if (initiative.assignedUsers && initiative.assignedUsers.length > 0) {
+                                          <strong class="text-slate-700 dark:text-slate-300">
+                                            @if (initiative.assignedUsers.length === 1) {
+                                              {{ initiative.assignedUsers[0].name || 'Unknown' }}
+                                            } @else {
+                                              {{ initiative.assignedUsers.length }} users
+                                            }
+                                          </strong>
+                                          @if (initiative.assignedUsers.length > 1) {
+                                            <span class="ml-1 text-slate-400" [title]="getAssignedUsersNames(initiative)">
+                                              ({{ getAssignedUsersNames(initiative) }})
+                                            </span>
+                                          }
+                                        } @else if (initiative.assignedUserName || initiative.assignedUser?.name) {
+                                          <strong class="text-slate-700 dark:text-slate-300">{{ initiative.assignedUserName || initiative.assignedUser?.name }}</strong>
+                                        } @else {
+                                          <strong class="text-slate-700 dark:text-slate-300">Unassigned</strong>
+                                        }
+                                      </span>
                                     </span>
                                     <!-- Completion Status Badge -->
                                     <span
@@ -417,7 +436,36 @@ import { ViewChild } from '@angular/core';
                   ></textarea>
                 </div>
                 <div class="relative">
-                  <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Assigned User *</label>
+                  <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">
+                    Assigned Users *
+                    @if (assignedUserIds().length > 0) {
+                      <span class="ml-2 px-2 py-0.5 bg-teal-100 dark:bg-teal-900/30 text-teal-700 dark:text-teal-400 rounded-full text-xs font-medium">
+                        {{ assignedUserIds().length }} selected
+                      </span>
+                    }
+                  </label>
+                  
+                  <!-- Selected Users Pills -->
+                  @if (assignedUserIds().length > 0) {
+                    <div class="flex flex-wrap gap-2 mb-2 p-2 bg-slate-50 dark:bg-slate-700/50 rounded-lg border border-slate-200 dark:border-slate-600">
+                      @for (userId of assignedUserIds(); track userId) {
+                        <div class="flex items-center space-x-1 px-3 py-1.5 bg-teal-100 dark:bg-teal-900/30 text-teal-700 dark:text-teal-400 rounded-full text-sm">
+                          <span>{{ getSelectedUserName(userId) }}</span>
+                          <button
+                            type="button"
+                            (click)="removeUser(userId); $event.stopPropagation()"
+                            class="ml-1 hover:text-teal-900 dark:hover:text-teal-300 transition-colors"
+                            title="Remove user"
+                          >
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                          </button>
+                        </div>
+                      }
+                    </div>
+                  }
+                  
                   <div class="relative">
                     <button
                       type="button"
@@ -425,11 +473,7 @@ import { ViewChild } from '@angular/core';
                       class="w-full px-4 py-3 border-2 border-slate-300 dark:border-slate-600 rounded-xl focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition-all bg-white dark:bg-slate-700 text-slate-900 dark:text-slate-100 text-left flex items-center justify-between hover:border-teal-400 dark:hover:border-teal-500"
                     >
                       <span class="truncate">
-                        @if (assignedUserId() && assignedUserId() !== 0) {
-                          {{ getSelectedUserName(assignedUserId()!) }}
-                        } @else {
-                          <span class="text-slate-400">Select a user</span>
-                        }
+                        <span class="text-slate-400">Select users</span>
                       </span>
                       <svg class="w-5 h-5 text-slate-400 transition-transform duration-200" [class.rotate-180]="showUserDropdown()" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
@@ -437,8 +481,8 @@ import { ViewChild } from '@angular/core';
                     </button>
                     
                     @if (showUserDropdown()) {
-                      <div class="absolute z-50 w-full mt-2 bg-white rounded-xl shadow-2xl border-2 border-slate-200 overflow-hidden animate-in slide-in-from-top-2" (click)="$event.stopPropagation()">
-                        <div class="p-3 border-b border-slate-200 sticky top-0 bg-white">
+                      <div class="absolute z-50 w-full mt-2 bg-white dark:bg-slate-800 rounded-xl shadow-2xl border-2 border-slate-200 dark:border-slate-700 overflow-hidden animate-in slide-in-from-top-2" (click)="$event.stopPropagation()">
+                        <div class="p-3 border-b border-slate-200 dark:border-slate-700 sticky top-0 bg-white dark:bg-slate-800">
                           <div class="relative">
                             <svg class="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
@@ -481,18 +525,27 @@ import { ViewChild } from '@angular/core';
                             @for (user of filteredUsers(); track user.userId) {
                               <button
                                 type="button"
-                                (click)="selectUser(user.userId!); showUserDropdown.set(false); $event.stopPropagation()"
-                                class="w-full px-4 py-3 text-left hover:bg-teal-50 active:bg-teal-100 transition-colors border-b border-slate-100 last:border-b-0 flex items-center space-x-3 group focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-inset"
+                                (click)="toggleUser(user.userId!); $event.stopPropagation()"
+                                class="w-full px-4 py-3 text-left hover:bg-teal-50 dark:hover:bg-teal-900/30 active:bg-teal-100 dark:active:bg-teal-900/50 transition-colors border-b border-slate-100 dark:border-slate-700 last:border-b-0 flex items-center space-x-3 group focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-inset"
                               >
+                                <div class="flex items-center">
+                                  <input
+                                    type="checkbox"
+                                    [checked]="isUserSelected(user.userId!)"
+                                    (change)="toggleUser(user.userId!)"
+                                    class="w-4 h-4 text-teal-600 border-slate-300 rounded focus:ring-teal-500"
+                                    (click)="$event.stopPropagation()"
+                                  />
+                                </div>
                                 <div class="w-8 h-8 bg-gradient-to-br from-teal-500 to-teal-600 rounded-full flex items-center justify-center text-white font-semibold text-xs flex-shrink-0">
                                   {{ (user.name && user.name.length > 0) ? user.name.charAt(0).toUpperCase() : 'U' }}
                                 </div>
                                 <div class="flex-1 min-w-0">
-                                  <div class="font-medium text-slate-900 truncate">{{ user.name }}</div>
-                                  <div class="text-xs text-slate-500 truncate">{{ user.email }}</div>
+                                  <div class="font-medium text-slate-900 dark:text-slate-100 truncate">{{ user.name }}</div>
+                                  <div class="text-xs text-slate-500 dark:text-slate-400 truncate">{{ user.email }}</div>
                                 </div>
-                                @if (assignedUserId() === user.userId) {
-                                  <svg class="w-5 h-5 text-teal-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                @if (isUserSelected(user.userId!)) {
+                                  <svg class="w-5 h-5 text-teal-600 dark:text-teal-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
                                   </svg>
                                 }
@@ -554,7 +607,36 @@ import { ViewChild } from '@angular/core';
                   ></textarea>
                 </div>
                 <div class="relative">
-                  <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Assigned User *</label>
+                  <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">
+                    Assigned Users *
+                    @if (editedAssignedUserIds().length > 0) {
+                      <span class="ml-2 px-2 py-0.5 bg-teal-100 dark:bg-teal-900/30 text-teal-700 dark:text-teal-400 rounded-full text-xs font-medium">
+                        {{ editedAssignedUserIds().length }} selected
+                      </span>
+                    }
+                  </label>
+                  
+                  <!-- Selected Users Pills -->
+                  @if (editedAssignedUserIds().length > 0) {
+                    <div class="flex flex-wrap gap-2 mb-2 p-2 bg-slate-50 dark:bg-slate-700/50 rounded-lg border border-slate-200 dark:border-slate-600">
+                      @for (userId of editedAssignedUserIds(); track userId) {
+                        <div class="flex items-center space-x-1 px-3 py-1.5 bg-teal-100 dark:bg-teal-900/30 text-teal-700 dark:text-teal-400 rounded-full text-sm">
+                          <span>{{ getSelectedUserName(userId) }}</span>
+                          <button
+                            type="button"
+                            (click)="removeEditUser(userId); $event.stopPropagation()"
+                            class="ml-1 hover:text-teal-900 dark:hover:text-teal-300 transition-colors"
+                            title="Remove user"
+                          >
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                          </button>
+                        </div>
+                      }
+                    </div>
+                  }
+                  
                   <div class="relative">
                     <button
                       type="button"
@@ -562,11 +644,7 @@ import { ViewChild } from '@angular/core';
                       class="w-full px-4 py-3 border-2 border-slate-300 dark:border-slate-600 rounded-xl focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition-all bg-white dark:bg-slate-700 text-slate-900 dark:text-slate-100 text-left flex items-center justify-between hover:border-teal-400 dark:hover:border-teal-500"
                     >
                       <span class="truncate">
-                        @if (editedInitiative.assignedUserId) {
-                          {{ getSelectedUserName(editedInitiative.assignedUserId) }}
-                        } @else {
-                          <span class="text-slate-400">Select a user</span>
-                        }
+                        <span class="text-slate-400">Select users</span>
                       </span>
                       <svg class="w-5 h-5 text-slate-400 transition-transform duration-200" [class.rotate-180]="showEditUserDropdown()" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
@@ -574,8 +652,8 @@ import { ViewChild } from '@angular/core';
                     </button>
                     
                     @if (showEditUserDropdown()) {
-                      <div class="absolute z-50 w-full mt-2 bg-white rounded-xl shadow-2xl border-2 border-slate-200 overflow-hidden animate-in slide-in-from-top-2" (click)="$event.stopPropagation()">
-                        <div class="p-3 border-b border-slate-200 sticky top-0 bg-white">
+                      <div class="absolute z-50 w-full mt-2 bg-white dark:bg-slate-800 rounded-xl shadow-2xl border-2 border-slate-200 dark:border-slate-700 overflow-hidden animate-in slide-in-from-top-2" (click)="$event.stopPropagation()">
+                        <div class="p-3 border-b border-slate-200 dark:border-slate-700 sticky top-0 bg-white dark:bg-slate-800">
                           <div class="relative">
                             <svg class="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
@@ -586,7 +664,6 @@ import { ViewChild } from '@angular/core';
                               (input)="onEditUserSearchInput($event)"
                               (click)="$event.stopPropagation()"
                               (keydown.escape)="showEditUserDropdown.set(false)"
-                              (keydown.arrowdown)="$event.preventDefault(); focusFirstEditUser()"
                               placeholder="Type to search (e.g., alok, yog)..."
                               class="w-full pl-10 pr-4 py-2.5 border-2 border-slate-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition-all bg-white dark:bg-slate-700 text-slate-900 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-400"
                               autofocus
@@ -619,19 +696,27 @@ import { ViewChild } from '@angular/core';
                             @for (user of filteredUsersForEdit(); track user.userId) {
                               <button
                                 type="button"
-                                (click)="selectEditUser(user.userId!); showEditUserDropdown.set(false); $event.stopPropagation()"
-                                (keydown.enter)="selectEditUser(user.userId!); showEditUserDropdown.set(false); $event.stopPropagation()"
-                                class="w-full px-4 py-3 text-left hover:bg-teal-50 active:bg-teal-100 transition-colors border-b border-slate-100 last:border-b-0 flex items-center space-x-3 group focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-inset"
+                                (click)="toggleEditUser(user.userId!); $event.stopPropagation()"
+                                class="w-full px-4 py-3 text-left hover:bg-teal-50 dark:hover:bg-teal-900/30 active:bg-teal-100 dark:active:bg-teal-900/50 transition-colors border-b border-slate-100 dark:border-slate-700 last:border-b-0 flex items-center space-x-3 group focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-inset"
                               >
+                                <div class="flex items-center">
+                                  <input
+                                    type="checkbox"
+                                    [checked]="isEditUserSelected(user.userId!)"
+                                    (change)="toggleEditUser(user.userId!)"
+                                    class="w-4 h-4 text-teal-600 border-slate-300 rounded focus:ring-teal-500"
+                                    (click)="$event.stopPropagation()"
+                                  />
+                                </div>
                                 <div class="w-8 h-8 bg-gradient-to-br from-teal-500 to-teal-600 rounded-full flex items-center justify-center text-white font-semibold text-xs flex-shrink-0">
                                   {{ (user.name && user.name.length > 0) ? user.name.charAt(0).toUpperCase() : 'U' }}
                                 </div>
                                 <div class="flex-1 min-w-0">
-                                  <div class="font-medium text-slate-900 truncate">{{ user.name }}</div>
-                                  <div class="text-xs text-slate-500 truncate">{{ user.email }}</div>
+                                  <div class="font-medium text-slate-900 dark:text-slate-100 truncate">{{ user.name }}</div>
+                                  <div class="text-xs text-slate-500 dark:text-slate-400 truncate">{{ user.email }}</div>
                                 </div>
-                                @if (editedInitiative.assignedUserId === user.userId) {
-                                  <svg class="w-5 h-5 text-teal-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                @if (isEditUserSelected(user.userId!)) {
+                                  <svg class="w-5 h-5 text-teal-600 dark:text-teal-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
                                   </svg>
                                 }
@@ -827,7 +912,8 @@ export class PlanDetailComponent implements OnInit {
   showEditInitiativeModal = signal(false);
   showEditPlanModal = signal(false);
   selectedMilestoneId = signal<number | null>(null);
-  assignedUserId = signal<number | undefined>(undefined);
+  assignedUserIds = signal<number[]>([]);
+  editedAssignedUserIds = signal<number[]>([]);
   editingInitiative = signal<Initiative | null>(null);
   editingMilestone = signal<MilestoneDetail | null>(null);
   users = signal<User[]>([]);
@@ -886,7 +972,7 @@ export class PlanDetailComponent implements OnInit {
     title: '',
     description: '',
     status: 'PLANNED',
-    assignedUserId: undefined
+    assignedUserIds: []
   };
 
   editedPlan: Partial<Plan> = {
@@ -956,15 +1042,22 @@ export class PlanDetailComponent implements OnInit {
     this.loadingService.show();
     this.planService.getPlanDetail(planId).subscribe({
       next: (data) => {
-        // Map assigned user names for initiatives
+        // Map assigned users for initiatives (support both single and multiple)
         if (data.milestones) {
           data.milestones = data.milestones.map((milestone: any) => {
             if (milestone.initiatives) {
               milestone.initiatives = milestone.initiatives.map((initiative: any) => {
-                // Map assignedUser object to assignedUserName and assignedUserId
-                if (initiative.assignedUser) {
+                // Handle multiple assignees (new format)
+                if (initiative.assignedUsers && Array.isArray(initiative.assignedUsers)) {
+                  initiative.assignedUserIds = initiative.assignedUsers.map((u: any) => u.userId);
+                  initiative.assignedUserNames = initiative.assignedUsers.map((u: any) => u.name || 'Unknown');
+                }
+                // Handle single assignee (legacy format for backward compatibility)
+                else if (initiative.assignedUser) {
                   initiative.assignedUserName = initiative.assignedUser.name || 'Unknown';
                   initiative.assignedUserId = initiative.assignedUser.userId;
+                  initiative.assignedUserIds = [initiative.assignedUser.userId];
+                  initiative.assignedUserNames = [initiative.assignedUser.name || 'Unknown'];
                 }
                 return initiative;
               });
@@ -1029,7 +1122,11 @@ export class PlanDetailComponent implements OnInit {
         return false;
       }
       // Check if the initiative is assigned to the current user
-      // Handle both assignedUserId (number) and assignedUser.userId cases
+      // Handle multiple assignees (new format)
+      if (initiative.assignedUsers && Array.isArray(initiative.assignedUsers) && initiative.assignedUsers.length > 0) {
+        return initiative.assignedUsers.some(user => user.userId === currentUserId);
+      }
+      // Handle single assignee (legacy format for backward compatibility)
       const assignedUserId = initiative.assignedUserId || initiative.assignedUser?.userId;
       return assignedUserId === currentUserId;
     }
@@ -1075,15 +1172,15 @@ export class PlanDetailComponent implements OnInit {
       return;
     }
 
-    const userId = this.assignedUserId();
-    if (!userId || userId === 0) {
-      this.toastService.showError('Please select an assigned user');
+    const userIds = this.assignedUserIds();
+    if (!userIds || userIds.length === 0) {
+      this.toastService.showError('Please select at least one assigned user');
       return;
     }
 
     const milestoneId = this.selectedMilestoneId()!;
     this.loadingService.show();
-    this.initiativeService.createInitiative(milestoneId, userId, this.newInitiative as Initiative).subscribe({
+    this.initiativeService.createInitiative(milestoneId, userIds, this.newInitiative as Initiative).subscribe({
       next: () => {
         this.loadingService.hide();
         this.toastService.showSuccess('Initiative created successfully!');
@@ -1111,10 +1208,15 @@ export class PlanDetailComponent implements OnInit {
     if (this.authService.isManager() || this.authService.isAdmin()) {
       updated.title = initiative.title;
       updated.description = initiative.description;
-      if (initiative.assignedUserId || initiative.assignedUser?.userId) {
-        updated.assignedUser = {
+      // Handle multiple assignees (new format)
+      if (initiative.assignedUsers && Array.isArray(initiative.assignedUsers) && initiative.assignedUsers.length > 0) {
+        updated.assignedUsers = initiative.assignedUsers;
+      } 
+      // Handle single assignee (legacy format for backward compatibility)
+      else if (initiative.assignedUserId || initiative.assignedUser?.userId) {
+        updated.assignedUsers = [{
           userId: initiative.assignedUserId || initiative.assignedUser?.userId
-        };
+        }];
       }
     }
     
@@ -1271,12 +1373,26 @@ export class PlanDetailComponent implements OnInit {
   editInitiative(initiative: Initiative, event: Event): void {
     event.stopPropagation();
     this.editingInitiative.set(initiative);
+    
+    // Extract assigned user IDs from multiple assignees (new format) or single assignee (legacy)
+    let assignedUserIds: number[] = [];
+    if (initiative.assignedUsers && Array.isArray(initiative.assignedUsers) && initiative.assignedUsers.length > 0) {
+      assignedUserIds = initiative.assignedUsers.map(u => u.userId!).filter(id => id !== undefined);
+    } else if (initiative.assignedUserId) {
+      assignedUserIds = [initiative.assignedUserId];
+    } else if (initiative.assignedUser?.userId) {
+      assignedUserIds = [initiative.assignedUser.userId];
+    }
+    
     this.editedInitiative = {
       title: initiative.title || '',
       description: initiative.description || '',
       status: initiative.status || 'PLANNED',
-      assignedUserId: initiative.assignedUserId || undefined
+      assignedUserIds: assignedUserIds
     };
+    
+    // Set the assigned user IDs signal for the multi-select UI
+    this.editedAssignedUserIds.set(assignedUserIds);
     this.showEditInitiativeModal.set(true);
   }
 
@@ -1292,19 +1408,22 @@ export class PlanDetailComponent implements OnInit {
       return;
     }
 
-    if (!this.editedInitiative.assignedUserId) {
-      this.toastService.showError('Please select an assigned user');
+    const userIds = this.editedAssignedUserIds();
+    if (!userIds || userIds.length === 0) {
+      this.toastService.showError('Please select at least one assigned user');
       return;
     }
 
     this.loadingService.show();
+    
+    // Convert user IDs to assignedUsers array format expected by backend
+    const assignedUsers = userIds.map(userId => ({ userId: userId }));
+    
     const updatedInitiative: any = {
       title: this.editedInitiative.title!,
       description: this.editedInitiative.description || '',
       status: this.editedInitiative.status || 'PLANNED',
-      assignedUser: {
-        userId: this.editedInitiative.assignedUserId
-      }
+      assignedUsers: assignedUsers
     };
 
     this.initiativeService.updateInitiative(initiative.initiativeId, updatedInitiative).subscribe({
@@ -1329,11 +1448,12 @@ export class PlanDetailComponent implements OnInit {
     this.showEditUserDropdown.set(false);
     this.editingInitiative.set(null);
     this.editUserSearchQuery.set('');
+    this.editedAssignedUserIds.set([]);
     this.editedInitiative = {
       title: '',
       description: '',
       status: 'PLANNED',
-      assignedUserId: undefined
+      assignedUserIds: []
     };
   }
 
@@ -1369,7 +1489,9 @@ export class PlanDetailComponent implements OnInit {
   closeAddInitiativeModal(): void {
     this.showAddInitiativeModal.set(false);
     this.selectedMilestoneId.set(null);
-    this.assignedUserId.set(undefined);
+    this.assignedUserIds.set([]);
+    this.userSearchQuery.set('');
+    this.showUserDropdown.set(false);
     this.newInitiative = {
       title: '',
       description: '',
@@ -1489,19 +1611,65 @@ export class PlanDetailComponent implements OnInit {
 
   getSelectedUserName(userId: number): string {
     const user = this.users().find(u => u.userId === userId);
-    return user ? `${user.name} (${user.email})` : 'Unknown';
+    return user ? user.name : 'Unknown';
   }
 
-  selectUser(userId: number): void {
-    this.assignedUserId.set(userId);
-    this.userSearchQuery.set('');
-    this.showUserDropdown.set(false);
+  getAssignedUsersNames(initiative: Initiative): string {
+    if (!initiative.assignedUsers || initiative.assignedUsers.length === 0) {
+      return 'Unassigned';
+    }
+    return initiative.assignedUsers
+      .map(u => u.name || 'Unknown')
+      .filter(name => name !== 'Unknown')
+      .join(', ');
   }
 
-  selectEditUser(userId: number): void {
-    this.editedInitiative.assignedUserId = userId;
-    this.editUserSearchQuery.set('');
-    this.showEditUserDropdown.set(false);
+  isUserSelected(userId: number): boolean {
+    return this.assignedUserIds().includes(userId);
+  }
+
+  toggleUser(userId: number): void {
+    const current = [...this.assignedUserIds()];
+    const index = current.indexOf(userId);
+    if (index > -1) {
+      current.splice(index, 1);
+    } else {
+      current.push(userId);
+    }
+    this.assignedUserIds.set(current);
+  }
+
+  removeUser(userId: number): void {
+    const current = [...this.assignedUserIds()];
+    const index = current.indexOf(userId);
+    if (index > -1) {
+      current.splice(index, 1);
+      this.assignedUserIds.set(current);
+    }
+  }
+
+  toggleEditUser(userId: number): void {
+    const current = [...this.editedAssignedUserIds()];
+    const index = current.indexOf(userId);
+    if (index > -1) {
+      current.splice(index, 1);
+    } else {
+      current.push(userId);
+    }
+    this.editedAssignedUserIds.set(current);
+  }
+
+  isEditUserSelected(userId: number): boolean {
+    return this.editedAssignedUserIds().includes(userId);
+  }
+
+  removeEditUser(userId: number): void {
+    const current = [...this.editedAssignedUserIds()];
+    const index = current.indexOf(userId);
+    if (index > -1) {
+      current.splice(index, 1);
+      this.editedAssignedUserIds.set(current);
+    }
   }
 
   focusFirstUser(): void {

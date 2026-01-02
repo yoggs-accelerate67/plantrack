@@ -1,6 +1,8 @@
 package com.plantrack.backend.controller;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,9 +26,24 @@ public class InitiativeController {
 
     @PostMapping("/milestones/{milestoneId}/initiatives")
     public Initiative createInitiative(@PathVariable Long milestoneId, 
-                                       @RequestParam Long userId,
+                                       @RequestParam(required = false) String assignedUserIds,
                                        @RequestBody Initiative initiative) {
-        return initiativeService.createInitiative(milestoneId, userId, initiative);
+        // Support both new format (comma-separated IDs) and legacy format (single userId)
+        List<Long> userIds;
+        if (assignedUserIds != null && !assignedUserIds.trim().isEmpty()) {
+            // Parse comma-separated user IDs
+            userIds = Arrays.stream(assignedUserIds.split(","))
+                    .map(String::trim)
+                    .filter(s -> !s.isEmpty())
+                    .map(Long::parseLong)
+                    .collect(Collectors.toList());
+        } else {
+            // Fallback: try to get from request body if provided
+            // This maintains backward compatibility
+            throw new RuntimeException("assignedUserIds parameter is required. Provide comma-separated user IDs (e.g., ?assignedUserIds=1,2,3)");
+        }
+        
+        return initiativeService.createInitiative(milestoneId, userIds, initiative);
     }
 
     @GetMapping("/milestones/{milestoneId}/initiatives")

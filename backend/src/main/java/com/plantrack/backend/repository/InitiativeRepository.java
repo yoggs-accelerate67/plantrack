@@ -14,7 +14,7 @@ public interface InitiativeRepository extends JpaRepository<Initiative, Long> {
     @Query("SELECT DISTINCT i FROM Initiative i " +
            "LEFT JOIN FETCH i.milestone m " +
            "LEFT JOIN FETCH m.plan p " +
-           "LEFT JOIN FETCH i.assignedUser " +
-           "WHERE i.assignedUser.userId = :userId")
+           "LEFT JOIN FETCH i.assignedUsers u " +
+           "WHERE u.userId = :userId")
     List<Initiative> findByAssignedUserUserId(@Param("userId") Long userId);
 }

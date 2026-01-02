@@ -53,6 +53,7 @@ export interface Initiative {
   planId?: number;
   planTitle?: string;
   planPriority?: PlanPriority;
+  // Legacy single assignee fields (for backward compatibility)
   assignedUserId?: number;
   assignedUserName?: string;
   assignedUser?: {
@@ -60,6 +61,13 @@ export interface Initiative {
     name?: string;
     email?: string;
   };
+  // New multiple assignees fields
+  assignedUserIds?: number[];
+  assignedUsers?: Array<{
+    userId?: number;
+    name?: string;
+    email?: string;
+  }>;
   milestone?: {
     milestoneId?: number;
     title?: string;

@@ -9,9 +9,13 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "initiatives")
@@ -37,11 +41,15 @@ public class Initiative {
     @JsonProperty(access = JsonProperty.Access.READ_ONLY) // Allow serialization, prevent deserialization (milestone is set via service, not request body)
     private Milestone milestone;
 
-    // --- RELATIONSHIP: Initiative is assigned to a User (Employee) ---
-    @ManyToOne
-    @JoinColumn(name = "assigned_user_id", nullable = false)
+    // --- RELATIONSHIP: Initiative is assigned to multiple Users (Employees) ---
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+        name = "initiative_assignees",
+        joinColumns = @JoinColumn(name = "initiative_id"),
+        inverseJoinColumns = @JoinColumn(name = "user_id")
+    )
     @JsonIgnoreProperties({"password", "plans"}) // Prevent password and circular references
-    private User assignedUser;
+    private Set<User> assignedUsers = new HashSet<>();
 
     public Initiative() {}
 
@@ -61,6 +69,6 @@ public class Initiative {
     public Milestone getMilestone() { return milestone; }
     public void setMilestone(Milestone milestone) { this.milestone = milestone; }
 
-    public User getAssignedUser() { return assignedUser; }
-    public void setAssignedUser(User assignedUser) { this.assignedUser = assignedUser; }
+    public Set<User> getAssignedUsers() { return assignedUsers; }
+    public void setAssignedUsers(Set<User> assignedUsers) { this.assignedUsers = assignedUsers; }
 }

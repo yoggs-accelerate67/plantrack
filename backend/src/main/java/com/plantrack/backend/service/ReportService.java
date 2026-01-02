@@ -56,7 +56,9 @@ public class ReportService {
         // 4. Calculate Avg Initiative Completion
         // (Simple: COMPLETED = 100, others = 0)
         List<Initiative> deptInitiatives = initiativeRepository.findAll().stream()
-                .filter(i -> userIds.contains(i.getAssignedUser().getUserId()))
+                .filter(i -> i.getAssignedUsers() != null && !i.getAssignedUsers().isEmpty() &&
+                        i.getAssignedUsers().stream()
+                                .anyMatch(assignedUser -> userIds.contains(assignedUser.getUserId())))
                 .collect(Collectors.toList());
 
         double avgInitiative = deptInitiatives.isEmpty() ? 0.0 : deptInitiatives.stream()

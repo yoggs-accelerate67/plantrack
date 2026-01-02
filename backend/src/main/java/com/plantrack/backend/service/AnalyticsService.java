@@ -108,7 +108,9 @@ public class AnalyticsService {
 
             // Get all initiatives assigned to users in this department
             List<Initiative> departmentInitiatives = initiativeRepository.findAll().stream()
-                    .filter(i -> i.getAssignedUser() != null && userIds.contains(i.getAssignedUser().getUserId()))
+                    .filter(i -> i.getAssignedUsers() != null && !i.getAssignedUsers().isEmpty() &&
+                            i.getAssignedUsers().stream()
+                                    .anyMatch(user -> userIds.contains(user.getUserId())))
                     .collect(Collectors.toList());
 
             int total = departmentInitiatives.size();
@@ -155,7 +157,9 @@ public class AnalyticsService {
 
         // Get all initiatives assigned to this user
         List<Initiative> userInitiatives = initiativeRepository.findAll().stream()
-                .filter(i -> i.getAssignedUser() != null && i.getAssignedUser().getUserId().equals(userId))
+                .filter(i -> i.getAssignedUsers() != null && !i.getAssignedUsers().isEmpty() &&
+                        i.getAssignedUsers().stream()
+                                .anyMatch(assignedUser -> assignedUser.getUserId().equals(userId)))
                 .collect(Collectors.toList());
 
         int tasksAssigned = userInitiatives.size();
