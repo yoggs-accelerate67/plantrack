@@ -11,12 +11,13 @@ import { ToastService } from '../../services/toast.service';
 import { LoadingService } from '../../services/loading.service';
 import { PlanDetail, MilestoneDetail, Initiative, PlanStatus, Plan, PlanPriority } from '../../models/plan.model';
 import { NotificationCenterComponent } from '../notification-center/notification-center.component';
+import { CommentsComponent } from '../comments/comments.component';
 import { ViewChild } from '@angular/core';
 
 @Component({
   selector: 'app-plan-detail',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule, NotificationCenterComponent],
+  imports: [CommonModule, FormsModule, RouterModule, NotificationCenterComponent, CommentsComponent],
   template: `
     <div class="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50/30 to-indigo-50/50 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900">
       <!-- Navigation Header -->
@@ -83,8 +84,8 @@ import { ViewChild } from '@angular/core';
             <div class="flex justify-between items-start mb-4">
               <div class="flex-1">
                 <div class="flex items-center space-x-3 mb-2">
-                  <h2 class="text-3xl font-bold text-slate-900 dark:text-slate-100">{{ plan()!.title }}</h2>
-                  @if (authService.isManager() || authService.isAdmin()) {
+                  <h2 class="text-3xl font-bold text-slate-900 dark:text-slate-100" [class.line-through]="plan()!.status === 'CANCELLED'" [class.text-slate-400]="plan()!.status === 'CANCELLED'">{{ plan()!.title }}</h2>
+                  @if ((authService.isManager() || authService.isAdmin()) && plan()!.status !== 'CANCELLED') {
                     <button
                       (click)="editPlan()"
                       class="p-2 text-slate-400 hover:text-teal-600 dark:hover:text-teal-400 transition-colors rounded-lg hover:bg-teal-50 dark:hover:bg-teal-900/30"
@@ -94,6 +95,20 @@ import { ViewChild } from '@angular/core';
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                       </svg>
                     </button>
+                    <button
+                      (click)="openCancelPlanModal()"
+                      class="p-2 text-slate-400 hover:text-red-600 dark:hover:text-red-400 transition-colors rounded-lg hover:bg-red-50 dark:hover:bg-red-900/30"
+                      title="Cancel Plan"
+                    >
+                      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636" />
+                      </svg>
+                    </button>
+                  }
+                  @if (plan()!.status === 'CANCELLED') {
+                    <span class="px-3 py-1 bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400 rounded-full text-sm font-semibold">
+                      CANCELLED
+                    </span>
                   }
                 </div>
                 <p class="text-slate-600 dark:text-slate-400 mb-4">{{ plan()!.description || 'No description provided' }}</p>
@@ -165,8 +180,12 @@ import { ViewChild } from '@angular/core';
                       </svg>
                       <div class="flex-1">
                         <div class="flex items-center space-x-3">
-                          <h3 class="text-lg font-semibold text-slate-900 dark:text-slate-100">{{ milestone.title }}</h3>
-                          @if (authService.isManager()) {
+                          <h3 class="text-lg font-semibold text-slate-900 dark:text-slate-100" 
+                              [class.line-through]="milestone.status === 'CANCELLED'" 
+                              [class.text-slate-400]="milestone.status === 'CANCELLED'">
+                            {{ milestone.title }}
+                          </h3>
+                          @if (authService.isManager() && milestone.status !== 'CANCELLED') {
                             <button
                               (click)="editMilestone(milestone, $event)"
                               class="p-1.5 text-slate-400 hover:text-teal-600 transition-colors rounded-lg hover:bg-teal-50 opacity-0 group-hover:opacity-100"
@@ -196,7 +215,8 @@ import { ViewChild } from '@angular/core';
                             [ngClass]="{
                               'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 border border-green-200 dark:border-green-800': milestone.status === 'COMPLETED',
                               'bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-400 border border-amber-200 dark:border-amber-800': milestone.status === 'IN_PROGRESS',
-                              'bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-600': milestone.status === 'PLANNED'
+                              'bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-600': milestone.status === 'PLANNED',
+                              'bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400 border border-red-200 dark:border-red-800': milestone.status === 'CANCELLED'
                             }"
                           >
                             {{ milestone.status?.replace('_', ' ') }}
@@ -206,17 +226,30 @@ import { ViewChild } from '@angular/core';
                     </div>
                     @if (authService.isManager()) {
                       <div class="flex items-center space-x-2 ml-4">
-                        <button
-                          (click)="editMilestone(milestone, $event)"
-                          class="p-2 text-slate-400 hover:text-teal-600 transition-colors"
-                        >
-                          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                          </svg>
-                        </button>
+                        @if (milestone.status !== 'CANCELLED') {
+                          <button
+                            (click)="editMilestone(milestone, $event)"
+                            class="p-2 text-slate-400 hover:text-teal-600 transition-colors"
+                            title="Edit Milestone"
+                          >
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                            </svg>
+                          </button>
+                          <button
+                            (click)="openCancelMilestoneModal(milestone); $event.stopPropagation()"
+                            class="p-2 text-slate-400 hover:text-red-600 transition-colors"
+                            title="Cancel Milestone"
+                          >
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636" />
+                            </svg>
+                          </button>
+                        }
                         <button
                           (click)="deleteMilestone(milestone.milestoneId!, $event)"
                           class="p-2 text-slate-400 hover:text-red-600 transition-colors"
+                          title="Delete Milestone"
                         >
                           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
@@ -261,8 +294,12 @@ import { ViewChild } from '@angular/core';
                             <div class="bg-white dark:bg-slate-800 rounded-lg p-4 border border-slate-200 dark:border-slate-700 hover:shadow-md transition-all group">
                               <div class="flex items-center justify-between">
                                 <div class="flex-1">
-                                  <h4 class="font-medium text-slate-900 dark:text-slate-100 mb-1">{{ initiative.title }}</h4>
-                                  <p class="text-sm text-slate-600 dark:text-slate-400 mb-2">{{ initiative.description || 'No description' }}</p>
+                                  <h4 class="font-medium text-slate-900 dark:text-slate-100 mb-1"
+                                      [class.line-through]="initiative.status === 'CANCELLED'"
+                                      [class.text-slate-400]="initiative.status === 'CANCELLED'">
+                                    {{ initiative.title }}
+                                  </h4>
+                                  <p class="text-sm text-slate-600 dark:text-slate-400 mb-2" [class.line-through]="initiative.status === 'CANCELLED'">{{ initiative.description || 'No description' }}</p>
                                   <div class="flex items-center space-x-4 text-xs text-slate-500 dark:text-slate-400">
                                     <span class="flex items-center space-x-1">
                                       <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -295,7 +332,8 @@ import { ViewChild } from '@angular/core';
                                       [ngClass]="{
                                         'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400': initiative.status === 'COMPLETED',
                                         'bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-400': initiative.status === 'IN_PROGRESS',
-                                        'bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300': initiative.status === 'PLANNED'
+                                        'bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300': initiative.status === 'PLANNED',
+                                        'bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400': initiative.status === 'CANCELLED'
                                       }"
                                     >
                                       @if (initiative.status === 'COMPLETED') {
@@ -303,13 +341,18 @@ import { ViewChild } from '@angular/core';
                                           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
                                         </svg>
                                       }
-                                      <span>{{ initiative.status === 'COMPLETED' ? 'Completed' : initiative.status === 'IN_PROGRESS' ? 'In Progress' : 'Planned' }}</span>
+                                      @if (initiative.status === 'CANCELLED') {
+                                        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                        </svg>
+                                      }
+                                      <span>{{ getInitiativeStatusLabel(initiative.status) }}</span>
                                     </span>
                                   </div>
                                 </div>
                                 <div class="flex items-center space-x-3 ml-4">
                                   <!-- Status Dropdown (Employee can edit assigned, Manager/Admin can edit all) -->
-                                  @if (canEditInitiative(initiative)) {
+                                  @if (canEditInitiative(initiative) && initiative.status !== 'CANCELLED') {
                                     <select
                                       [value]="initiative.status"
                                       (change)="updateInitiativeStatus(initiative, $event)"
@@ -318,6 +361,9 @@ import { ViewChild } from '@angular/core';
                                       <option value="PLANNED">Planned</option>
                                       <option value="IN_PROGRESS">In Progress</option>
                                       <option value="COMPLETED">Completed</option>
+                                      @if (authService.isManager()) {
+                                        <option value="CANCELLED">Cancelled</option>
+                                      }
                                     </select>
                                   } @else {
                                     <span
@@ -325,7 +371,8 @@ import { ViewChild } from '@angular/core';
                                       [ngClass]="{
                                         'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400': initiative.status === 'COMPLETED',
                                         'bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-400': initiative.status === 'IN_PROGRESS',
-                                        'bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300': initiative.status === 'PLANNED'
+                                        'bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300': initiative.status === 'PLANNED',
+                                        'bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400': initiative.status === 'CANCELLED'
                                       }"
                                     >
                                       {{ initiative.status }}
@@ -352,6 +399,12 @@ import { ViewChild } from '@angular/core';
                                   }
                                 </div>
                               </div>
+                              
+                              <!-- Comments Section -->
+                              <app-comments 
+                                [initiativeId]="initiative.initiativeId!" 
+                                (commentAdded)="loadPlan(plan()!.planId!)"
+                              ></app-comments>
                             </div>
                           }
                         </div>
@@ -877,6 +930,7 @@ import { ViewChild } from '@angular/core';
                     <option value="PLANNED">Planned</option>
                     <option value="IN_PROGRESS">In Progress</option>
                     <option value="COMPLETED">Completed</option>
+                    <option value="CANCELLED">Cancelled</option>
                   </select>
                 </div>
                 <div class="flex space-x-3 pt-4">
@@ -895,6 +949,154 @@ import { ViewChild } from '@angular/core';
                   </button>
                 </div>
               </form>
+            </div>
+          </div>
+        }
+
+        <!-- Cancel Plan Cascade Confirmation Modal -->
+        @if (showCancelPlanModal()) {
+          <div class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center p-4" (click)="closeCancelPlanModal()">
+            <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-2xl w-full max-w-lg p-6" (click)="$event.stopPropagation()">
+              <div class="flex items-center space-x-3 mb-6">
+                <div class="w-12 h-12 bg-red-100 dark:bg-red-900/30 rounded-full flex items-center justify-center">
+                  <svg class="w-6 h-6 text-red-600 dark:text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                  </svg>
+                </div>
+                <div>
+                  <h3 class="text-xl font-bold text-slate-900 dark:text-white">Cancel Plan?</h3>
+                  <p class="text-sm text-slate-500 dark:text-slate-400">This action will cascade to all child entities</p>
+                </div>
+              </div>
+              
+              @if (cancelPlanPreview()) {
+                <div class="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-xl p-4 mb-6">
+                  <p class="text-sm font-medium text-red-800 dark:text-red-300 mb-3">
+                    The following will be cancelled:
+                  </p>
+                  <ul class="space-y-2 text-sm text-red-700 dark:text-red-400">
+                    <li class="flex items-center space-x-2">
+                      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                      </svg>
+                      <span><strong>{{ cancelPlanPreview().milestonesCount }}</strong> milestones</span>
+                    </li>
+                    <li class="flex items-center space-x-2">
+                      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                      </svg>
+                      <span><strong>{{ cancelPlanPreview().initiativesCount }}</strong> initiatives</span>
+                    </li>
+                  </ul>
+                  @if (cancelPlanPreview().initiativeNames?.length > 0) {
+                    <div class="mt-3 pt-3 border-t border-red-200 dark:border-red-700">
+                      <p class="text-xs text-red-600 dark:text-red-400 mb-1">Affected initiatives:</p>
+                      <p class="text-xs text-red-500 dark:text-red-500 line-clamp-3">
+                        {{ cancelPlanPreview().initiativeNames.slice(0, 5).join(', ') }}
+                        @if (cancelPlanPreview().initiativeNames.length > 5) {
+                          <span> and {{ cancelPlanPreview().initiativeNames.length - 5 }} more...</span>
+                        }
+                      </p>
+                    </div>
+                  }
+                </div>
+              }
+              
+              <div class="flex space-x-3">
+                <button
+                  type="button"
+                  (click)="closeCancelPlanModal()"
+                  class="flex-1 px-4 py-3 border-2 border-slate-300 dark:border-slate-600 text-slate-700 dark:text-slate-300 font-semibold rounded-xl hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors"
+                  [disabled]="cancellingPlan()"
+                >
+                  Keep Plan
+                </button>
+                <button
+                  type="button"
+                  (click)="confirmCancelPlan()"
+                  class="flex-1 px-4 py-3 bg-red-600 text-white font-semibold rounded-xl hover:bg-red-700 transition-colors disabled:opacity-50"
+                  [disabled]="cancellingPlan()"
+                >
+                  @if (cancellingPlan()) {
+                    <span class="flex items-center justify-center">
+                      <svg class="animate-spin -ml-1 mr-2 h-4 w-4 text-white" fill="none" viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                      </svg>
+                      Cancelling...
+                    </span>
+                  } @else {
+                    Cancel Plan
+                  }
+                </button>
+              </div>
+            </div>
+          </div>
+        }
+
+        <!-- Cancel Milestone Cascade Confirmation Modal -->
+        @if (showCancelMilestoneModal()) {
+          <div class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center p-4" (click)="closeCancelMilestoneModal()">
+            <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-2xl w-full max-w-lg p-6" (click)="$event.stopPropagation()">
+              <div class="flex items-center space-x-3 mb-6">
+                <div class="w-12 h-12 bg-red-100 dark:bg-red-900/30 rounded-full flex items-center justify-center">
+                  <svg class="w-6 h-6 text-red-600 dark:text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                  </svg>
+                </div>
+                <div>
+                  <h3 class="text-xl font-bold text-slate-900 dark:text-white">Cancel Milestone?</h3>
+                  <p class="text-sm text-slate-500 dark:text-slate-400">This will cancel all initiatives in this milestone</p>
+                </div>
+              </div>
+              
+              @if (cancelMilestonePreview()) {
+                <div class="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-xl p-4 mb-6">
+                  <p class="text-sm font-medium text-red-800 dark:text-red-300 mb-3">
+                    Milestone: <strong>{{ cancelMilestonePreview().milestoneTitle }}</strong>
+                  </p>
+                  <p class="text-sm text-red-700 dark:text-red-400">
+                    <strong>{{ cancelMilestonePreview().initiativesCount }}</strong> initiatives will be cancelled
+                  </p>
+                  @if (cancelMilestonePreview().initiativeNames?.length > 0) {
+                    <div class="mt-3 pt-3 border-t border-red-200 dark:border-red-700">
+                      <p class="text-xs text-red-600 dark:text-red-400 mb-1">Affected initiatives:</p>
+                      <p class="text-xs text-red-500 dark:text-red-500">
+                        {{ cancelMilestonePreview().initiativeNames.join(', ') }}
+                      </p>
+                    </div>
+                  }
+                </div>
+              }
+              
+              <div class="flex space-x-3">
+                <button
+                  type="button"
+                  (click)="closeCancelMilestoneModal()"
+                  class="flex-1 px-4 py-3 border-2 border-slate-300 dark:border-slate-600 text-slate-700 dark:text-slate-300 font-semibold rounded-xl hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors"
+                  [disabled]="cancellingMilestone()"
+                >
+                  Keep Milestone
+                </button>
+                <button
+                  type="button"
+                  (click)="confirmCancelMilestone()"
+                  class="flex-1 px-4 py-3 bg-red-600 text-white font-semibold rounded-xl hover:bg-red-700 transition-colors disabled:opacity-50"
+                  [disabled]="cancellingMilestone()"
+                >
+                  @if (cancellingMilestone()) {
+                    <span class="flex items-center justify-center">
+                      <svg class="animate-spin -ml-1 mr-2 h-4 w-4 text-white" fill="none" viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                      </svg>
+                      Cancelling...
+                    </span>
+                  } @else {
+                    Cancel Milestone
+                  }
+                </button>
+              </div>
             </div>
           </div>
         }
@@ -1695,6 +1897,111 @@ export class PlanDetailComponent implements OnInit {
   logout(): void {
     this.authService.logout();
     this.router.navigate(['/login']);
+  }
+
+  // Helper to get initiative status label
+  getInitiativeStatusLabel(status?: string): string {
+    switch (status) {
+      case 'COMPLETED': return 'Completed';
+      case 'IN_PROGRESS': return 'In Progress';
+      case 'CANCELLED': return 'Cancelled';
+      default: return 'Planned';
+    }
+  }
+
+  // Cascade cancellation preview signals
+  showCancelPlanModal = signal(false);
+  cancelPlanPreview = signal<any>(null);
+  cancellingPlan = signal(false);
+
+  showCancelMilestoneModal = signal(false);
+  cancelMilestonePreview = signal<any>(null);
+  cancellingMilestone = signal(false);
+  milestoneToCancel = signal<any>(null);
+
+  // Open cascade cancel confirmation for plan
+  openCancelPlanModal(): void {
+    if (!this.plan()) return;
+    
+    this.planService.getCancelPreview(this.plan()!.planId!).subscribe({
+      next: (preview) => {
+        this.cancelPlanPreview.set(preview);
+        this.showCancelPlanModal.set(true);
+      },
+      error: (error) => {
+        this.toastService.showError(error.error?.message || 'Failed to get cancel preview');
+      }
+    });
+  }
+
+  // Confirm and execute plan cascade cancellation
+  confirmCancelPlan(): void {
+    if (!this.plan()) return;
+    
+    this.cancellingPlan.set(true);
+    this.planService.cancelPlanWithCascade(this.plan()!.planId!).subscribe({
+      next: (result) => {
+        this.toastService.showSuccess(
+          `Plan cancelled! ${result.milestonesAffected} milestones and ${result.initiativesAffected} initiatives affected.`
+        );
+        this.showCancelPlanModal.set(false);
+        this.cancellingPlan.set(false);
+        this.loadPlan(this.plan()!.planId!); // Refresh the view
+      },
+      error: (error) => {
+        this.toastService.showError(error.error?.message || 'Failed to cancel plan');
+        this.cancellingPlan.set(false);
+      }
+    });
+  }
+
+  closeCancelPlanModal(): void {
+    this.showCancelPlanModal.set(false);
+    this.cancelPlanPreview.set(null);
+  }
+
+  // Open cascade cancel confirmation for milestone
+  openCancelMilestoneModal(milestone: any): void {
+    this.milestoneToCancel.set(milestone);
+    
+    this.milestoneService.getCancelPreview(milestone.milestoneId).subscribe({
+      next: (preview) => {
+        this.cancelMilestonePreview.set(preview);
+        this.showCancelMilestoneModal.set(true);
+      },
+      error: (error) => {
+        this.toastService.showError(error.error?.message || 'Failed to get cancel preview');
+      }
+    });
+  }
+
+  // Confirm and execute milestone cascade cancellation
+  confirmCancelMilestone(): void {
+    const milestone = this.milestoneToCancel();
+    if (!milestone) return;
+    
+    this.cancellingMilestone.set(true);
+    this.milestoneService.cancelMilestoneWithCascade(milestone.milestoneId).subscribe({
+      next: (result) => {
+        this.toastService.showSuccess(
+          `Milestone cancelled! ${result.initiativesAffected} initiatives affected.`
+        );
+        this.showCancelMilestoneModal.set(false);
+        this.cancellingMilestone.set(false);
+        this.milestoneToCancel.set(null);
+        this.loadPlan(this.plan()!.planId!); // Refresh the view
+      },
+      error: (error) => {
+        this.toastService.showError(error.error?.message || 'Failed to cancel milestone');
+        this.cancellingMilestone.set(false);
+      }
+    });
+  }
+
+  closeCancelMilestoneModal(): void {
+    this.showCancelMilestoneModal.set(false);
+    this.cancelMilestonePreview.set(null);
+    this.milestoneToCancel.set(null);
   }
 }
 
