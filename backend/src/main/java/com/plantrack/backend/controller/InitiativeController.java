@@ -39,4 +39,13 @@ public class InitiativeController {
     public Initiative updateInitiative(@PathVariable Long initiativeId, @RequestBody Initiative initiative) {
         return initiativeService.updateInitiative(initiativeId, initiative);
     }
+
+    // Get all initiatives assigned to a user
+    @GetMapping("/users/{userId}/initiatives")
+    public List<Initiative> getMyInitiatives(@PathVariable Long userId) {
+        System.out.println("Getting initiatives for userId: " + userId);
+        List<Initiative> initiatives = initiativeService.getInitiativesByUser(userId);
+        System.out.println("Found " + initiatives.size() + " initiatives for user " + userId);
+        return initiatives;
+    }
 }

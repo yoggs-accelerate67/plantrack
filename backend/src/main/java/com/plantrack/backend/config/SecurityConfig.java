@@ -49,6 +49,21 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.GET, "/api/users/*/assigned-plans").hasAnyRole("EMPLOYEE", "MANAGER", "ADMIN")
                 // Allow Managers and Admins to GET users list (for assigning initiatives)
                 .requestMatchers(HttpMethod.GET, "/api/users").hasAnyRole("MANAGER", "ADMIN")
+                
+                // Allow Employees, Managers, and Admins to GET their own initiatives
+                .requestMatchers(HttpMethod.GET, "/api/users/*/initiatives").hasAnyRole("EMPLOYEE", "MANAGER", "ADMIN")
+                
+                // Allow Employees, Managers, and Admins to GET their assigned plans
+                .requestMatchers(HttpMethod.GET, "/api/users/*/assigned-plans").hasAnyRole("EMPLOYEE", "MANAGER", "ADMIN")
+
+                // 10. NOTIFICATIONS (MUST come before /api/users/** rule!)
+                // All authenticated users can access their own notifications
+                // Use Ant-style patterns: * matches one segment, ** matches multiple
+                .requestMatchers(HttpMethod.GET, "/api/users/*/notifications").hasAnyRole("EMPLOYEE", "MANAGER", "ADMIN")
+                .requestMatchers(HttpMethod.GET, "/api/users/*/notifications/**").hasAnyRole("EMPLOYEE", "MANAGER", "ADMIN")
+                .requestMatchers(HttpMethod.PUT, "/api/notifications/*/read").hasAnyRole("EMPLOYEE", "MANAGER", "ADMIN")
+                .requestMatchers(HttpMethod.PUT, "/api/users/*/notifications/read-all").hasAnyRole("EMPLOYEE", "MANAGER", "ADMIN")
+                .requestMatchers("/api/notifications/**").hasAnyRole("EMPLOYEE", "MANAGER", "ADMIN")
 
                 // =========================================================
                 // 3. GENERIC ADMIN RULES (for POST, PUT, DELETE on users)
@@ -71,6 +86,12 @@ public class SecurityConfig {
 
                 // 7. DASHBOARD STATS
                 .requestMatchers("/api/dashboard/**").hasAnyRole("MANAGER", "EMPLOYEE", "ADMIN")
+                
+                // 8. ANALYTICS (Manager and Admin only)
+                .requestMatchers("/api/analytics/**").hasAnyRole("MANAGER", "ADMIN")
+                
+                // 9. AUDIT LOGS (Admin only)
+                .requestMatchers("/api/audit-logs/**").hasRole("ADMIN")
 
                 .anyRequest().authenticated()
             )

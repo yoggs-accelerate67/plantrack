@@ -50,12 +50,24 @@ export interface Initiative {
   status?: string;
   milestoneId?: number;
   milestoneTitle?: string;
+  planId?: number;
+  planTitle?: string;
+  planPriority?: PlanPriority;
   assignedUserId?: number;
   assignedUserName?: string;
   assignedUser?: {
     userId?: number;
     name?: string;
     email?: string;
+  };
+  milestone?: {
+    milestoneId?: number;
+    title?: string;
+    plan?: {
+      planId?: number;
+      title?: string;
+      priority?: PlanPriority;
+    };
   };
 }
 

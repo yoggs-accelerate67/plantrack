@@ -1,7 +1,6 @@
 package com.plantrack.backend.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.plantrack.backend.config.LocalDateTimeDeserializer;
 import jakarta.persistence.*;
@@ -41,7 +40,6 @@ public class Plan {
     private User user;
 
     @OneToMany(mappedBy = "plan", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
-    @JsonManagedReference // This side will be serialized
     private java.util.List<Milestone> milestones = new java.util.ArrayList<>();
 
     public Plan() {}

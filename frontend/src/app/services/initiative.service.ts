@@ -30,5 +30,9 @@ export class InitiativeService {
   deleteInitiative(initiativeId: number): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/initiatives/${initiativeId}`);
   }
+
+  getMyInitiatives(userId: number): Observable<Initiative[]> {
+    return this.http.get<Initiative[]>(`${this.apiUrl}/users/${userId}/initiatives`);
+  }
 }
 
