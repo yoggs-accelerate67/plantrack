@@ -3,7 +3,6 @@ package com.plantrack.backend.service;
 import com.plantrack.backend.model.Initiative;
 import com.plantrack.backend.model.Milestone;
 import com.plantrack.backend.model.User;
-import com.plantrack.backend.repository.AuditLogRepository;
 import com.plantrack.backend.repository.InitiativeRepository;
 import com.plantrack.backend.repository.MilestoneRepository;
 import com.plantrack.backend.repository.UserRepository;
@@ -12,7 +11,10 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class InitiativeService {
@@ -33,33 +35,52 @@ public class InitiativeService {
     private NotificationService notificationService;
 
     // 1. Create Initiative
-    public Initiative createInitiative(Long milestoneId, Long assignedUserId, Initiative initiative) {
+    public Initiative createInitiative(Long milestoneId, List<Long> assignedUserIds, Initiative initiative) {
         Milestone milestone = milestoneRepository.findById(milestoneId)
                 .orElseThrow(() -> new RuntimeException("Milestone not found"));
 
-        User user = userRepository.findById(assignedUserId)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+        // Validate that at least one assignee is provided
+        if (assignedUserIds == null || assignedUserIds.isEmpty()) {
+            throw new RuntimeException("At least one assignee is required");
+        }
+
+        // Validate all users exist and are active
+        Set<User> assignedUsers = new HashSet<>();
+        for (Long userId : assignedUserIds) {
+            User user = userRepository.findById(userId)
+                    .orElseThrow(() -> new RuntimeException("User not found with ID: " + userId));
+            if (!"ACTIVE".equalsIgnoreCase(user.getStatus())) {
+                throw new RuntimeException("User " + user.getName() + " is not active");
+            }
+            assignedUsers.add(user);
+        }
 
         initiative.setMilestone(milestone);
-        initiative.setAssignedUser(user);
+        initiative.setAssignedUsers(assignedUsers);
         
         Initiative savedInitiative = initiativeRepository.save(initiative);
 
-        // Audit Log
+        // Audit Log - include all assigned users
+        String assigneeNames = assignedUsers.stream()
+                .map(User::getName)
+                .collect(Collectors.joining(", "));
         auditService.logCreate("INITIATIVE", savedInitiative.getInitiativeId(), 
-            "Created initiative: " + savedInitiative.getTitle() + " in milestone: " + milestone.getTitle());
+            "Created initiative: " + savedInitiative.getTitle() + " in milestone: " + milestone.getTitle() + 
+            " assigned to: " + assigneeNames);
 
-        // Notify Employee
-        try {
-            notificationService.notifyInitiativeAssigned(
-                assignedUserId,
-                savedInitiative.getTitle(),
-                savedInitiative.getInitiativeId()
-            );
-            System.out.println("Notification sent to employee " + assignedUserId + " for initiative: " + savedInitiative.getTitle());
-        } catch (Exception e) {
-            System.err.println("Failed to send notification to employee " + assignedUserId + ": " + e.getMessage());
-            e.printStackTrace();
+        // Notify all assigned users
+        for (User user : assignedUsers) {
+            try {
+                notificationService.notifyInitiativeAssigned(
+                    user.getUserId(),
+                    savedInitiative.getTitle(),
+                    savedInitiative.getInitiativeId()
+                );
+                System.out.println("Notification sent to employee " + user.getUserId() + " (" + user.getEmail() + ") for initiative: " + savedInitiative.getTitle());
+            } catch (Exception e) {
+                System.err.println("Failed to send notification to employee " + user.getUserId() + ": " + e.getMessage());
+                e.printStackTrace();
+            }
         }
 
         // TRIGGER: Recalculate Progress immediately after adding a new task
@@ -79,14 +100,17 @@ public Initiative updateInitiative(Long id, Initiative updatedData) {
         boolean isEmployee = auth.getAuthorities().stream()
                 .anyMatch(a -> a.getAuthority().equals("ROLE_EMPLOYEE"));
         
-        if (isEmployee && initiative.getAssignedUser() != null) {
+        if (isEmployee && initiative.getAssignedUsers() != null && !initiative.getAssignedUsers().isEmpty()) {
             // Get current user ID from authentication (assuming email is stored)
             String currentUserEmail = auth.getName();
             User currentUser = userRepository.findByEmail(currentUserEmail)
                     .orElseThrow(() -> new RuntimeException("Current user not found: " + currentUserEmail));
             
-            // Check if the initiative is assigned to the current user
-            if (!initiative.getAssignedUser().getUserId().equals(currentUser.getUserId())) {
+            // Check if the current user is among the assigned users
+            boolean isAssigned = initiative.getAssignedUsers().stream()
+                    .anyMatch(user -> user.getUserId().equals(currentUser.getUserId()));
+            
+            if (!isAssigned) {
                 throw new RuntimeException("You can only update initiatives assigned to you");
             }
             
@@ -105,11 +129,26 @@ public Initiative updateInitiative(Long id, Initiative updatedData) {
                 initiative.setStatus(updatedData.getStatus());
             }
             
-            // Update assigned user if provided (only Managers/Admins)
-            if (updatedData.getAssignedUser() != null && updatedData.getAssignedUser().getUserId() != null) {
-                User newUser = userRepository.findById(updatedData.getAssignedUser().getUserId())
-                        .orElseThrow(() -> new RuntimeException("User not found"));
-                initiative.setAssignedUser(newUser);
+            // Update assigned users if provided (only Managers/Admins)
+            if (updatedData.getAssignedUsers() != null && !updatedData.getAssignedUsers().isEmpty()) {
+                // Validate all users exist and are active
+                Set<User> newAssignedUsers = new HashSet<>();
+                for (User userData : updatedData.getAssignedUsers()) {
+                    if (userData.getUserId() != null) {
+                        User user = userRepository.findById(userData.getUserId())
+                                .orElseThrow(() -> new RuntimeException("User not found with ID: " + userData.getUserId()));
+                        if (!"ACTIVE".equalsIgnoreCase(user.getStatus())) {
+                            throw new RuntimeException("User " + user.getName() + " is not active");
+                        }
+                        newAssignedUsers.add(user);
+                    }
+                }
+                
+                if (newAssignedUsers.isEmpty()) {
+                    throw new RuntimeException("At least one assignee is required");
+                }
+                
+                initiative.setAssignedUsers(newAssignedUsers);
             }
         }
         
@@ -170,24 +209,58 @@ public Initiative updateInitiative(Long id, Initiative updatedData) {
         }
 
         // Audit Log - Assignment change
-        if (updatedData.getAssignedUser() != null && updatedData.getAssignedUser().getUserId() != null) {
-            User oldAssignee = initiative.getAssignedUser();
-            if (oldAssignee == null || !oldAssignee.getUserId().equals(updatedData.getAssignedUser().getUserId())) {
-                User newAssignee = userRepository.findById(updatedData.getAssignedUser().getUserId())
-                        .orElseThrow(() -> new RuntimeException("User not found"));
+        if (updatedData.getAssignedUsers() != null && !updatedData.getAssignedUsers().isEmpty()) {
+            // Get old assignee IDs (handle null case)
+            Set<Long> oldAssigneeIds = new HashSet<>();
+            if (initiative.getAssignedUsers() != null && !initiative.getAssignedUsers().isEmpty()) {
+                oldAssigneeIds = initiative.getAssignedUsers().stream()
+                        .map(User::getUserId)
+                        .filter(userId -> userId != null)
+                        .collect(Collectors.toSet());
+            }
+            
+            Set<Long> newAssigneeIds = updatedData.getAssignedUsers().stream()
+                    .map(User::getUserId)
+                    .filter(userId -> userId != null)
+                    .collect(Collectors.toSet());
+            
+            // Check if assignment changed
+            if (!oldAssigneeIds.equals(newAssigneeIds)) {
+                String oldAssigneeNames = "Unassigned";
+                if (initiative.getAssignedUsers() != null && !initiative.getAssignedUsers().isEmpty()) {
+                    oldAssigneeNames = initiative.getAssignedUsers().stream()
+                            .map(User::getName)
+                            .filter(name -> name != null)
+                            .collect(Collectors.joining(", "));
+                    if (oldAssigneeNames.isEmpty()) {
+                        oldAssigneeNames = "Unassigned";
+                    }
+                }
+                
+                String newAssigneeNames = savedInitiative.getAssignedUsers().stream()
+                        .map(User::getName)
+                        .filter(name -> name != null)
+                        .collect(Collectors.joining(", "));
+                
                 auditService.logUpdate("INITIATIVE", id, 
-                    "Reassigned initiative from " + (oldAssignee != null ? oldAssignee.getName() : "Unassigned") + 
-                    " to " + newAssignee.getName());
+                    "Reassigned initiative from [" + oldAssigneeNames + 
+                    "] to [" + newAssigneeNames + "]");
 
-                // Notify new assignee
-                try {
-                    notificationService.notifyInitiativeAssigned(
-                        newAssignee.getUserId(),
-                        savedInitiative.getTitle(),
-                        id
-                    );
-                } catch (Exception e) {
-                    System.err.println("Failed to notify new assignee: " + e.getMessage());
+                // Notify newly assigned users (users in new set but not in old set)
+                Set<Long> newlyAssignedIds = new HashSet<>(newAssigneeIds);
+                newlyAssignedIds.removeAll(oldAssigneeIds);
+                
+                for (Long newUserId : newlyAssignedIds) {
+                    try {
+                        notificationService.notifyInitiativeAssigned(
+                            newUserId,
+                            savedInitiative.getTitle(),
+                            id
+                        );
+                        System.out.println("Notification sent to newly assigned user " + newUserId);
+                    } catch (Exception e) {
+                        System.err.println("Failed to notify newly assigned user " + newUserId + ": " + e.getMessage());
+                    }
                 }
             }
         }

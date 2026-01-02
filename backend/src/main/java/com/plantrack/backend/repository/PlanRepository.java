@@ -14,6 +14,7 @@ public interface PlanRepository extends JpaRepository<Plan, Long> {
     @Query("SELECT DISTINCT p FROM Plan p " +
            "JOIN p.milestones m " +
            "JOIN m.initiatives i " +
-           "WHERE i.assignedUser.userId = :userId")
+           "JOIN i.assignedUsers u " +
+           "WHERE u.userId = :userId")
     List<Plan> findPlansWithAssignedInitiatives(@Param("userId") Long userId);
 }
