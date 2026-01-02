@@ -12,7 +12,7 @@ public class Notification {
     private Long notificationId;
 
     @Column(nullable = false)
-    private String type; // e.g., "INFO", "ALERT"
+    private String type; // e.g., "ASSIGNMENT", "STATUS_UPDATE", "SYSTEM_ALERT", "WEEKLY_REPORT"
 
     @Column(nullable = false)
     private String message;
@@ -20,6 +20,10 @@ public class Notification {
     private String status; // "UNREAD", "READ"
 
     private LocalDateTime createdDate;
+
+    // Link to related entity (Plan, Initiative, etc.)
+    private String entityType; // "PLAN", "INITIATIVE", "MILESTONE", "SYSTEM"
+    private Long entityId; // ID of the related entity
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
@@ -45,6 +49,12 @@ public class Notification {
 
     public LocalDateTime getCreatedDate() { return createdDate; }
     public void setCreatedDate(LocalDateTime createdDate) { this.createdDate = createdDate; }
+
+    public String getEntityType() { return entityType; }
+    public void setEntityType(String entityType) { this.entityType = entityType; }
+
+    public Long getEntityId() { return entityId; }
+    public void setEntityId(Long entityId) { this.entityId = entityId; }
 
     public User getUser() { return user; }
     public void setUser(User user) { this.user = user; }

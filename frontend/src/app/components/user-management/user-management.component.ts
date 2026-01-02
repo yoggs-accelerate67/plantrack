@@ -6,15 +6,16 @@ import { AuthService } from '../../services/auth.service';
 import { UserService, User } from '../../services/user.service';
 import { ToastService } from '../../services/toast.service';
 import { LoadingService } from '../../services/loading.service';
+import { NotificationCenterComponent } from '../notification-center/notification-center.component';
 
 @Component({
   selector: 'app-user-management',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule],
+  imports: [CommonModule, FormsModule, RouterModule, NotificationCenterComponent],
   template: `
-    <div class="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50/30 to-indigo-50/50">
+    <div class="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50/30 to-indigo-50/50 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900">
       <!-- Navigation Header -->
-      <nav class="bg-white/80 backdrop-blur-xl border-b border-slate-200/50 shadow-sm sticky top-0 z-40">
+      <nav class="bg-white/80 dark:bg-slate-800/80 backdrop-blur-xl border-b border-slate-200/50 dark:border-slate-700/50 shadow-sm sticky top-0 z-40">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div class="flex justify-between items-center h-16">
             <div class="flex items-center space-x-8">
@@ -24,27 +25,34 @@ import { LoadingService } from '../../services/loading.service';
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
                   </svg>
                 </div>
-                <h1 class="text-xl font-bold text-slate-900">PlanTrack Enterprise</h1>
+                <h1 class="text-xl font-bold text-slate-900 dark:text-slate-100">PlanTrack Enterprise</h1>
               </div>
               <div class="hidden md:flex space-x-1">
-                <a routerLink="/dashboard" routerLinkActive="bg-teal-50 text-teal-700" class="px-4 py-2 text-sm font-medium text-slate-600 hover:text-teal-600 rounded-lg transition-colors">Dashboard</a>
-                <a routerLink="/plans" routerLinkActive="bg-teal-50 text-teal-700" class="px-4 py-2 text-sm font-medium text-slate-600 hover:text-teal-600 rounded-lg transition-colors">Plans</a>
+                <a routerLink="/dashboard" routerLinkActive="bg-teal-50 dark:bg-teal-900/30 text-teal-700 dark:text-teal-400" class="px-4 py-2 text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-teal-600 dark:hover:text-teal-400 rounded-lg transition-colors">Dashboard</a>
+                <a routerLink="/plans" routerLinkActive="bg-teal-50 dark:bg-teal-900/30 text-teal-700 dark:text-teal-400" class="px-4 py-2 text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-teal-600 dark:hover:text-teal-400 rounded-lg transition-colors">Plans</a>
+                @if (authService.isManager() || authService.isAdmin()) {
+                  <a routerLink="/analytics" routerLinkActive="bg-teal-50 dark:bg-teal-900/30 text-teal-700 dark:text-teal-400" class="px-4 py-2 text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-teal-600 dark:hover:text-teal-400 rounded-lg transition-colors">Analytics</a>
+                }
                 @if (authService.isAdmin()) {
-                  <a routerLink="/users" routerLinkActive="bg-teal-50 text-teal-700" class="px-4 py-2 text-sm font-medium text-teal-600 rounded-lg">User Management</a>
+                  <a routerLink="/audit-logs" routerLinkActive="bg-teal-50 dark:bg-teal-900/30 text-teal-700 dark:text-teal-400" class="px-4 py-2 text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-teal-600 dark:hover:text-teal-400 rounded-lg transition-colors">Audit Logs</a>
+                  <a routerLink="/users" routerLinkActive="bg-teal-50 dark:bg-teal-900/30 text-teal-700 dark:text-teal-400" class="px-4 py-2 text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-teal-600 dark:hover:text-teal-400 rounded-lg transition-colors">User Management</a>
                 }
               </div>
             </div>
             <div class="flex items-center space-x-4">
+              <!-- Notification Center -->
+              <app-notification-center></app-notification-center>
+              
               <div class="hidden sm:flex items-center space-x-3">
                 <div class="text-right">
-                  <p class="text-xs text-slate-500">Signed in as</p>
-                  <p class="text-sm font-medium text-slate-900">{{ authService.currentUser() }}</p>
+                  <p class="text-xs text-slate-500 dark:text-slate-400">Signed in as</p>
+                  <p class="text-sm font-medium text-slate-900 dark:text-slate-100">{{ authService.currentUser() }}</p>
                 </div>
-                <span class="px-3 py-1.5 bg-gradient-to-r from-teal-100 to-teal-50 text-teal-700 rounded-full text-xs font-semibold border border-teal-200">{{ authService.userRole() }}</span>
+                <span class="px-3 py-1.5 bg-gradient-to-r from-teal-100 to-teal-50 dark:from-teal-900/30 dark:to-teal-800/30 text-teal-700 dark:text-teal-400 rounded-full text-xs font-semibold border border-teal-200 dark:border-teal-700">{{ authService.userRole() }}</span>
               </div>
               <button 
                 (click)="logout()" 
-                class="px-4 py-2 text-sm font-medium text-slate-600 hover:text-slate-900 hover:bg-slate-100 rounded-lg transition-colors flex items-center space-x-2"
+                class="px-4 py-2 text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-slate-100 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-lg transition-colors flex items-center space-x-2"
               >
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
@@ -60,8 +68,8 @@ import { LoadingService } from '../../services/loading.service';
         <!-- Page Header -->
         <div class="flex justify-between items-center mb-8">
           <div>
-            <h2 class="text-3xl font-bold text-slate-900 mb-2">User Management</h2>
-            <p class="text-slate-600">Manage platform users, roles, and permissions</p>
+            <h2 class="text-3xl font-bold text-slate-900 dark:text-slate-100 mb-2">User Management</h2>
+            <p class="text-slate-600 dark:text-slate-400">Manage platform users, roles, and permissions</p>
           </div>
           <button
             (click)="openAddUserModal()"
@@ -81,13 +89,13 @@ import { LoadingService } from '../../services/loading.service';
           </div>
         } @else if (users().length === 0) {
           <div class="card p-16 text-center">
-            <div class="w-20 h-20 bg-gradient-to-br from-slate-100 to-slate-200 rounded-2xl flex items-center justify-center mx-auto mb-6">
-              <svg class="w-10 h-10 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div class="w-20 h-20 bg-gradient-to-br from-slate-100 to-slate-200 dark:from-slate-700 dark:to-slate-800 rounded-2xl flex items-center justify-center mx-auto mb-6">
+              <svg class="w-10 h-10 text-slate-400 dark:text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
               </svg>
             </div>
-            <h3 class="text-xl font-bold text-slate-900 mb-2">No users found</h3>
-            <p class="text-slate-600 mb-6 max-w-sm mx-auto">Get started by adding your first user to the platform.</p>
+            <h3 class="text-xl font-bold text-slate-900 dark:text-slate-100 mb-2">No users found</h3>
+            <p class="text-slate-600 dark:text-slate-400 mb-6 max-w-sm mx-auto">Get started by adding your first user to the platform.</p>
             <button
               (click)="openAddUserModal()"
               class="btn-primary inline-flex items-center space-x-2"
@@ -101,43 +109,43 @@ import { LoadingService } from '../../services/loading.service';
         } @else {
           <div class="card overflow-hidden">
             <div class="overflow-x-auto">
-              <table class="min-w-full divide-y divide-slate-200">
-                <thead class="bg-slate-50">
+              <table class="min-w-full divide-y divide-slate-200 dark:divide-slate-700">
+                <thead class="bg-slate-50 dark:bg-slate-800">
                   <tr>
-                    <th class="px-6 py-3 text-left text-xs font-semibold text-slate-700 uppercase tracking-wider">Name</th>
-                    <th class="px-6 py-3 text-left text-xs font-semibold text-slate-700 uppercase tracking-wider">Email</th>
-                    <th class="px-6 py-3 text-left text-xs font-semibold text-slate-700 uppercase tracking-wider">Department</th>
-                    <th class="px-6 py-3 text-left text-xs font-semibold text-slate-700 uppercase tracking-wider">Role</th>
-                    <th class="px-6 py-3 text-left text-xs font-semibold text-slate-700 uppercase tracking-wider">Status</th>
-                    <th class="px-6 py-3 text-right text-xs font-semibold text-slate-700 uppercase tracking-wider">Actions</th>
+                    <th class="px-6 py-3 text-left text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider">Name</th>
+                    <th class="px-6 py-3 text-left text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider">Email</th>
+                    <th class="px-6 py-3 text-left text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider">Department</th>
+                    <th class="px-6 py-3 text-left text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider">Role</th>
+                    <th class="px-6 py-3 text-left text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider">Status</th>
+                    <th class="px-6 py-3 text-right text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider">Actions</th>
                   </tr>
                 </thead>
-                <tbody class="bg-white divide-y divide-slate-200">
+                <tbody class="bg-white dark:bg-slate-800 divide-y divide-slate-200 dark:divide-slate-700">
                   @for (user of users(); track user.userId) {
-                    <tr class="hover:bg-slate-50 transition-colors">
+                    <tr class="hover:bg-slate-50 dark:hover:bg-slate-700/50 transition-colors">
                       <td class="px-6 py-4 whitespace-nowrap">
                         <div class="flex items-center">
                           <div class="w-10 h-10 bg-gradient-to-br from-teal-500 to-teal-600 rounded-full flex items-center justify-center text-white font-semibold text-sm">
                             {{ (user.name && user.name.length > 0) ? user.name.charAt(0).toUpperCase() : 'U' }}
                           </div>
                           <div class="ml-4">
-                            <div class="text-sm font-medium text-slate-900">{{ user.name }}</div>
+                            <div class="text-sm font-medium text-slate-900 dark:text-slate-100">{{ user.name }}</div>
                           </div>
                         </div>
                       </td>
                       <td class="px-6 py-4 whitespace-nowrap">
-                        <div class="text-sm text-slate-600">{{ user.email }}</div>
+                        <div class="text-sm text-slate-600 dark:text-slate-400">{{ user.email }}</div>
                       </td>
                       <td class="px-6 py-4 whitespace-nowrap">
-                        <div class="text-sm text-slate-600">{{ user.department || 'N/A' }}</div>
+                        <div class="text-sm text-slate-600 dark:text-slate-400">{{ user.department || 'N/A' }}</div>
                       </td>
                       <td class="px-6 py-4 whitespace-nowrap">
                         <span
                           class="px-3 py-1 rounded-full text-xs font-semibold"
                           [ngClass]="{
-                            'bg-purple-100 text-purple-700 border border-purple-200': user.role === 'ADMIN',
-                            'bg-blue-100 text-blue-700 border border-blue-200': user.role === 'MANAGER',
-                            'bg-green-100 text-green-700 border border-green-200': user.role === 'EMPLOYEE'
+                            'bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-400 border border-purple-200 dark:border-purple-800': user.role === 'ADMIN',
+                            'bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400 border border-blue-200 dark:border-blue-800': user.role === 'MANAGER',
+                            'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 border border-green-200 dark:border-green-800': user.role === 'EMPLOYEE'
                           }"
                         >
                           {{ user.role || 'N/A' }}
@@ -147,9 +155,9 @@ import { LoadingService } from '../../services/loading.service';
                         <span
                           class="px-3 py-1 rounded-full text-xs font-semibold"
                           [ngClass]="{
-                            'bg-green-100 text-green-700 border border-green-200': user.status === 'ACTIVE',
-                            'bg-red-100 text-red-700 border border-red-200': user.status === 'INACTIVE',
-                            'bg-slate-100 text-slate-700 border border-slate-200': !user.status
+                            'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 border border-green-200 dark:border-green-800': user.status === 'ACTIVE',
+                            'bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400 border border-red-200 dark:border-red-800': user.status === 'INACTIVE',
+                            'bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-600': !user.status
                           }"
                         >
                           {{ user.status || 'N/A' }}
@@ -159,7 +167,7 @@ import { LoadingService } from '../../services/loading.service';
                         <div class="flex items-center justify-end space-x-2">
                           <button
                             (click)="editUser(user)"
-                            class="p-2 text-slate-400 hover:text-teal-600 transition-colors rounded-lg hover:bg-teal-50"
+                            class="p-2 text-slate-400 dark:text-slate-500 hover:text-teal-600 dark:hover:text-teal-400 transition-colors rounded-lg hover:bg-teal-50 dark:hover:bg-teal-900/30"
                             title="Edit User"
                           >
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -168,7 +176,7 @@ import { LoadingService } from '../../services/loading.service';
                           </button>
                           <button
                             (click)="deleteUser(user.userId!)"
-                            class="p-2 text-slate-400 hover:text-red-600 transition-colors rounded-lg hover:bg-red-50"
+                            class="p-2 text-slate-400 dark:text-slate-500 hover:text-red-600 dark:hover:text-red-400 transition-colors rounded-lg hover:bg-red-50 dark:hover:bg-red-900/30"
                             title="Delete User"
                           >
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -188,18 +196,18 @@ import { LoadingService } from '../../services/loading.service';
         <!-- Add/Edit User Modal -->
         @if (showUserModal()) {
           <div class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-            <div class="bg-white rounded-3xl shadow-2xl max-w-md w-full p-8 border border-slate-200">
+            <div class="bg-white dark:bg-slate-800 rounded-3xl shadow-2xl max-w-md w-full p-8 border border-slate-200 dark:border-slate-700">
               <div class="flex items-center space-x-3 mb-6">
                 <div class="w-10 h-10 bg-gradient-to-br from-teal-600 to-teal-700 rounded-xl flex items-center justify-center">
                   <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
                   </svg>
                 </div>
-                <h3 class="text-2xl font-bold text-slate-900">{{ editingUser() ? 'Edit User' : 'Add New User' }}</h3>
+                <h3 class="text-2xl font-bold text-slate-900 dark:text-slate-100">{{ editingUser() ? 'Edit User' : 'Add New User' }}</h3>
               </div>
               <form (ngSubmit)="saveUser()" class="space-y-4">
                 <div>
-                  <label class="block text-sm font-semibold text-slate-700 mb-2">Name *</label>
+                  <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Name *</label>
                   <input
                     [(ngModel)]="currentUser.name"
                     name="name"
@@ -209,7 +217,7 @@ import { LoadingService } from '../../services/loading.service';
                   />
                 </div>
                 <div>
-                  <label class="block text-sm font-semibold text-slate-700 mb-2">Email *</label>
+                  <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Email *</label>
                   <input
                     type="email"
                     [(ngModel)]="currentUser.email"
@@ -220,7 +228,7 @@ import { LoadingService } from '../../services/loading.service';
                   />
                 </div>
                 <div>
-                  <label class="block text-sm font-semibold text-slate-700 mb-2">Password {{ editingUser() ? '(leave blank to keep current)' : '*' }}</label>
+                  <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Password {{ editingUser() ? '(leave blank to keep current)' : '*' }}</label>
                   <input
                     type="password"
                     [(ngModel)]="currentUser.password"
@@ -231,7 +239,7 @@ import { LoadingService } from '../../services/loading.service';
                   />
                 </div>
                 <div>
-                  <label class="block text-sm font-semibold text-slate-700 mb-2">Department</label>
+                  <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Department</label>
                   <input
                     [(ngModel)]="currentUser.department"
                     name="department"
@@ -240,7 +248,7 @@ import { LoadingService } from '../../services/loading.service';
                   />
                 </div>
                 <div>
-                  <label class="block text-sm font-semibold text-slate-700 mb-2">Role *</label>
+                  <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Role *</label>
                   <select
                     [(ngModel)]="currentUser.role"
                     name="role"
@@ -254,7 +262,7 @@ import { LoadingService } from '../../services/loading.service';
                   </select>
                 </div>
                 <div>
-                  <label class="block text-sm font-semibold text-slate-700 mb-2">Status</label>
+                  <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Status</label>
                   <select
                     [(ngModel)]="currentUser.status"
                     name="status"
@@ -265,11 +273,11 @@ import { LoadingService } from '../../services/loading.service';
                     <option value="INACTIVE">Inactive</option>
                   </select>
                 </div>
-                <div class="flex space-x-3 pt-6 mt-6 border-t border-slate-200">
+                <div class="flex space-x-3 pt-6 mt-6 border-t border-slate-200 dark:border-slate-700">
                   <button
                     type="button"
                     (click)="closeUserModal()"
-                    class="flex-1 px-4 py-3 border-2 border-slate-300 text-slate-700 font-semibold rounded-lg hover:bg-slate-50 transition-colors"
+                    class="flex-1 px-4 py-3 border-2 border-slate-300 dark:border-slate-600 text-slate-700 dark:text-slate-300 font-semibold rounded-lg hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors"
                   >
                     Cancel
                   </button>

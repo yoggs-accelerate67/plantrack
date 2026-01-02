@@ -24,6 +24,9 @@ public class PlanService {
     @Autowired
     private NotificationService notificationService;
 
+    @Autowired
+    private AuditService auditService;
+
     // 1. Logic to Create a Plan linked to a User + Trigger Notification
     public Plan createPlan(Long userId, Plan plan) {
         User user = userRepository.findById(userId)
@@ -38,13 +41,19 @@ public class PlanService {
         
         Plan savedPlan = planRepository.save(plan);
 
+        // Audit Log
+        auditService.logCreate("PLAN", savedPlan.getPlanId(), 
+            "Created plan: " + savedPlan.getTitle() + " (Priority: " + savedPlan.getPriority() + ")");
+
         // --- TRIGGER NOTIFICATION ---
         // Automatically alert the user that a plan was assigned
         try {
             notificationService.createNotification(
                 userId, 
                 "INFO", 
-                "New Plan Created: '" + savedPlan.getTitle() + "'."
+                "New Plan Created: '" + savedPlan.getTitle() + "'.",
+                "PLAN",
+                savedPlan.getPlanId()
             );
         } catch (Exception e) {
             // Don't fail plan creation if notification fails
@@ -75,6 +84,9 @@ public class PlanService {
         Plan plan = planRepository.findById(planId)
                 .orElseThrow(() -> new RuntimeException("Plan not found with id: " + planId));
         
+        String oldStatus = plan.getStatus() != null ? plan.getStatus().toString() : null;
+        String oldPriority = plan.getPriority() != null ? plan.getPriority().toString() : null;
+        
         plan.setTitle(planDetails.getTitle());
         plan.setDescription(planDetails.getDescription());
         plan.setPriority(planDetails.getPriority());
@@ -82,12 +94,29 @@ public class PlanService {
         plan.setStartDate(planDetails.getStartDate());
         plan.setEndDate(planDetails.getEndDate());
         
-        return planRepository.save(plan);
+        Plan savedPlan = planRepository.save(plan);
+
+        // Audit Log
+        if (planDetails.getStatus() != null && oldStatus != null && !oldStatus.equals(planDetails.getStatus().toString())) {
+            auditService.logStatusChange("PLAN", planId, oldStatus, planDetails.getStatus().toString(),
+                "Plan '" + savedPlan.getTitle() + "' status changed from " + oldStatus + " to " + planDetails.getStatus());
+        } else {
+            auditService.logUpdate("PLAN", planId, "Updated plan: " + savedPlan.getTitle());
+        }
+        
+        return savedPlan;
     }
 
     // 6. Logic to Delete Plan
     public void deletePlan(Long planId) {
+        Plan plan = planRepository.findById(planId)
+                .orElseThrow(() -> new RuntimeException("Plan not found with id: " + planId));
+        
+        String planTitle = plan.getTitle();
         planRepository.deleteById(planId);
+        
+        // Audit Log
+        auditService.logDelete("PLAN", planId, "Deleted plan: " + planTitle);
     }
 
     // 7. Get Plans that contain initiatives assigned to a specific user (for Employees)

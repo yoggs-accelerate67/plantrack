@@ -1,7 +1,7 @@
 package com.plantrack.backend.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.plantrack.backend.config.LocalDateTimeDeserializer;
 import jakarta.persistence.*;
@@ -28,13 +28,13 @@ public class Milestone {
     
     private String status; // "PLANNED", "IN_PROGRESS", "COMPLETED"
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "plan_id", nullable = false)
-    @JsonBackReference // This side will not be serialized (prevents circular reference)
+    @JsonIgnoreProperties({"milestones", "user"}) // Prevent circular reference but allow plan data
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY) // Allow serialization, prevent deserialization (plan is set via service, not request body)
     private Plan plan;
 
     @OneToMany(mappedBy = "milestone", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
-    @JsonManagedReference // This side will be serialized
     private java.util.List<Initiative> initiatives = new java.util.ArrayList<>();
 
     public Milestone() {

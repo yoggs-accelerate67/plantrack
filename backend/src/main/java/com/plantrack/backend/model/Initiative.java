@@ -1,9 +1,10 @@
 package com.plantrack.backend.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -30,9 +31,10 @@ public class Initiative {
     private String status; // PLANNED, IN_PROGRESS, COMPLETED
 
     // --- RELATIONSHIP: Initiative belongs to a Milestone ---
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "milestone_id", nullable = false)
-    @JsonBackReference // This side will not be serialized (prevents circular reference)
+    @JsonIgnoreProperties({"initiatives", "plan"}) // Prevent circular reference but allow milestone data
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY) // Allow serialization, prevent deserialization (milestone is set via service, not request body)
     private Milestone milestone;
 
     // --- RELATIONSHIP: Initiative is assigned to a User (Employee) ---

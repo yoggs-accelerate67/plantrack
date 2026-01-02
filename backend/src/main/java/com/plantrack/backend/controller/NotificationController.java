@@ -14,17 +14,33 @@ public class NotificationController {
     @Autowired
     private NotificationService notificationService;
 
-    // Get unread notifications for a user
-    // URL: GET http://localhost:8080/api/users/{userId}/notifications
+    // Get all notifications for a user
     @GetMapping("/users/{userId}/notifications")
-    public List<Notification> getNotifications(@PathVariable Long userId) {
+    public List<Notification> getAllNotifications(@PathVariable Long userId) {
+        return notificationService.getAllNotifications(userId);
+    }
+
+    // Get unread notifications for a user
+    @GetMapping("/users/{userId}/notifications/unread")
+    public List<Notification> getUnreadNotifications(@PathVariable Long userId) {
         return notificationService.getUnreadNotifications(userId);
     }
 
+    // Get unread count for a user
+    @GetMapping("/users/{userId}/notifications/unread-count")
+    public Long getUnreadCount(@PathVariable Long userId) {
+        return notificationService.getUnreadCount(userId);
+    }
+
     // Mark a notification as read
-    // URL: PUT http://localhost:8080/api/notifications/{notificationId}/read
     @PutMapping("/notifications/{notificationId}/read")
     public void markAsRead(@PathVariable Long notificationId) {
         notificationService.markAsRead(notificationId);
+    }
+
+    // Mark all notifications as read for a user
+    @PutMapping("/users/{userId}/notifications/read-all")
+    public void markAllAsRead(@PathVariable Long userId) {
+        notificationService.markAllAsRead(userId);
     }
 }

@@ -27,6 +27,21 @@ export const routes: Routes = [
     canActivate: [authGuard]
   },
   {
+    path: 'my-initiatives',
+    loadComponent: () => import('./components/my-initiatives/my-initiatives.component').then(m => m.MyInitiativesComponent),
+    canActivate: [authGuard]
+  },
+  {
+    path: 'analytics',
+    loadComponent: () => import('./components/analytics-dashboard/analytics-dashboard.component').then(m => m.AnalyticsDashboardComponent),
+    canActivate: [authGuard]
+  },
+  {
+    path: 'audit-logs',
+    loadComponent: () => import('./components/audit-logs/audit-logs.component').then(m => m.AuditLogsComponent),
+    canActivate: [authGuard]
+  },
+  {
     path: '',
     redirectTo: '/login',
     pathMatch: 'full'

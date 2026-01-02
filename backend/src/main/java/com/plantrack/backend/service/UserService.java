@@ -17,12 +17,21 @@ public class UserService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    @Autowired
+    private AuditService auditService;
+
     public User createUser(User user) {
         // Hash password if provided
         if (user.getPassword() != null && !user.getPassword().isEmpty()) {
             user.setPassword(passwordEncoder.encode(user.getPassword()));
         }
-        return userRepository.save(user);
+        User savedUser = userRepository.save(user);
+        
+        // Audit Log
+        auditService.logCreate("USER", savedUser.getUserId(),
+            "Created user: " + savedUser.getName() + " (" + savedUser.getEmail() + ") with role: " + savedUser.getRole());
+        
+        return savedUser;
     }
 
     public List<User> getAllUsers() {
@@ -59,11 +68,24 @@ public class UserService {
             user.setStatus(userDetails.getStatus());
         }
         
-        return userRepository.save(user);
+        User savedUser = userRepository.save(user);
+        
+        // Audit Log
+        auditService.logUpdate("USER", id, "Updated user: " + savedUser.getName() + " (" + savedUser.getEmail() + ")");
+        
+        return savedUser;
     }
 
     // ADDED: Missing delete method
     public void deleteUser(Long id) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("User not found with id: " + id));
+        
+        String userName = user.getName();
+        String userEmail = user.getEmail();
         userRepository.deleteById(id);
+        
+        // Audit Log
+        auditService.logDelete("USER", id, "Deleted user: " + userName + " (" + userEmail + ")");
     }
 }
