@@ -1,8 +1,6 @@
 package com.plantrack.backend.controller;
 
-import com.plantrack.backend.dto.DashboardStatsDTO;
-import com.plantrack.backend.dto.DepartmentalInsightsDTO;
-import com.plantrack.backend.dto.VelocityMetricsDTO;
+import com.plantrack.backend.dto.*;
 import com.plantrack.backend.model.AnalyticsDTO;
 import com.plantrack.backend.service.AnalyticsService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,9 +29,9 @@ public class AnalyticsController {
         return ResponseEntity.ok(analyticsService.getUserAnalytics(userId));
     }
 
-    // Get Departmental Insights (Admin/Manager only)
+    // Get Departmental Insights (All authenticated users for gamification)
     @GetMapping("/analytics/departmental-insights")
-    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER', 'EMPLOYEE')")
     public ResponseEntity<List<DepartmentalInsightsDTO>> getDepartmentalInsights() {
         return ResponseEntity.ok(analyticsService.getDepartmentalInsights());
     }
@@ -50,5 +48,69 @@ public class AnalyticsController {
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<VelocityMetricsDTO>> getAllUsersVelocity() {
         return ResponseEntity.ok(analyticsService.getAllUsersVelocity());
+    }
+
+    // ============================================================
+    // GAMIFICATION ENDPOINTS
+    // ============================================================
+
+    // Get gamified velocity metrics with filtering and sorting
+    @GetMapping("/analytics/gamified-velocity")
+    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER', 'EMPLOYEE')")
+    public ResponseEntity<List<GamifiedVelocityDTO>> getGamifiedVelocity(
+            @RequestParam(required = false) String department,
+            @RequestParam(required = false) String search,
+            @RequestParam(required = false) Double minCompletionRate,
+            @RequestParam(required = false) Double maxCompletionRate,
+            @RequestParam(required = false) Integer minTasks,
+            @RequestParam(required = false) Integer maxTasks,
+            @RequestParam(required = false) String performanceTier,
+            @RequestParam(required = false) String sortBy,
+            @RequestParam(required = false, defaultValue = "desc") String sortOrder) {
+        return ResponseEntity.ok(analyticsService.getAllGamifiedVelocity(
+                department, search, minCompletionRate, maxCompletionRate,
+                minTasks, maxTasks, performanceTier, sortBy, sortOrder));
+    }
+
+    // Get performance score for a specific user
+    @GetMapping("/analytics/performance-score/{userId}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER')")
+    public ResponseEntity<PerformanceScoreDTO> getPerformanceScore(
+            @PathVariable Long userId,
+            @RequestParam(required = false) String department) {
+        return ResponseEntity.ok(analyticsService.calculatePerformanceScore(userId, department));
+    }
+
+    // Get badges for a specific user
+    @GetMapping("/analytics/badges/{userId}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER', 'EMPLOYEE')")
+    public ResponseEntity<List<BadgeDTO>> getUserBadges(@PathVariable Long userId) {
+        return ResponseEntity.ok(analyticsService.calculateBadges(userId));
+    }
+
+    // Get leaderboard
+    @GetMapping("/analytics/leaderboard")
+    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER', 'EMPLOYEE')")
+    public ResponseEntity<List<LeaderboardEntryDTO>> getLeaderboard(
+            @RequestParam(required = false, defaultValue = "OVERALL") String metricType,
+            @RequestParam(required = false) String department,
+            @RequestParam(required = false, defaultValue = "50") int limit) {
+        return ResponseEntity.ok(analyticsService.getLeaderboard(metricType, department, limit));
+    }
+
+    // Get all departments
+    @GetMapping("/analytics/departments")
+    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER', 'EMPLOYEE')")
+    public ResponseEntity<List<String>> getAllDepartments() {
+        return ResponseEntity.ok(analyticsService.getAllDepartments());
+    }
+
+    // Get gamified velocity for a specific user
+    @GetMapping("/analytics/gamified-velocity/{userId}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER', 'EMPLOYEE')")
+    public ResponseEntity<GamifiedVelocityDTO> getUserGamifiedVelocity(
+            @PathVariable Long userId,
+            @RequestParam(required = false) String department) {
+        return ResponseEntity.ok(analyticsService.getGamifiedVelocity(userId, department));
     }
 }
