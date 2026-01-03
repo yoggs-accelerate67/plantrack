@@ -15,18 +15,35 @@ public class CommentController {
     @Autowired
     private CommentService commentService;
 
-    // Add a comment to an Initiative
-    // URL: POST /api/initiatives/1/comments?userId=1
+    /**
+     * Create a new comment on an initiative
+     */
     @PostMapping("/initiatives/{initiativeId}/comments")
-    public Comment addComment(@PathVariable Long initiativeId, 
-                              @RequestParam Long userId, 
-                              @Valid @RequestBody Comment comment) {
-        return commentService.addComment(initiativeId, userId, comment);
+    public Comment createComment(@PathVariable Long initiativeId, @Valid @RequestBody Comment comment) {
+        return commentService.createComment(initiativeId, comment);
     }
 
-    // Get all comments for an Initiative
+    /**
+     * Get all comments for an initiative
+     */
     @GetMapping("/initiatives/{initiativeId}/comments")
-    public List<Comment> getCommentsByInitiative(@PathVariable Long initiativeId) {
+    public List<Comment> getComments(@PathVariable Long initiativeId) {
         return commentService.getCommentsByInitiative(initiativeId);
+    }
+
+    /**
+     * Update a comment
+     */
+    @PutMapping("/comments/{commentId}")
+    public Comment updateComment(@PathVariable Long commentId, @Valid @RequestBody Comment comment) {
+        return commentService.updateComment(commentId, comment);
+    }
+
+    /**
+     * Delete a comment (soft delete)
+     */
+    @DeleteMapping("/comments/{commentId}")
+    public void deleteComment(@PathVariable Long commentId) {
+        commentService.deleteComment(commentId);
     }
 }

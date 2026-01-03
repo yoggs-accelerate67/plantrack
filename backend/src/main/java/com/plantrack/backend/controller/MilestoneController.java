@@ -3,9 +3,11 @@ package com.plantrack.backend.controller;
 import com.plantrack.backend.model.Milestone;
 import com.plantrack.backend.service.MilestoneService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api")
@@ -34,7 +36,28 @@ public class MilestoneController {
     
     // Delete Milestone
     @DeleteMapping("/milestones/{milestoneId}")
-    public void deleteMilestone(@PathVariable Long milestoneId) {
-        milestoneService.deleteMilestone(milestoneId);
+    public ResponseEntity<Void> deleteMilestone(@PathVariable Long milestoneId) {
+        try {
+            milestoneService.deleteMilestone(milestoneId);
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to delete milestone: " + e.getMessage(), e);
+        }
+    }
+
+    /**
+     * Get preview of cascade cancellation for a milestone
+     */
+    @GetMapping("/milestones/{milestoneId}/cancel-preview")
+    public ResponseEntity<Map<String, Object>> getCancelPreview(@PathVariable Long milestoneId) {
+        return ResponseEntity.ok(milestoneService.getCancelCascadePreview(milestoneId));
+    }
+
+    /**
+     * Cancel a milestone with cascade to all initiatives
+     */
+    @PostMapping("/milestones/{milestoneId}/cancel")
+    public ResponseEntity<Map<String, Object>> cancelMilestoneWithCascade(@PathVariable Long milestoneId) {
+        return ResponseEntity.ok(milestoneService.cancelMilestoneWithCascade(milestoneId));
     }
 }

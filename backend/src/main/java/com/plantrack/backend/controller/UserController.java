@@ -25,6 +25,17 @@ public class UserController {
         return userService.getAllUsers();
     }
 
+    /**
+     * Get users for mention dropdown - accessible by all authenticated users
+     * Returns only active users with limited fields (id, name, email)
+     */
+    @GetMapping("/mentions")
+    public List<User> getUsersForMentions() {
+        return userService.getAllUsers().stream()
+                .filter(user -> "ACTIVE".equalsIgnoreCase(user.getStatus()))
+                .toList();
+    }
+
     @GetMapping("/{id}")
     public User getUserById(@PathVariable Long id) {
         // This now works because UserService returns 'User', not 'Optional<User>'

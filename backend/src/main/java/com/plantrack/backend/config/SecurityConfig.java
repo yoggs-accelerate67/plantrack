@@ -47,7 +47,9 @@ public class SecurityConfig {
                 .requestMatchers("/api/users/*/plans/**").hasAnyRole("MANAGER", "ADMIN")
                 // Allow Employees to get their assigned plans
                 .requestMatchers(HttpMethod.GET, "/api/users/*/assigned-plans").hasAnyRole("EMPLOYEE", "MANAGER", "ADMIN")
-                // Allow Managers and Admins to GET users list (for assigning initiatives)
+                // Allow all authenticated users to GET users for mentions (comment @mentions)
+                .requestMatchers(HttpMethod.GET, "/api/users/mentions").hasAnyRole("EMPLOYEE", "MANAGER", "ADMIN")
+                // Allow Managers and Admins to GET full users list (for assigning initiatives)
                 .requestMatchers(HttpMethod.GET, "/api/users").hasAnyRole("MANAGER", "ADMIN")
                 
                 // Allow Employees, Managers, and Admins to GET their own initiatives
@@ -83,6 +85,10 @@ public class SecurityConfig {
                 // 6. INITIATIVES (Strict Rules)
                 .requestMatchers(HttpMethod.DELETE, "/api/initiatives/**").hasAnyRole("MANAGER", "ADMIN")
                 .requestMatchers("/api/initiatives/**").hasAnyRole("MANAGER", "EMPLOYEE", "ADMIN")
+                
+                // 6.1. COMMENTS (Assigned users, managers, and admins can comment)
+                .requestMatchers("/api/initiatives/*/comments").hasAnyRole("MANAGER", "EMPLOYEE", "ADMIN")
+                .requestMatchers("/api/comments/**").hasAnyRole("MANAGER", "EMPLOYEE", "ADMIN")
 
                 // 7. DASHBOARD STATS
                 .requestMatchers("/api/dashboard/**").hasAnyRole("MANAGER", "EMPLOYEE", "ADMIN")

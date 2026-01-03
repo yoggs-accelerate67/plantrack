@@ -9,9 +9,12 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api")
@@ -62,5 +65,24 @@ public class PlanController {
         List<Plan> plans = planService.getPlansWithAssignedInitiatives(userId);
         System.out.println("Found " + plans.size() + " plans with assigned initiatives for user " + userId);
         return ResponseEntity.ok(plans);
+    }
+
+    /**
+     * Get preview of cascade cancellation (counts of affected entities)
+     */
+    @GetMapping("/plans/{planId}/cancel-preview")
+    public ResponseEntity<Map<String, Object>> getCancelPreview(@PathVariable Long planId) {
+        return ResponseEntity.ok(planService.getCancelCascadePreview(planId));
+    }
+
+    /**
+     * Cancel a plan with cascade to all milestones and initiatives
+     */
+    @PostMapping("/plans/{planId}/cancel")
+    public ResponseEntity<Map<String, Object>> cancelPlanWithCascade(@PathVariable Long planId) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        // Get userId from authentication context if needed
+        Long userId = null; // Can be extracted from auth if needed for logging
+        return ResponseEntity.ok(planService.cancelPlanWithCascade(planId, userId));
     }
 }
