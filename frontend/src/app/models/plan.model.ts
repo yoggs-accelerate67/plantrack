@@ -139,3 +139,66 @@ export interface Comment {
   }>;
 }
 
+// ============================================================
+// GAMIFICATION MODELS
+// ============================================================
+
+export interface PerformanceScore {
+  userId: number;
+  userName: string;
+  department: string;
+  overallScore: number;
+  completionRate: number;
+  speedScore: number;
+  qualityScore: number;
+  consistencyScore: number;
+  rank: number;
+  departmentRank: number;
+  previousRank: number;
+  previousDepartmentRank: number;
+  performanceTier: 'TOP_PERFORMER' | 'CONSISTENT' | 'NEEDS_IMPROVEMENT';
+  improvementPercentage: number;
+}
+
+export interface Badge {
+  badgeId: string;
+  badgeName: string;
+  description: string;
+  category: 'SPEED' | 'QUALITY' | 'CONSISTENCY' | 'TEAMWORK' | 'IMPROVEMENT';
+  icon: string;
+  earnedDate?: string;
+  earned: boolean;
+  criteria: string;
+}
+
+export interface LeaderboardEntry {
+  userId: number;
+  userName: string;
+  department: string;
+  rank: number;
+  score: number;
+  metricType: 'OVERALL' | 'SPEED' | 'QUALITY' | 'IMPROVEMENT';
+  metricValue: number;
+  rankChange: number;
+  badgeIcon?: string;
+}
+
+export interface GamifiedVelocity {
+  userId: number;
+  userName: string;
+  department: string;
+  tasksAssigned: number;
+  tasksCompleted: number;
+  completionRate: number;
+  averageTasksPerWeek: number;
+  averageTasksPerMonth: number;
+  overallScore: number;
+  rank: number;
+  departmentRank: number;
+  performanceTier: 'TOP_PERFORMER' | 'CONSISTENT' | 'NEEDS_IMPROVEMENT';
+  badges: Badge[];
+  improvementPercentage: number;
+  streakDays: number;
+  streakWeeks: number;
+}
+

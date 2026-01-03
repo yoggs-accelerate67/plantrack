@@ -93,8 +93,8 @@ public class SecurityConfig {
                 // 7. DASHBOARD STATS
                 .requestMatchers("/api/dashboard/**").hasAnyRole("MANAGER", "EMPLOYEE", "ADMIN")
                 
-                // 8. ANALYTICS (Manager and Admin only)
-                .requestMatchers("/api/analytics/**").hasAnyRole("MANAGER", "ADMIN")
+                // 8. ANALYTICS (All authenticated users - Employees, Managers, and Admins)
+                .requestMatchers("/api/analytics/**").hasAnyRole("EMPLOYEE", "MANAGER", "ADMIN")
                 
                 // 9. AUDIT LOGS (Admin only)
                 .requestMatchers("/api/audit-logs/**").hasRole("ADMIN")
