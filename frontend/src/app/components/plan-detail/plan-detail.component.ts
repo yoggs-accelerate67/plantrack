@@ -465,11 +465,11 @@ import { ViewChild } from '@angular/core';
         <!-- Add Initiative Modal -->
         @if (showAddInitiativeModal()) {
           <div class="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-            <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6">
-              <h3 class="text-2xl font-bold text-slate-900 mb-6">Add Initiative</h3>
+            <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-2xl max-w-md w-full p-6 border border-slate-200 dark:border-slate-700">
+              <h3 class="text-2xl font-bold text-slate-900 dark:text-slate-100 mb-6">Add Initiative</h3>
               <form (ngSubmit)="addInitiative()" class="space-y-4">
                 <div>
-                  <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Title *</label>
+                  <label class="block text-sm font-medium text-slate-700 dark:text-slate-200 mb-2">Title *</label>
                   <input
                     [(ngModel)]="newInitiative.title"
                     name="initiativeTitle"
@@ -479,7 +479,7 @@ import { ViewChild } from '@angular/core';
                   />
                 </div>
                 <div>
-                  <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Description</label>
+                  <label class="block text-sm font-medium text-slate-700 dark:text-slate-200 mb-2">Description</label>
                   <textarea
                     [(ngModel)]="newInitiative.description"
                     name="initiativeDescription"
@@ -489,7 +489,7 @@ import { ViewChild } from '@angular/core';
                   ></textarea>
                 </div>
                 <div class="relative">
-                  <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">
+                  <label class="block text-sm font-semibold text-slate-700 dark:text-slate-200 mb-2">
                     Assigned Users *
                     @if (assignedUserIds().length > 0) {
                       <span class="ml-2 px-2 py-0.5 bg-teal-100 dark:bg-teal-900/30 text-teal-700 dark:text-teal-400 rounded-full text-xs font-medium">
@@ -526,9 +526,9 @@ import { ViewChild } from '@angular/core';
                       class="w-full px-4 py-3 border-2 border-slate-300 dark:border-slate-600 rounded-xl focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition-all bg-white dark:bg-slate-700 text-slate-900 dark:text-slate-100 text-left flex items-center justify-between hover:border-teal-400 dark:hover:border-teal-500"
                     >
                       <span class="truncate">
-                        <span class="text-slate-400">Select users</span>
+                        <span class="text-slate-400 dark:text-slate-300">Select users</span>
                       </span>
-                      <svg class="w-5 h-5 text-slate-400 transition-transform duration-200" [class.rotate-180]="showUserDropdown()" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <svg class="w-5 h-5 text-slate-400 dark:text-slate-300 transition-transform duration-200" [class.rotate-180]="showUserDropdown()" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
                       </svg>
                     </button>
@@ -555,7 +555,7 @@ import { ViewChild } from '@angular/core';
                         </div>
                         <div id="userDropdownList" class="max-h-64 overflow-y-auto">
                           @if (filteredUsers().length === 0) {
-                            <div class="p-4 text-center text-slate-500 text-sm">
+                            <div class="p-4 text-center text-slate-500 dark:text-slate-400 text-sm">
                               @if (userSearchQuery().trim()) {
                                 No users found matching "{{ userSearchQuery() }}"
                               } @else {
@@ -617,7 +617,7 @@ import { ViewChild } from '@angular/core';
                   <button
                     type="button"
                     (click)="closeAddInitiativeModal()"
-                    class="flex-1 px-4 py-3 border-2 border-slate-300 text-slate-700 font-semibold rounded-xl hover:bg-slate-50 transition-colors"
+                    class="flex-1 px-4 py-3 border-2 border-slate-300 dark:border-slate-600 text-slate-700 dark:text-slate-300 font-semibold rounded-xl hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors"
                   >
                     Cancel
                   </button>

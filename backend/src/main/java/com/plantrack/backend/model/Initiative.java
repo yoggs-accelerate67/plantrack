@@ -11,11 +11,14 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.List;
+import java.util.ArrayList;
 
 @Entity
 @Table(name = "initiatives")
@@ -51,6 +54,11 @@ public class Initiative {
     @JsonIgnoreProperties({"password", "plans"}) // Prevent password and circular references
     private Set<User> assignedUsers = new HashSet<>();
 
+    // --- RELATIONSHIP: Initiative has many Comments ---
+    @OneToMany(mappedBy = "initiative", fetch = FetchType.LAZY, cascade = jakarta.persistence.CascadeType.ALL)
+    @JsonIgnoreProperties({"initiative", "mentionedUsers"}) // Prevent circular references
+    private List<Comment> comments = new ArrayList<>();
+
     public Initiative() {}
 
     // Getters and Setters
@@ -71,4 +79,7 @@ public class Initiative {
 
     public Set<User> getAssignedUsers() { return assignedUsers; }
     public void setAssignedUsers(Set<User> assignedUsers) { this.assignedUsers = assignedUsers; }
+
+    public List<Comment> getComments() { return comments; }
+    public void setComments(List<Comment> comments) { this.comments = comments; }
 }
