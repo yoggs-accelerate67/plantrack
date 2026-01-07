@@ -354,13 +354,13 @@ import { ViewChild } from '@angular/core';
                                     <select
                                       [value]="initiative.status"
                                       (change)="updateInitiativeStatus(initiative, $event)"
-                                      class="px-3 py-1 border border-slate-300 dark:border-slate-600 rounded-lg text-sm focus:ring-2 focus:ring-teal-500 focus:border-teal-500 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100"
+                                      class="status-select px-4 py-2 border-2 border-slate-300 dark:border-slate-600 rounded-lg text-base font-medium focus:ring-2 focus:ring-teal-500 focus:border-teal-500 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 transition-all hover:border-teal-400 dark:hover:border-teal-500"
                                     >
-                                      <option value="PLANNED">Planned</option>
-                                      <option value="IN_PROGRESS">In Progress</option>
-                                      <option value="COMPLETED">Completed</option>
+                                      <option value="PLANNED" class="text-base">Planned</option>
+                                      <option value="IN_PROGRESS" class="text-base">In Progress</option>
+                                      <option value="COMPLETED" class="text-base">Completed</option>
                                       @if (authService.isManager()) {
-                                        <option value="CANCELLED">Cancelled</option>
+                                        <option value="CANCELLED" class="text-base">Cancelled</option>
                                       }
                                     </select>
                                   } @else {
@@ -596,7 +596,7 @@ import { ViewChild } from '@angular/core';
                                   <div class="text-xs text-slate-500 dark:text-slate-400 truncate">{{ user.email }}</div>
                                 </div>
                                 @if (isUserSelected(user.userId!)) {
-                                  <svg class="w-5 h-5 text-teal-600 dark:text-teal-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                  <svg class="w-4 h-4 text-teal-600 dark:text-teal-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
                                   </svg>
                                 }
@@ -1101,7 +1101,75 @@ import { ViewChild } from '@angular/core';
       </div>
     </div>
   `,
-  styles: []
+  styles: [`
+    /* Custom select dropdown styling */
+    .status-select {
+      appearance: none;
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+      background-position: right 0.5rem center;
+      background-repeat: no-repeat;
+      background-size: 0.875em 0.875em;
+      padding-right: 2.5rem;
+      font-size: 1rem;
+    }
+    
+    .status-select option {
+      font-size: 1rem !important;
+      padding: 0.75rem 0.5rem !important;
+      line-height: 1.5 !important;
+      min-height: 2.5rem !important;
+    }
+    
+    .dark .status-select {
+      background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%9ca3af' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+    }
+    
+    /* Ensure dropdown options are readable - target all selects */
+    select.status-select {
+      font-size: 1rem;
+    }
+    
+    select.status-select option {
+      font-size: 1rem !important;
+      padding: 0.75rem !important;
+      min-height: 2.5rem !important;
+    }
+    
+    /* Modern scrollbar styling */
+    .overflow-y-auto::-webkit-scrollbar,
+    .overflow-x-auto::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    
+    .overflow-y-auto::-webkit-scrollbar-track,
+    .overflow-x-auto::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    
+    .overflow-y-auto::-webkit-scrollbar-thumb,
+    .overflow-x-auto::-webkit-scrollbar-thumb {
+      background: rgba(148, 163, 184, 0.3);
+      border-radius: 3px;
+    }
+    
+    .overflow-y-auto::-webkit-scrollbar-thumb:hover,
+    .overflow-x-auto::-webkit-scrollbar-thumb:hover {
+      background: rgba(148, 163, 184, 0.5);
+    }
+    
+    .dark .overflow-y-auto::-webkit-scrollbar-thumb,
+    .dark .overflow-x-auto::-webkit-scrollbar-thumb {
+      background: rgba(148, 163, 184, 0.4);
+    }
+    
+    .dark .overflow-y-auto::-webkit-scrollbar-thumb:hover,
+    .dark .overflow-x-auto::-webkit-scrollbar-thumb:hover {
+      background: rgba(148, 163, 184, 0.6);
+    }
+  `]
 })
 export class PlanDetailComponent implements OnInit {
   plan = signal<PlanDetail | null>(null);

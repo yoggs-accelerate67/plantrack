@@ -250,16 +250,16 @@ import { NotificationCenterComponent } from '../notification-center/notification
                         <select
                           [value]="initiative.status"
                           (change)="updateStatus(initiative, $event)"
-                          class="px-4 py-2 rounded-lg border-2 text-sm font-medium focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition-all bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100"
+                          class="status-select px-4 py-2 rounded-lg border-2 text-base font-medium focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition-all bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100"
                           [ngClass]="{
                             'border-green-500 dark:border-green-500': initiative.status === 'COMPLETED',
                             'border-amber-500 dark:border-amber-500': initiative.status === 'IN_PROGRESS',
                             'border-slate-300 dark:border-slate-600': initiative.status === 'PLANNED'
                           }"
                         >
-                          <option value="PLANNED">Planned</option>
-                          <option value="IN_PROGRESS">In Progress</option>
-                          <option value="COMPLETED">Completed</option>
+                          <option value="PLANNED" class="text-base">Planned</option>
+                          <option value="IN_PROGRESS" class="text-base">In Progress</option>
+                          <option value="COMPLETED" class="text-base">Completed</option>
                         </select>
                       }
 
@@ -306,6 +306,74 @@ import { NotificationCenterComponent } from '../notification-center/notification
     .dark .card {
       background: rgb(30 41 59);
       border-color: rgb(51 65 85);
+    }
+    
+    /* Custom select dropdown styling */
+    .status-select {
+      appearance: none;
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+      background-position: right 0.5rem center;
+      background-repeat: no-repeat;
+      background-size: 0.875em 0.875em;
+      padding-right: 2.5rem;
+      font-size: 1rem;
+    }
+    
+    .status-select option {
+      font-size: 1rem !important;
+      padding: 0.75rem 0.5rem !important;
+      line-height: 1.5 !important;
+      min-height: 2.5rem !important;
+    }
+    
+    .dark .status-select {
+      background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%9ca3af' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+    }
+    
+    /* Ensure dropdown options are readable */
+    select.status-select {
+      font-size: 1rem;
+    }
+    
+    select.status-select option {
+      font-size: 1rem !important;
+      padding: 0.75rem !important;
+      min-height: 2.5rem !important;
+    }
+    
+    /* Modern scrollbar styling */
+    .overflow-y-auto::-webkit-scrollbar,
+    .overflow-x-auto::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    
+    .overflow-y-auto::-webkit-scrollbar-track,
+    .overflow-x-auto::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    
+    .overflow-y-auto::-webkit-scrollbar-thumb,
+    .overflow-x-auto::-webkit-scrollbar-thumb {
+      background: rgba(148, 163, 184, 0.3);
+      border-radius: 3px;
+    }
+    
+    .overflow-y-auto::-webkit-scrollbar-thumb:hover,
+    .overflow-x-auto::-webkit-scrollbar-thumb:hover {
+      background: rgba(148, 163, 184, 0.5);
+    }
+    
+    .dark .overflow-y-auto::-webkit-scrollbar-thumb,
+    .dark .overflow-x-auto::-webkit-scrollbar-thumb {
+      background: rgba(148, 163, 184, 0.4);
+    }
+    
+    .dark .overflow-y-auto::-webkit-scrollbar-thumb:hover,
+    .dark .overflow-x-auto::-webkit-scrollbar-thumb:hover {
+      background: rgba(148, 163, 184, 0.6);
     }
   `]
 })

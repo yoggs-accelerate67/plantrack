@@ -108,7 +108,33 @@ import { ToastService } from '../../services/toast.service';
       }
     </div>
   `,
-  styles: []
+  styles: [`
+    /* Modern scrollbar styling for notifications */
+    .overflow-y-auto::-webkit-scrollbar {
+      width: 6px;
+    }
+    
+    .overflow-y-auto::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    
+    .overflow-y-auto::-webkit-scrollbar-thumb {
+      background: rgba(148, 163, 184, 0.3);
+      border-radius: 3px;
+    }
+    
+    .overflow-y-auto::-webkit-scrollbar-thumb:hover {
+      background: rgba(148, 163, 184, 0.5);
+    }
+    
+    .dark .overflow-y-auto::-webkit-scrollbar-thumb {
+      background: rgba(148, 163, 184, 0.4);
+    }
+    
+    .dark .overflow-y-auto::-webkit-scrollbar-thumb:hover {
+      background: rgba(148, 163, 184, 0.6);
+    }
+  `]
 })
 export class NotificationCenterComponent implements OnInit {
   private notificationService = inject(NotificationService);
