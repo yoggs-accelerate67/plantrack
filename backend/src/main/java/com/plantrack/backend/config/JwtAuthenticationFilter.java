@@ -6,6 +6,8 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -18,6 +20,8 @@ import java.io.IOException;
 
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
+
+    private static final Logger logger = LoggerFactory.getLogger(JwtAuthenticationFilter.class);
 
     @Autowired
     private JwtUtil jwtUtil;
@@ -39,9 +43,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             jwt = authorizationHeader.substring(7); // Remove "Bearer " prefix
             try {
                 username = jwtUtil.extractUsername(jwt);
+                logger.trace("JWT token extracted successfully: username={}, uri={}", username, request.getRequestURI());
             } catch (Exception e) {
-                System.out.println("JWT Token extraction failed: " + e.getMessage());
+                logger.warn("JWT token extraction failed: uri={}, error={}", request.getRequestURI(), e.getMessage());
             }
+        } else {
+            logger.trace("No Authorization header found: uri={}", request.getRequestURI());
         }
 
         // 2. Validate token and set authentication
@@ -55,6 +62,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 
                 // This is the magic line that logs the user in for this request
                 SecurityContextHolder.getContext().setAuthentication(authToken);
+                logger.debug("JWT authentication successful: username={}, uri={}", username, request.getRequestURI());
+            } else {
+                logger.warn("JWT token validation failed: username={}, uri={}", username, request.getRequestURI());
             }
         }
         chain.doFilter(request, response);

@@ -6,6 +6,8 @@ import com.plantrack.backend.model.User;
 import com.plantrack.backend.repository.CommentRepository;
 import com.plantrack.backend.repository.InitiativeRepository;
 import com.plantrack.backend.repository.UserRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -18,6 +20,8 @@ import java.util.stream.Collectors;
 
 @Service
 public class CommentService {
+
+    private static final Logger logger = LoggerFactory.getLogger(CommentService.class);
 
     @Autowired
     private CommentRepository commentRepository;
@@ -289,9 +293,11 @@ public class CommentService {
                     "INITIATIVE",
                     initiative.getInitiativeId()
                 );
-                System.out.println("Mention notification sent to user " + mentionedUser.getUserId() + " (" + mentionedUser.getEmail() + ")");
+                logger.info("Successfully sent mention notification: userId={}, email={}, initiativeId={}", 
+                        mentionedUser.getUserId(), mentionedUser.getEmail(), initiative.getInitiativeId());
             } catch (Exception e) {
-                System.err.println("Failed to send mention notification to user " + mentionedUser.getUserId() + ": " + e.getMessage());
+                logger.error("Failed to send mention notification: userId={}, email={}, initiativeId={}", 
+                        mentionedUser.getUserId(), mentionedUser.getEmail(), initiative.getInitiativeId(), e);
             }
         }
     }
@@ -329,7 +335,8 @@ public class CommentService {
                     initiative.getInitiativeId()
                 );
             } catch (Exception e) {
-                System.err.println("Failed to notify stakeholder " + stakeholder.getUserId() + ": " + e.getMessage());
+                logger.error("Failed to notify stakeholder: userId={}, initiativeId={}", 
+                        stakeholder.getUserId(), initiative.getInitiativeId(), e);
             }
         }
     }

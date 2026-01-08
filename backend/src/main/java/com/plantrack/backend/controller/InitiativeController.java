@@ -4,6 +4,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,6 +22,8 @@ import com.plantrack.backend.service.InitiativeService;
 @RestController
 @RequestMapping("/api")
 public class InitiativeController {
+
+    private static final Logger logger = LoggerFactory.getLogger(InitiativeController.class);
 
     @Autowired
     private InitiativeService initiativeService;
@@ -60,9 +64,9 @@ public class InitiativeController {
     // Get all initiatives assigned to a user
     @GetMapping("/users/{userId}/initiatives")
     public List<Initiative> getMyInitiatives(@PathVariable Long userId) {
-        System.out.println("Getting initiatives for userId: " + userId);
+        logger.debug("GET /users/{}/initiatives - Request received", userId);
         List<Initiative> initiatives = initiativeService.getInitiativesByUser(userId);
-        System.out.println("Found " + initiatives.size() + " initiatives for user " + userId);
+        logger.info("GET /users/{}/initiatives - Found {} initiatives", userId, initiatives.size());
         return initiatives;
     }
 }

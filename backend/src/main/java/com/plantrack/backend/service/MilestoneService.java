@@ -9,6 +9,8 @@ import com.plantrack.backend.repository.MilestoneRepository;
 import com.plantrack.backend.repository.PlanRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,6 +22,8 @@ import java.util.Map;
 
 @Service
 public class MilestoneService {
+
+    private static final Logger logger = LoggerFactory.getLogger(MilestoneService.class);
 
     @Autowired
     private MilestoneRepository milestoneRepository;
@@ -192,7 +196,8 @@ public class MilestoneService {
                     milestoneId
                 );
             } catch (Exception e) {
-                System.err.println("Failed to send cancellation notification to user " + notifyUserId + ": " + e.getMessage());
+                logger.error("Failed to send cancellation notification: userId={}, milestoneId={}", 
+                        notifyUserId, milestoneId, e);
             }
         }
 

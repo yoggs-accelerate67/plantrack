@@ -3,6 +3,8 @@ package com.plantrack.backend.controller;
 import com.plantrack.backend.model.Plan;
 import com.plantrack.backend.service.PlanService;
 import jakarta.validation.Valid;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -19,6 +21,8 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api")
 public class PlanController {
+
+    private static final Logger logger = LoggerFactory.getLogger(PlanController.class);
 
     @Autowired
     private PlanService planService;
@@ -61,9 +65,9 @@ public class PlanController {
     // Endpoint for employees to get plans with their assigned initiatives
     @GetMapping("/users/{userId}/assigned-plans")
     public ResponseEntity<List<Plan>> getPlansWithAssignedInitiatives(@PathVariable Long userId) {
-        System.out.println("Getting assigned plans for userId: " + userId);
+        logger.debug("GET /users/{}/assigned-plans - Request received", userId);
         List<Plan> plans = planService.getPlansWithAssignedInitiatives(userId);
-        System.out.println("Found " + plans.size() + " plans with assigned initiatives for user " + userId);
+        logger.info("GET /users/{}/assigned-plans - Found {} plans with assigned initiatives", userId, plans.size());
         return ResponseEntity.ok(plans);
     }
 

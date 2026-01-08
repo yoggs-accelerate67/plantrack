@@ -4,6 +4,8 @@ import com.plantrack.backend.model.Notification;
 import com.plantrack.backend.model.User;
 import com.plantrack.backend.repository.NotificationRepository;
 import com.plantrack.backend.repository.UserRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,6 +13,8 @@ import java.util.List;
 
 @Service
 public class NotificationService {
+
+    private static final Logger logger = LoggerFactory.getLogger(NotificationService.class);
 
     @Autowired
     private NotificationRepository notificationRepository;
@@ -48,11 +52,11 @@ public class NotificationService {
             }
             
             Notification saved = notificationRepository.save(notification);
-            System.out.println("Notification created successfully: ID=" + saved.getNotificationId() + 
-                             ", User=" + userId + ", Type=" + type + ", Message=" + message);
+            logger.info("Notification created successfully: notificationId={}, userId={}, type={}, entityType={}, entityId={}", 
+                    saved.getNotificationId(), userId, type, entityType, entityId);
         } catch (Exception e) {
-            System.err.println("Failed to create notification for user " + userId + ": " + e.getMessage());
-            e.printStackTrace();
+            logger.error("Failed to create notification: userId={}, type={}, entityType={}, entityId={}", 
+                    userId, type, entityType, entityId, e);
             throw e; // Re-throw to see the error
         }
     }
@@ -61,6 +65,8 @@ public class NotificationService {
      * Notify employee when initiative is assigned
      */
     public void notifyInitiativeAssigned(Long employeeUserId, String initiativeTitle, Long initiativeId) {
+        logger.debug("Sending initiative assignment notification: userId={}, initiativeId={}, title={}", 
+                employeeUserId, initiativeId, initiativeTitle);
         createNotification(
             employeeUserId,
             "ASSIGNMENT",
@@ -74,6 +80,8 @@ public class NotificationService {
      * Notify manager when employee updates initiative status
      */
     public void notifyStatusUpdate(Long managerUserId, String employeeName, String initiativeTitle, String newStatus, Long initiativeId) {
+        logger.debug("Sending status update notification: managerId={}, employeeName={}, initiativeId={}, newStatus={}", 
+                managerUserId, employeeName, initiativeId, newStatus);
         createNotification(
             managerUserId,
             "STATUS_UPDATE",
@@ -87,6 +95,7 @@ public class NotificationService {
      * Notify admin when weekly report is generated
      */
     public void notifyWeeklyReport(Long adminUserId, String reportSummary) {
+        logger.debug("Sending weekly report notification: adminId={}", adminUserId);
         createNotification(
             adminUserId,
             "WEEKLY_REPORT",
@@ -97,29 +106,45 @@ public class NotificationService {
     }
 
     public List<Notification> getUnreadNotifications(Long userId) {
-        return notificationRepository.findByUserUserIdAndStatus(userId, "UNREAD");
+        logger.debug("Fetching unread notifications: userId={}", userId);
+        List<Notification> notifications = notificationRepository.findByUserUserIdAndStatus(userId, "UNREAD");
+        logger.debug("Found {} unread notifications for user: userId={}", notifications.size(), userId);
+        return notifications;
     }
 
     public List<Notification> getAllNotifications(Long userId) {
-        return notificationRepository.findByUserUserIdOrderByCreatedDateDesc(userId);
+        logger.debug("Fetching all notifications: userId={}", userId);
+        List<Notification> notifications = notificationRepository.findByUserUserIdOrderByCreatedDateDesc(userId);
+        logger.debug("Found {} total notifications for user: userId={}", notifications.size(), userId);
+        return notifications;
     }
 
     public Long getUnreadCount(Long userId) {
-        return notificationRepository.countUnreadByUserId(userId);
+        logger.debug("Getting unread count: userId={}", userId);
+        Long count = notificationRepository.countUnreadByUserId(userId);
+        logger.debug("Unread count: userId={}, count={}", userId, count);
+        return count;
     }
 
     public void markAsRead(Long notificationId) {
+        logger.debug("Marking notification as read: notificationId={}", notificationId);
         Notification notification = notificationRepository.findById(notificationId)
-                .orElseThrow(() -> new RuntimeException("Notification not found"));
+                .orElseThrow(() -> {
+                    logger.error("Notification not found: notificationId={}", notificationId);
+                    return new RuntimeException("Notification not found");
+                });
         notification.setStatus("READ");
         notificationRepository.save(notification);
+        logger.debug("Notification marked as read: notificationId={}", notificationId);
     }
 
     public void markAllAsRead(Long userId) {
+        logger.info("Marking all notifications as read: userId={}", userId);
         List<Notification> unreadNotifications = getUnreadNotifications(userId);
         for (Notification notification : unreadNotifications) {
             notification.setStatus("READ");
             notificationRepository.save(notification);
         }
+        logger.info("Marked {} notifications as read: userId={}", unreadNotifications.size(), userId);
     }
 }

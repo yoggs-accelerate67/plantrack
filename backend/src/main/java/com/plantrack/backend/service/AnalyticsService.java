@@ -11,6 +11,8 @@ import com.plantrack.backend.repository.InitiativeRepository;
 import com.plantrack.backend.repository.MilestoneRepository;
 import com.plantrack.backend.repository.PlanRepository;
 import com.plantrack.backend.repository.UserRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,6 +24,8 @@ import java.util.Comparator;
 
 @Service
 public class AnalyticsService {
+
+    private static final Logger logger = LoggerFactory.getLogger(AnalyticsService.class);
 
     @Autowired
     private PlanRepository planRepository;
@@ -36,6 +40,8 @@ public class AnalyticsService {
     private UserRepository userRepository;
 
     public AnalyticsDTO getUserAnalytics(Long userId) {
+        logger.debug("Calculating user analytics: userId={}", userId);
+        
         // 1. Fetch all plans for the user
         List<Plan> userPlans = planRepository.findByUserUserId(userId);
 
@@ -55,11 +61,17 @@ public class AnalyticsService {
         // 3. Calculate Percentage (Avoid division by zero)
         double percentage = (totalPlans == 0) ? 0.0 : ((double) completedPlans / totalPlans) * 100;
 
+        logger.info("User analytics calculated: userId={}, totalPlans={}, completedPlans={}, pendingPlans={}, completionRate={}%", 
+                userId, totalPlans, completedPlans, pendingPlans, percentage);
+        
         // 4. Return the Report
         return new AnalyticsDTO(totalPlans, completedPlans, pendingPlans, percentage);
     }
 
     public DashboardStatsDTO getDashboardStats() {
+        logger.debug("Calculating dashboard statistics");
+        long startTime = System.currentTimeMillis();
+        
         // Get total plans
         int totalPlans = (int) planRepository.count();
 
@@ -84,6 +96,10 @@ public class AnalyticsService {
 
         // Get total users
         int totalUsers = (int) userRepository.count();
+
+        long duration = System.currentTimeMillis() - startTime;
+        logger.info("Dashboard stats calculated: totalPlans={}, activeInitiatives={}, completedMilestones={}, totalUsers={}, duration={}ms", 
+                totalPlans, activeInitiatives, completedMilestones, totalUsers, duration);
 
         return new DashboardStatsDTO(totalPlans, activeInitiatives, completedMilestones, totalUsers);
     }
