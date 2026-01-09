@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -27,17 +28,18 @@ public class NotificationService {
     @Autowired
     private UserRepository userRepository;
 
-    // Thread-safe map to store active emitters per user
+    // Thread-safe storage for active SSE connections
     private final Map<Long, List<SseEmitter>> userEmitters = new ConcurrentHashMap<>();
 
     // --- SSE Logic ---
 
     public SseEmitter subscribe(Long userId) {
-        // Timeout set to 30 minutes (1800000ms) or Long.MAX_VALUE
-        SseEmitter emitter = new SseEmitter(Long.MAX_VALUE);
+        // 1 Hour Timeout (3600000ms)
+        SseEmitter emitter = new SseEmitter(3600000L); 
         
         userEmitters.computeIfAbsent(userId, k -> new CopyOnWriteArrayList<>()).add(emitter);
 
+        // Remove emitter on completion, timeout, or error
         emitter.onCompletion(() -> removeEmitter(userId, emitter));
         emitter.onTimeout(() -> removeEmitter(userId, emitter));
         emitter.onError((e) -> removeEmitter(userId, emitter));
@@ -72,7 +74,11 @@ public class NotificationService {
         }
     }
 
-    // --- Existing Logic Updated ---
+    // --- Main Logic ---
+
+    public void createNotification(Long userId, String type, String message) {
+        createNotification(userId, type, message, null, null);
+    }
 
     public void createNotification(Long userId, String type, String message, String entityType, Long entityId) {
         try {
@@ -86,25 +92,20 @@ public class NotificationService {
             notification.setEntityType(entityType);
             notification.setEntityId(entityId);
             notification.setStatus("UNREAD");
-            notification.setCreatedDate(java.time.LocalDateTime.now());
+            notification.setCreatedDate(LocalDateTime.now());
             
             Notification saved = notificationRepository.save(notification);
             
-            // PUSH TO SSE
+            // PUSH Real-time update
             pushNotificationToUser(userId, saved);
             
-            logger.info("Notification created and pushed: id={}", saved.getNotificationId());
+            logger.info("Notification created and pushed: id={}, userId={}", saved.getNotificationId(), userId);
         } catch (Exception e) {
             logger.error("Failed to create notification", e);
-            throw e; 
+            throw e;
         }
     }
 
-    // ... (Keep existing simple createNotification, notifyInitiativeAssigned, notifyStatusUpdate, notifyWeeklyReport methods as they call the main one) ...
-    public void createNotification(Long userId, String type, String message) {
-        createNotification(userId, type, message, null, null);
-    }
-    
     public void notifyInitiativeAssigned(Long employeeUserId, String initiativeTitle, Long initiativeId) {
         createNotification(employeeUserId, "ASSIGNMENT", "You have been assigned to: " + initiativeTitle, "INITIATIVE", initiativeId);
     }
@@ -117,7 +118,8 @@ public class NotificationService {
         createNotification(adminUserId, "WEEKLY_REPORT", "Weekly Analytics Report: " + reportSummary, "SYSTEM", null);
     }
 
-    // ... (Keep existing getters: getUnreadNotifications, getAllNotifications, getUnreadCount) ...
+    // --- Getters & Helpers ---
+
     public List<Notification> getUnreadNotifications(Long userId) {
         return notificationRepository.findByUserUserIdAndStatus(userId, "UNREAD");
     }
@@ -130,7 +132,6 @@ public class NotificationService {
         return notificationRepository.countUnreadByUserId(userId);
     }
 
-    // ... (Keep existing markAsRead, markAllAsRead) ...
     public void markAsRead(Long notificationId) {
         Notification notification = notificationRepository.findById(notificationId)
                 .orElseThrow(() -> new RuntimeException("Notification not found"));

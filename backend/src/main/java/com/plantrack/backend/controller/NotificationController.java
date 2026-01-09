@@ -1,12 +1,18 @@
 package com.plantrack.backend.controller;
 
-import com.plantrack.backend.model.Notification;
-import com.plantrack.backend.service.NotificationService;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
-import java.util.List;
+import com.plantrack.backend.model.Notification;
+import com.plantrack.backend.service.NotificationService;
 
 @RestController
 @RequestMapping("/api")
@@ -15,15 +21,12 @@ public class NotificationController {
     @Autowired
     private NotificationService notificationService;
 
-    // --- NEW SSE ENDPOINT ---
+    // --- SSE Endpoint ---
     @GetMapping("/notifications/stream")
     public SseEmitter streamNotifications(@RequestParam Long userId) {
-        // Note: In a real app, you'd extract userId from the SecurityContext
-        // but since we passed the token in query params, SecurityContext is populated.
-        // We can just trust the userId passed or grab it from auth.
         return notificationService.subscribe(userId);
     }
-    // ------------------------
+    // --------------------
 
     @GetMapping("/users/{userId}/notifications")
     public List<Notification> getAllNotifications(@PathVariable Long userId) {

@@ -1,8 +1,9 @@
-import { Component, OnInit, OnDestroy, signal, inject, effect } from '@angular/core';
+import { Component, OnInit, OnDestroy, signal, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NotificationService, Notification } from '../../services/notification.service';
 import { AuthService } from '../../services/auth.service';
 import { ToastService } from '../../services/toast.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-notification-center',
@@ -54,6 +55,9 @@ export class NotificationCenterComponent implements OnInit, OnDestroy {
   private notificationService = inject(NotificationService);
   private authService = inject(AuthService);
   private toastService = inject(ToastService);
+  
+  // Track subscriptions to clean them up on destroy
+  private subscriptions: Subscription = new Subscription();
 
   showDropdown = signal(false);
   notifications = signal<Notification[]>([]);
@@ -62,39 +66,50 @@ export class NotificationCenterComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     const userId = this.authService.getUserId();
     if (userId) {
-      // 1. Initial Load of Unread Count
-      this.notificationService.getUnreadCount(userId).subscribe(); // Service updates the observable
+      // 1. Initial Load of Counts
+      this.notificationService.getUnreadCount(userId).subscribe();
       
-      // 2. Subscribe to Unread Count changes (from initial load OR SSE updates)
-      this.notificationService.unreadCount$.subscribe(count => {
-        this.unreadCount.set(count);
-      });
+      // 2. Subscribe to Count updates
+      this.subscriptions.add(
+        this.notificationService.unreadCount$.subscribe(count => {
+          this.unreadCount.set(count);
+        })
+      );
 
-      // 3. Connect to SSE Stream
+      // 3. Start SSE connection
       this.notificationService.subscribeToNotifications(userId);
 
-      // 4. Listen for new incoming notifications to update the list immediately if dropdown is open
-      this.notificationService.latestNotification$.subscribe(newNotification => {
-        console.log("IRAN")
-        if (newNotification) {
-          // Add to top of list
-          this.notifications.update(current => [newNotification, ...current]);
-          this.toastService.showInfo('New Notification: ' + newNotification.message);
-        }
-      });
+      // 4. Subscribe to Real-Time Notification Stream (WITH DEDUPLICATION)
+      this.subscriptions.add(
+        this.notificationService.latestNotification$.subscribe(newNotification => {
+          if (newNotification) {
+            // Deduplication Logic: Check if ID already exists
+            this.notifications.update(current => {
+              const exists = current.some(n => n.notificationId === newNotification.notificationId);
+              if (exists) {
+                return current; // Do nothing if it already exists
+              }
+              return [newNotification, ...current]; // Add to top if new
+            });
+            this.toastService.showInfo('New Notification: ' + newNotification.message);
+          }
+        })
+      );
     }
   }
 
   ngOnDestroy(): void {
+    // CRITICAL: Close SSE connection and unsubscribe
     this.notificationService.disconnect();
+    this.subscriptions.unsubscribe();
   }
 
   toggleDropdown(): void {
     this.showDropdown.set(!this.showDropdown());
     if (this.showDropdown()) {
-      // Reload full list when opening to ensure sync
       const userId = this.authService.getUserId();
       if (userId) {
+        // Refresh full list when opening to ensure sync
         this.notificationService.getAllNotifications(userId).subscribe(data => {
           this.notifications.set(data);
         });
@@ -105,8 +120,10 @@ export class NotificationCenterComponent implements OnInit, OnDestroy {
   markAsRead(notification: Notification): void {
     if (notification.status === 'READ' || !notification.notificationId) return;
     this.notificationService.markAsRead(notification.notificationId).subscribe(() => {
-      notification.status = 'READ';
-      // Unread count is auto-updated by the service's tap operator
+      // Update local state to reflect read status
+      this.notifications.update(list => 
+        list.map(n => n.notificationId === notification.notificationId ? { ...n, status: 'READ' } : n)
+      );
     });
   }
 

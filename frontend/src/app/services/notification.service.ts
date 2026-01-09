@@ -1,6 +1,6 @@
 import { Injectable, NgZone } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, BehaviorSubject } from 'rxjs';
+import { Observable, BehaviorSubject, Subject } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { AuthService } from './auth.service';
 
@@ -20,11 +20,14 @@ export interface Notification {
 export class NotificationService {
   private apiUrl = 'http://localhost:8080/api';
   
-  // Observables for components to subscribe to
+  // Stores the count, initial value 0
   private unreadCountSubject = new BehaviorSubject<number>(0);
   public unreadCount$ = this.unreadCountSubject.asObservable();
   
-  private latestNotificationSubject = new BehaviorSubject<Notification | null>(null);
+  // Stores the REAL-TIME event stream.
+  // CRITICAL FIX: Use Subject, not BehaviorSubject. 
+  // BehaviorSubject replays the last value to new subscribers, causing duplicates on reload.
+  private latestNotificationSubject = new Subject<Notification>(); 
   public latestNotification$ = this.latestNotificationSubject.asObservable();
 
   private eventSource: EventSource | null = null;
@@ -35,48 +38,53 @@ export class NotificationService {
     private zone: NgZone
   ) {}
 
-  // --- SSE Subscription ---
   subscribeToNotifications(userId: number): void {
-    if (this.eventSource) {
-      this.eventSource.close();
-    }
+    // 1. Cleanup: Ensure any previous connection is closed
+    this.disconnect();
 
     const token = this.authService.getToken();
-    // Pass userId and token in query params
+    // Pass token as query param for SSE
     const url = `${this.apiUrl}/notifications/stream?userId=${userId}&token=${token}`;
     
+    console.log('Connecting to SSE:', url);
     this.eventSource = new EventSource(url);
 
     this.eventSource.addEventListener('notification', (event: MessageEvent) => {
-      // Must run inside Angular Zone to update UI
+      // Zone.run ensures Angular detects the change and updates the UI
       this.zone.run(() => {
-        const notification: Notification = JSON.parse(event.data);
-        console.log('SSE Received:', notification);
-        
-        // 1. Update latest notification stream
-        this.latestNotificationSubject.next(notification);
-        
-        // 2. Increment unread count locally
-        const currentCount = this.unreadCountSubject.value;
-        this.unreadCountSubject.next(currentCount + 1);
+        try {
+          const notification: Notification = JSON.parse(event.data);
+          console.log('SSE Received:', notification);
+          
+          // Emit to subscribers
+          this.latestNotificationSubject.next(notification);
+          
+          // Increment count immediately
+          const currentCount = this.unreadCountSubject.value;
+          this.unreadCountSubject.next(currentCount + 1);
+        } catch (e) {
+          console.error('Error parsing SSE data', e);
+        }
       });
     });
 
     this.eventSource.onerror = (error) => {
-      console.error('SSE Error:', error);
-      // Optional: Implement reconnection backoff here if needed
-      // EventSource tries to reconnect automatically by default
+      // readyState 0=CONNECTING, 1=OPEN, 2=CLOSED
+      if (this.eventSource?.readyState !== 2) {
+        console.error('SSE Connection Error:', error);
+      }
     };
   }
 
   disconnect(): void {
     if (this.eventSource) {
+      console.log('Disconnecting SSE');
       this.eventSource.close();
       this.eventSource = null;
     }
   }
 
-  // --- Standard CRUD ---
+  // --- CRUD Methods ---
 
   getAllNotifications(userId: number): Observable<Notification[]> {
     return this.http.get<Notification[]>(`${this.apiUrl}/users/${userId}/notifications`);
@@ -91,7 +99,7 @@ export class NotificationService {
   markAsRead(notificationId: number): Observable<void> {
     return this.http.put<void>(`${this.apiUrl}/notifications/${notificationId}/read`, {}).pipe(
       tap(() => {
-        // Decrement local count immediately for UI responsiveness
+        // Optimistic UI update
         const current = this.unreadCountSubject.value;
         this.unreadCountSubject.next(Math.max(0, current - 1));
       })

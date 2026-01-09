@@ -35,27 +35,27 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         String jwt = null;
         String username = null;
-        
-        // 1. Try to get token from Header
+
+        // 1. Try to get token from Authorization Header
         final String authorizationHeader = request.getHeader("Authorization");
         if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
             jwt = authorizationHeader.substring(7);
         } 
-        // 2. If no header, try query parameter (For SSE)
+        // 2. Fallback: Try to get token from Query Parameter (Required for SSE/EventSource)
         else if (request.getParameter("token") != null) {
             jwt = request.getParameter("token");
         }
 
-        // 3. Extract Username if token exists
+        // 3. Extract Username if token found
         if (jwt != null) {
             try {
                 username = jwtUtil.extractUsername(jwt);
             } catch (Exception e) {
-                logger.warn("JWT extraction failed: {}", e.getMessage());
+                logger.warn("JWT token extraction failed: uri={}, error={}", request.getRequestURI(), e.getMessage());
             }
         }
 
-        // 4. Validate and Authenticate
+        // 4. Validate Token and Authenticate
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             UserDetails userDetails = this.userDetailsService.loadUserByUsername(username);
 
@@ -65,6 +65,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 
                 SecurityContextHolder.getContext().setAuthentication(authToken);
+                logger.trace("Authenticated user: {}", username);
             }
         }
         chain.doFilter(request, response);
