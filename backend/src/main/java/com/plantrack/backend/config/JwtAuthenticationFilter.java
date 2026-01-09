@@ -33,25 +33,29 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
             throws ServletException, IOException {
 
-        final String authorizationHeader = request.getHeader("Authorization");
-
-        String username = null;
         String jwt = null;
-
-        // 1. Check if header exists and starts with "Bearer "
+        String username = null;
+        
+        // 1. Try to get token from Header
+        final String authorizationHeader = request.getHeader("Authorization");
         if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
-            jwt = authorizationHeader.substring(7); // Remove "Bearer " prefix
-            try {
-                username = jwtUtil.extractUsername(jwt);
-                logger.trace("JWT token extracted successfully: username={}, uri={}", username, request.getRequestURI());
-            } catch (Exception e) {
-                logger.warn("JWT token extraction failed: uri={}, error={}", request.getRequestURI(), e.getMessage());
-            }
-        } else {
-            logger.trace("No Authorization header found: uri={}", request.getRequestURI());
+            jwt = authorizationHeader.substring(7);
+        } 
+        // 2. If no header, try query parameter (For SSE)
+        else if (request.getParameter("token") != null) {
+            jwt = request.getParameter("token");
         }
 
-        // 2. Validate token and set authentication
+        // 3. Extract Username if token exists
+        if (jwt != null) {
+            try {
+                username = jwtUtil.extractUsername(jwt);
+            } catch (Exception e) {
+                logger.warn("JWT extraction failed: {}", e.getMessage());
+            }
+        }
+
+        // 4. Validate and Authenticate
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             UserDetails userDetails = this.userDetailsService.loadUserByUsername(username);
 
@@ -60,11 +64,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                         userDetails, null, userDetails.getAuthorities());
                 authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 
-                // This is the magic line that logs the user in for this request
                 SecurityContextHolder.getContext().setAuthentication(authToken);
-                logger.debug("JWT authentication successful: username={}, uri={}", username, request.getRequestURI());
-            } else {
-                logger.warn("JWT token validation failed: username={}, uri={}", username, request.getRequestURI());
             }
         }
         chain.doFilter(request, response);
