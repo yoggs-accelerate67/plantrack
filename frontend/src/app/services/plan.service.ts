@@ -7,9 +7,9 @@ import { Plan, PlanDetail, PageResponse } from '../models/plan.model';
   providedIn: 'root'
 })
 export class PlanService {
-  private apiUrl = 'http://localhost:8080/api';
+  private apiUrl = 'http://localhost:8765/api';
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   getAllPlans(page: number = 0, size: number = 10, sort: string = 'planId'): Observable<PageResponse<Plan>> {
     const params = new HttpParams()

@@ -18,16 +18,16 @@ export interface Notification {
   providedIn: 'root'
 })
 export class NotificationService {
-  private apiUrl = 'http://localhost:8080/api';
-  
+  private apiUrl = 'http://localhost:8765/api/notifications';
+
   // Stores the count, initial value 0
   private unreadCountSubject = new BehaviorSubject<number>(0);
   public unreadCount$ = this.unreadCountSubject.asObservable();
-  
+
   // Stores the REAL-TIME event stream.
   // CRITICAL FIX: Use Subject, not BehaviorSubject. 
   // BehaviorSubject replays the last value to new subscribers, causing duplicates on reload.
-  private latestNotificationSubject = new Subject<Notification>(); 
+  private latestNotificationSubject = new Subject<Notification>();
   public latestNotification$ = this.latestNotificationSubject.asObservable();
 
   private eventSource: EventSource | null = null;
@@ -36,7 +36,7 @@ export class NotificationService {
     private http: HttpClient,
     private authService: AuthService,
     private zone: NgZone
-  ) {}
+  ) { }
 
   subscribeToNotifications(userId: number): void {
     // 1. Cleanup: Ensure any previous connection is closed
@@ -45,7 +45,7 @@ export class NotificationService {
     const token = this.authService.getToken();
     // Pass token as query param for SSE
     const url = `${this.apiUrl}/notifications/stream?userId=${userId}&token=${token}`;
-    
+
     console.log('Connecting to SSE:', url);
     this.eventSource = new EventSource(url);
 
@@ -55,10 +55,10 @@ export class NotificationService {
         try {
           const notification: Notification = JSON.parse(event.data);
           console.log('SSE Received:', notification);
-          
+
           // Emit to subscribers
           this.latestNotificationSubject.next(notification);
-          
+
           // Increment count immediately
           const currentCount = this.unreadCountSubject.value;
           this.unreadCountSubject.next(currentCount + 1);

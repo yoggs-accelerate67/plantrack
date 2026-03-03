@@ -68,8 +68,8 @@ Plan (Root)
    cd backend
    mvn spring-boot:run
    ```
-   - Backend runs on: `http://localhost:8080`
-   - Swagger UI: `http://localhost:8080/swagger-ui/index.html`
+   - Backend runs on: `http://localhost:8081`
+   - Swagger UI: `http://localhost:8081/swagger-ui/index.html`
 
 ### Frontend Setup
 
@@ -91,7 +91,7 @@ Plan (Root)
 
 ### Base URL
 ```
-http://localhost:8080/api
+http://localhost:8081/api
 ```
 
 ### Authentication
@@ -160,10 +160,10 @@ Content-Type: application/json
       "raw": "{\n  \"name\": \"Alice Manager\",\n  \"email\": \"alice@company.com\",\n  \"password\": \"SecurePass123!\",\n  \"department\": \"Engineering\",\n  \"role\": \"MANAGER\",\n  \"status\": \"ACTIVE\"\n}"
     },
     "url": {
-      "raw": "http://localhost:8080/api/auth/register",
+      "raw": "http://localhost:8081/api/auth/register",
       "protocol": "http",
       "host": ["localhost"],
-      "port": "8080",
+      "port": "8081",
       "path": ["api", "auth", "register"]
     }
   }
@@ -216,10 +216,10 @@ Content-Type: application/json
       "raw": "{\n  \"email\": \"alice@company.com\",\n  \"password\": \"SecurePass123!\"\n}"
     },
     "url": {
-      "raw": "http://localhost:8080/api/auth/login",
+      "raw": "http://localhost:8081/api/auth/login",
       "protocol": "http",
       "host": ["localhost"],
-      "port": "8080",
+      "port": "8081",
       "path": ["api", "auth", "login"]
     }
   }
@@ -298,10 +298,10 @@ Authorization: Bearer {{token}}
       "raw": "{\n  \"title\": \"Q1 Product Launch\",\n  \"description\": \"Complete product launch for Q1 2024\",\n  \"priority\": \"HIGH\",\n  \"status\": \"PLANNED\",\n  \"startDate\": \"2024-01-01T00:00:00\",\n  \"endDate\": \"2024-03-31T23:59:59\"\n}"
     },
     "url": {
-      "raw": "http://localhost:8080/api/users/1/plans",
+      "raw": "http://localhost:8081/api/users/1/plans",
       "protocol": "http",
       "host": ["localhost"],
-      "port": "8080",
+      "port": "8081",
       "path": ["api", "users", "1", "plans"]
     }
   }
@@ -934,7 +934,7 @@ Solution:
 3. Ensure database 'plantrack' exists
 ```
 
-**Problem**: Port 8080 already in use
+**Problem**: Port 8081 already in use
 ```
 Solution:
 1. Change port in application.properties:
@@ -1015,7 +1015,7 @@ Import this into Postman for quick testing:
   "variable": [
     {
       "key": "baseUrl",
-      "value": "http://localhost:8080/api"
+      "value": "http://localhost:8081/api"
     },
     {
       "key": "token",
@@ -1171,9 +1171,9 @@ Import this into Postman for quick testing:
 
 ## 🔗 Quick Links
 
-- **Swagger UI**: http://localhost:8080/swagger-ui/index.html
+- **Swagger UI**: http://localhost:8081/swagger-ui/index.html
 - **Frontend**: http://localhost:4200
-- **Backend API**: http://localhost:8080/api
+- **Backend API**: http://localhost:8081/api
 
 ---
 

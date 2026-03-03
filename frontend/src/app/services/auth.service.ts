@@ -7,9 +7,9 @@ import { LoginRequest, LoginResponse } from '../models/plan.model';
   providedIn: 'root'
 })
 export class AuthService {
-  private apiUrl = 'http://localhost:8080/api';
+  private apiUrl = 'http://localhost:8765/api';
   private tokenKey = 'auth_token';
-  
+
   isAuthenticated = signal<boolean>(false);
   currentUser = signal<string | null>(null);
   userRole = signal<string | null>(null);
@@ -22,25 +22,25 @@ export class AuthService {
     return this.http.post<LoginResponse>(`${this.apiUrl}/auth/login`, credentials).pipe(
       tap(response => {
         console.log('Login response received:', response);
-        
+
         if (!response || !response.token) {
           throw new Error('Invalid response from server');
         }
-        
+
         localStorage.setItem(this.tokenKey, response.token);
         localStorage.setItem('user_role', response.role);
-        
+
         // Extract email from token or use the one from credentials
         const email = this.extractEmailFromToken(response.token) || credentials.email;
         localStorage.setItem('user_email', email);
-        
+
         this.isAuthenticated.set(true);
         this.currentUser.set(email);
-        
+
         // Remove ROLE_ prefix if present
         const role = response.role.replace('ROLE_', '');
         this.userRole.set(role);
-        
+
         console.log('User authenticated:', { email, role });
       })
     );
@@ -85,7 +85,7 @@ export class AuthService {
   getUserId(): number | null {
     const token = this.getToken();
     if (!token) return null;
-    
+
     try {
       const payload = JSON.parse(atob(token.split('.')[1]));
       // Extract userId from token claims

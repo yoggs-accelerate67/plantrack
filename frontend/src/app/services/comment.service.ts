@@ -7,9 +7,9 @@ import { Comment } from '../models/plan.model';
   providedIn: 'root'
 })
 export class CommentService {
-  private apiUrl = 'http://localhost:8080/api';
+  private apiUrl = 'http://localhost:8765/api';
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   createComment(initiativeId: number, comment: Comment): Observable<Comment> {
     return this.http.post<Comment>(`${this.apiUrl}/initiatives/${initiativeId}/comments`, comment);

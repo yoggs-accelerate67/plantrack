@@ -1,0 +1,80 @@
+<div class="relative">
+  <button
+    (click)="toggleDropdown()"
+    class="relative p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors focus:outline-none"
+    [attr.aria-label]="'Notifications'"
+  >
+    <svg
+      class="w-6 h-6 text-slate-700 dark:text-slate-300"
+      fill="none"
+      stroke="currentColor"
+      viewBox="0 0 24 24"
+    >
+      <path
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        stroke-width="2"
+        d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"
+      />
+    </svg>
+    @if (unreadCount() > 0) {
+      <span
+        class="absolute top-0 right-0 flex h-5 w-5 items-center justify-center rounded-full bg-red-500 text-xs font-bold text-white"
+      >
+        {{ unreadCount() > 9 ? "9+" : unreadCount() }}
+      </span>
+    }
+  </button>
+
+  @if (showDropdown()) {
+    <div
+      class="absolute right-0 mt-2 w-96 bg-white dark:bg-slate-800 rounded-xl shadow-xl border border-slate-200 dark:border-slate-600 z-50 max-h-96 flex flex-col"
+    >
+      <div
+        class="flex items-center justify-between p-4 border-b border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-800"
+      >
+        <h3 class="text-lg font-semibold text-slate-900 dark:text-slate-100">
+          Notifications
+        </h3>
+        @if (unreadCount() > 0) {
+          <button
+            (click)="markAllAsRead()"
+            class="text-sm text-teal-600 dark:text-teal-400 hover:text-teal-700 font-medium"
+          >
+            Mark all read
+          </button>
+        }
+      </div>
+      <div class="overflow-y-auto flex-1">
+        @if (notifications().length === 0) {
+          <div class="p-8 text-center text-slate-500 dark:text-slate-400">
+            <p>No notifications</p>
+          </div>
+        } @else {
+          @for (
+            notification of notifications();
+            track notification.notificationId
+          ) {
+            <div
+              class="p-4 border-b border-slate-100 dark:border-slate-700 cursor-pointer"
+              [ngClass]="{
+                'bg-teal-50 dark:bg-teal-900/20':
+                  notification.status === 'UNREAD',
+                'hover:bg-slate-50 dark:hover:bg-slate-700':
+                  notification.status === 'READ',
+              }"
+              (click)="markAsRead(notification)"
+            >
+              <p class="text-sm font-medium text-slate-900 dark:text-slate-100">
+                {{ notification.message }}
+              </p>
+              <p class="text-xs text-slate-500 mt-1">
+                {{ formatDate(notification.createdDate) }}
+              </p>
+            </div>
+          }
+        }
+      </div>
+    </div>
+  }
+</div>

@@ -32,11 +32,6 @@ export const routes: Routes = [
     canActivate: [authGuard]
   },
   {
-    path: 'analytics',
-    loadComponent: () => import('./components/analytics-dashboard/analytics-dashboard.component').then(m => m.AnalyticsDashboardComponent),
-    canActivate: [authGuard]
-  },
-  {
     path: 'audit-logs',
     loadComponent: () => import('./components/audit-logs/audit-logs.component').then(m => m.AuditLogsComponent),
     canActivate: [authGuard]

@@ -164,7 +164,7 @@ You need to run TWO servers: Backend (Spring Boot) and Frontend (Angular).
    ```
    Started BackendApplication in X.XXX seconds
    ```
-4. The backend is now running at: `http://localhost:8080`
+4. The backend is now running at: `http://localhost:8081`
 5. **Keep this terminal window open!**
 
 ### Terminal 2: Start Frontend Server
@@ -205,7 +205,7 @@ Before you can login, you need to create user accounts. You can do this via:
 2. Open Postman
 3. Create a new request:
    - Method: `POST`
-   - URL: `http://localhost:8080/api/auth/register`
+   - URL: `http://localhost:8081/api/auth/register`
    - Headers: Add `Content-Type: application/json`
    - Body (raw JSON):
      ```json
@@ -224,7 +224,7 @@ Before you can login, you need to create user accounts. You can do this via:
    - **Admin**: Change email to `bob@company.com` and role to `ADMIN`
 
 **Option B: Using Swagger UI**
-1. Go to: `http://localhost:8080/swagger-ui/index.html`
+1. Go to: `http://localhost:8081/swagger-ui/index.html`
 2. Find the `/api/auth/register` endpoint
 3. Click "Try it out"
 4. Enter the JSON body (same as above)
@@ -333,12 +333,12 @@ When you click on a plan, you'll see:
 
 ### Problem: Backend won't start
 
-**Error**: `Port 8080 is already in use`
+**Error**: `Port 8081 is already in use`
 
 **Solution**:
-1. Find what's using port 8080:
-   - Windows: `netstat -ano | findstr :8080`
-   - Mac/Linux: `lsof -i :8080`
+1. Find what's using port 8081:
+   - Windows: `netstat -ano | findstr :8081`
+   - Mac/Linux: `lsof -i :8081`
 2. Kill the process or change the port in `application.properties`:
    ```properties
    server.port=8081
@@ -413,7 +413,7 @@ When you click on a plan, you'll see:
 **Error**: `Access to XMLHttpRequest blocked by CORS policy`
 
 **Solution**:
-1. Make sure backend is running on `http://localhost:8080`
+1. Make sure backend is running on `http://localhost:8081`
 2. Check `SecurityConfig.java` has CORS enabled for `http://localhost:4200`
 3. Restart the backend server
 
@@ -449,7 +449,7 @@ Before asking for help, make sure:
 
 - [ ] MySQL is running
 - [ ] Database `plantrack` exists
-- [ ] Backend is running on port 8080
+- [ ] Backend is running on port 8081
 - [ ] Frontend is running on port 4200
 - [ ] You've registered at least one user
 - [ ] You're using the correct credentials
@@ -461,7 +461,7 @@ Before asking for help, make sure:
 
 Once you're comfortable with the basics:
 
-1. **Explore Swagger UI**: `http://localhost:8080/swagger-ui/index.html`
+1. **Explore Swagger UI**: `http://localhost:8081/swagger-ui/index.html`
    - Test all API endpoints
    - See request/response formats
 

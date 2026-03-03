@@ -7,9 +7,9 @@ import { Initiative, PageResponse } from '../models/plan.model';
   providedIn: 'root'
 })
 export class InitiativeService {
-  private apiUrl = 'http://localhost:8080/api';
+  private apiUrl = 'http://localhost:8765/api';
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   createInitiative(milestoneId: number, assignedUserIds: number[], initiative: Initiative): Observable<Initiative> {
     // Send comma-separated user IDs as query parameter

@@ -7,9 +7,9 @@ import { Milestone, PageResponse } from '../models/plan.model';
   providedIn: 'root'
 })
 export class MilestoneService {
-  private apiUrl = 'http://localhost:8080/api';
+  private apiUrl = 'http://localhost:8765/api';
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   createMilestone(planId: number, milestone: Milestone): Observable<Milestone> {
     return this.http.post<Milestone>(`${this.apiUrl}/plans/${planId}/milestones`, milestone);

@@ -72,5 +72,5 @@ Get-Content logs\plantrack.log -Wait -Tail 20
 
 You should see logs like:
 ```
-2026-01-07 22:56:42.123 [http-nio-8080-exec-1] INFO  c.p.b.s.PlanService - Created plan: planId=1, title=My Plan, userId=1, priority=HIGH
+2026-01-07 22:56:42.123 [http-nio-8081-exec-1] INFO  c.p.b.s.PlanService - Created plan: planId=1, title=My Plan, userId=1, priority=HIGH
 ```

@@ -77,9 +77,9 @@ The production profile is configured in `logback-spring.xml`:
 
 When you create a plan, you'll see in `plantrack.log`:
 ```
-2026-01-07 22:35:10.123 [http-nio-8080-exec-1] INFO  c.p.b.s.PlanService - Created plan: planId=1, title=My Plan, userId=1, priority=HIGH
-2026-01-07 22:35:10.456 [http-nio-8080-exec-1] INFO  c.p.b.s.NotificationService - Notification created successfully: notificationId=1, userId=1, type=INFO
-2026-01-07 22:35:10.789 [http-nio-8080-exec-1] DEBUG c.p.b.s.AuditService - Creating audit log: action=CREATE, entityType=PLAN, entityId=1, performedBy=user@example.com
+2026-01-07 22:35:10.123 [http-nio-8081-exec-1] INFO  c.p.b.s.PlanService - Created plan: planId=1, title=My Plan, userId=1, priority=HIGH
+2026-01-07 22:35:10.456 [http-nio-8081-exec-1] INFO  c.p.b.s.NotificationService - Notification created successfully: notificationId=1, userId=1, type=INFO
+2026-01-07 22:35:10.789 [http-nio-8081-exec-1] DEBUG c.p.b.s.AuditService - Creating audit log: action=CREATE, entityType=PLAN, entityId=1, performedBy=user@example.com
 ```
 
 ### 6. Filter Logs

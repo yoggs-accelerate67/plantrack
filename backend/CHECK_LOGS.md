@@ -15,8 +15,8 @@ cd backend
 ### 3. What You Should See
 When you create a plan, you should see logs like:
 ```
-2026-01-07 22:35:10.123 [http-nio-8080-exec-1] INFO  c.p.b.s.PlanService - Created plan: planId=1, title=My Plan, userId=1, priority=HIGH
-2026-01-07 22:35:10.456 [http-nio-8080-exec-1] INFO  c.p.b.s.NotificationService - Notification created successfully: notificationId=1, userId=1, type=INFO
+2026-01-07 22:35:10.123 [http-nio-8081-exec-1] INFO  c.p.b.s.PlanService - Created plan: planId=1, title=My Plan, userId=1, priority=HIGH
+2026-01-07 22:35:10.456 [http-nio-8081-exec-1] INFO  c.p.b.s.NotificationService - Notification created successfully: notificationId=1, userId=1, type=INFO
 ```
 
 ### 4. If You Don't See Logs
