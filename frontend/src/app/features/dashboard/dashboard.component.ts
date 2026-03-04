@@ -23,7 +23,6 @@ import { NavbarComponent } from '@core/layout/navbar/navbar.component';
   templateUrl: './dashboard.component.html',
 })
 export class DashboardComponent implements OnInit {
-  stats = signal<DashboardStats | null>(null);
   plans = signal<Plan[]>([]);
   showCreateModal = signal(false);
   newPlan: Partial<Plan> = {
@@ -52,29 +51,13 @@ export class DashboardComponent implements OnInit {
   loadDashboard(): void {
     this.loadingService.show();
 
-    let statsLoaded = false;
     let plansLoaded = false;
 
     const hideLoading = () => {
-      if (statsLoaded && plansLoaded) {
+      if (plansLoaded) {
         this.loadingService.hide();
       }
     };
-
-    // Load stats
-    this.dashboardService.getDashboardStats().subscribe({
-      next: (data) => {
-        this.stats.set(data);
-        statsLoaded = true;
-        hideLoading();
-      },
-      error: (error) => {
-        console.error('Failed to load dashboard stats:', error);
-        statsLoaded = true;
-        hideLoading();
-        // Don't show toast - error interceptor will handle it
-      },
-    });
 
     // Load plans - different endpoint for employees
     const userId = this.authService.getUserId();
@@ -134,15 +117,6 @@ export class DashboardComponent implements OnInit {
         },
       });
     }
-  }
-
-  getProgress(plan: Plan): number {
-    // Simplified progress calculation
-    return plan.status === 'COMPLETED'
-      ? 100
-      : plan.status === 'IN_PROGRESS'
-        ? 50
-        : 0;
   }
 
   navigateToPlan(planId: number): void {

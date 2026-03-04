@@ -36,6 +36,10 @@ export class UserService {
     return this.http.get<User>(`${this.apiUrl}/users/${userId}`);
   }
 
+  getDepartments(): Observable<string[]> {
+    return this.http.get<string[]>(`${this.apiUrl}/users/departments`);
+  }
+
   createUser(user: User): Observable<User> {
     return this.http.post<User>(`${this.apiUrl}/users`, user);
   }
