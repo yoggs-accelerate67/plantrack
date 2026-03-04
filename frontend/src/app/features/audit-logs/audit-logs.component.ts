@@ -6,8 +6,9 @@ import { Router, RouterModule } from '@angular/router';
 import { AuthService } from '@core/services/auth.service';
 import { LoadingService } from '@core/services/loading.service';
 import { ToastService } from '@core/services/toast.service';
-import { NotificationCenterComponent } from '@core/layout/navbar/notification-center/notification-center.component';
 import { HttpClient } from '@angular/common/http';
+import { NavbarComponent } from '@core/layout/navbar/navbar.component';
+import { environment } from '@environments/environment';
 
 interface AuditLog {
   id: number;
@@ -25,10 +26,10 @@ interface AuditLog {
   selector: 'app-audit-logs',
   standalone: true,
   imports: [
+    NavbarComponent,
     CommonModule,
     FormsModule,
     RouterModule,
-    NotificationCenterComponent,
   ],
   templateUrl: './audit-logs.component.html',
 })
@@ -57,7 +58,7 @@ export class AuditLogsComponent implements OnInit {
   loadAuditLogs(): void {
     this.loadingService.show();
     this.http
-      .get<AuditLog[]>('http://localhost:8765/api/audit-logs')
+      .get<AuditLog[]>(environment.apiUrl + '/audit-logs')
       .subscribe({
         next: (logs) => {
           this.allLogs.set(logs);

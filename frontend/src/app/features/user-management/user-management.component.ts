@@ -2,21 +2,17 @@ import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
+
 import { AuthService } from '@core/services/auth.service';
 import { UserService, User } from '@core/services/user.service';
 import { ToastService } from '@core/services/toast.service';
 import { LoadingService } from '@core/services/loading.service';
-import { NotificationCenterComponent } from '@core/layout/navbar/notification-center/notification-center.component';
+import { NavbarComponent } from '@core/layout/navbar/navbar.component';
 
 @Component({
   selector: 'app-user-management',
   standalone: true,
-  imports: [
-    CommonModule,
-    FormsModule,
-    RouterModule,
-    NotificationCenterComponent,
-  ],
+  imports: [CommonModule, FormsModule, RouterModule, NavbarComponent],
   templateUrl: './user-management.component.html',
 })
 export class UserManagementComponent implements OnInit {

@@ -8,17 +8,12 @@ import { PlanService } from '../services/plan.service';
 import { ToastService } from '@core/services/toast.service';
 import { LoadingService } from '@core/services/loading.service';
 import { Plan, PlanStatus } from '@shared/plan.model';
-import { NotificationCenterComponent } from '@core/layout/navbar/notification-center/notification-center.component';
+import { NavbarComponent } from '@core/layout/navbar/navbar.component';
 
 @Component({
   selector: 'app-plan-board',
   standalone: true,
-  imports: [
-    CommonModule,
-    RouterModule,
-    FormsModule,
-    NotificationCenterComponent,
-  ],
+  imports: [CommonModule, RouterModule, FormsModule, NavbarComponent],
   templateUrl: './plan-board.component.html',
 })
 export class PlanBoardComponent implements OnInit {

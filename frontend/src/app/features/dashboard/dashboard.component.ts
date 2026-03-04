@@ -14,17 +14,12 @@ import {
   PlanStatus,
   PlanPriority,
 } from '../../shared/plan.model';
-import { NotificationCenterComponent } from '../../core/layout/navbar/notification-center/notification-center.component';
+import { NavbarComponent } from '@core/layout/navbar/navbar.component';
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [
-    CommonModule,
-    FormsModule,
-    RouterModule,
-    NotificationCenterComponent,
-  ],
+  imports: [CommonModule, FormsModule, RouterModule, NavbarComponent],
   templateUrl: './dashboard.component.html',
 })
 export class DashboardComponent implements OnInit {

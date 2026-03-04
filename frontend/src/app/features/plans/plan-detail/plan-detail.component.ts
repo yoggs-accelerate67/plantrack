@@ -19,8 +19,8 @@ import {
   Plan,
   PlanPriority,
 } from '@shared/plan.model';
-import { NotificationCenterComponent } from '@core/layout/navbar/notification-center/notification-center.component';
 import { CommentsComponent } from './comments/comments.component';
+import { NavbarComponent } from '@core/layout/navbar/navbar.component';
 
 @Component({
   selector: 'app-plan-detail',
@@ -29,7 +29,7 @@ import { CommentsComponent } from './comments/comments.component';
     CommonModule,
     FormsModule,
     RouterModule,
-    NotificationCenterComponent,
+    NavbarComponent,
     CommentsComponent,
   ],
   templateUrl: './plan-detail.component.html',

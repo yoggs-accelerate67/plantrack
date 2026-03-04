@@ -8,17 +8,12 @@ import { InitiativeService } from '../services/initiative.service';
 import { AuthService } from '@core/services/auth.service';
 import { LoadingService } from '@core/services/loading.service';
 import { ToastService } from '@core/services/toast.service';
-import { NotificationCenterComponent } from '@core/layout/navbar/notification-center/notification-center.component';
+import { NavbarComponent } from '@core/layout/navbar/navbar.component';
 
 @Component({
   selector: 'app-my-initiatives',
   standalone: true,
-  imports: [
-    CommonModule,
-    FormsModule,
-    RouterModule,
-    NotificationCenterComponent,
-  ],
+  imports: [CommonModule, FormsModule, RouterModule, NavbarComponent],
   templateUrl: './my-initiatives.component.html',
   styleUrl: './my-initiatives.component.css',
 })

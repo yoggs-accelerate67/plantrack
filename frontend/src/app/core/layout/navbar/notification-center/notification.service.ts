@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, BehaviorSubject, Subject } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { AuthService } from '@core/services/auth.service';
+import { environment } from '@environments/environment';
 
 export interface Notification {
   notificationId?: number;
@@ -18,7 +19,7 @@ export interface Notification {
   providedIn: 'root'
 })
 export class NotificationService {
-  private apiUrl = 'http://localhost:8765/api/notifications';
+  private apiUrl = environment.apiUrl + '/notifications';
 
   // Stores the count, initial value 0
   private unreadCountSubject = new BehaviorSubject<number>(0);
