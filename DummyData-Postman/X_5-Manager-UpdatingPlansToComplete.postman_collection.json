@@ -1,0 +1,716 @@
+{
+  "info": {
+    "_postman_id": "03e1d957-143d-458b-a30c-019fc31822b0",
+    "name": "X_5-Manager-UpdatingPlansToComplete",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "52265164",
+    "_collection_link": "https://go.postman.co/collection/52265164-03e1d957-143d-458b-a30c-019fc31822b0?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "Aditya Rao (user_id: 2) — Development",
+      "item": [
+        {
+          "name": "Login - Aditya Rao",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const json = pm.response.json();",
+                  "pm.collectionVariables.set('authToken_2', json.token);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"Aditya@company.com\",\n  \"password\": \"Aditya@123\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/auth/login",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "auth",
+                "login"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "PUT Plan 2 → COMPLETED",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken_2}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Developer Experience Platform\",\n  \"description\": \"Golden paths, templates, and paved roads to boost delivery velocity.\",\n  \"priority\": \"MEDIUM\",\n  \"status\": \"COMPLETED\",\n  \"startDate\": \"2026-03-20T09:00\",\n  \"endDate\": \"2026-05-30T18:00\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/plans/2",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "plans",
+                "2"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "PUT Plan 3 → COMPLETED",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken_2}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Payments Gateway Integration\",\n  \"description\": \"Integrate new PSP with tokenization, retries, 3DS, and reconciliation.\",\n  \"priority\": \"HIGH\",\n  \"status\": \"COMPLETED\",\n  \"startDate\": \"2026-04-01T09:00\",\n  \"endDate\": \"2026-08-01T18:00\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/plans/3",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "plans",
+                "3"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Kavya Iyer (user_id: 7) — QA",
+      "item": [
+        {
+          "name": "Login - Kavya Iyer",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const json = pm.response.json();",
+                  "pm.collectionVariables.set('authToken_7', json.token);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"Kavya@company.com\",\n  \"password\": \"Kavya@123\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/auth/login",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "auth",
+                "login"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "PUT Plan 5 → COMPLETED",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken_7}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Performance & Security Testing Program\",\n  \"description\": \"SLAs, performance baselines, SAST/DAST and threat modeling.\",\n  \"priority\": \"MEDIUM\",\n  \"status\": \"COMPLETED\",\n  \"startDate\": \"2026-04-01T09:00\",\n  \"endDate\": \"2026-06-15T18:00\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/plans/5",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "plans",
+                "5"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "PUT Plan 6 → COMPLETED",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken_7}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Release Qualification Program\",\n  \"description\": \"Define exit criteria, smoke packs, and rollback readiness checks.\",\n  \"priority\": \"LOW\",\n  \"status\": \"COMPLETED\",\n  \"startDate\": \"2026-04-12T09:00\",\n  \"endDate\": \"2026-06-30T18:00\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/plans/6",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "plans",
+                "6"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Rohan Malhotra (user_id: 12) — HR",
+      "item": [
+        {
+          "name": "Login - Rohan Malhotra",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const json = pm.response.json();",
+                  "pm.collectionVariables.set('authToken_12', json.token);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"Rohan@company.com\",\n  \"password\": \"Rohan@123\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/auth/login",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "auth",
+                "login"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "PUT Plan 7 → COMPLETED",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken_12}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Campus Hiring 2026\",\n  \"description\": \"Outreach, assessments, interviews, offers, and onboarding.\",\n  \"priority\": \"HIGH\",\n  \"status\": \"COMPLETED\",\n  \"startDate\": \"2026-03-05T09:00\",\n  \"endDate\": \"2026-06-10T18:00\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/plans/7",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "plans",
+                "7"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "PUT Plan 8 → COMPLETED",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken_12}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"L&D Curriculum Refresh\",\n  \"description\": \"Revise role-based learning paths, curate materials, vouchers & labs.\",\n  \"priority\": \"MEDIUM\",\n  \"status\": \"COMPLETED\",\n  \"startDate\": \"2026-04-05T09:00\",\n  \"endDate\": \"2026-06-25T18:00\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/plans/8",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "plans",
+                "8"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "PUT Plan 9 → COMPLETED",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken_12}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"HRMS Rollout\",\n  \"description\": \"Roll out attendance, payroll integration, and self-service modules.\",\n  \"priority\": \"HIGH\",\n  \"status\": \"COMPLETED\",\n  \"startDate\": \"2026-04-10T09:00\",\n  \"endDate\": \"2026-08-15T18:00\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/plans/9",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "plans",
+                "9"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "PUT Plan 10 → COMPLETED",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken_12}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Employee Engagement Q2\",\n  \"description\": \"Pulse surveys, townhalls, recognition, and action tracking.\",\n  \"priority\": \"LOW\",\n  \"status\": \"COMPLETED\",\n  \"startDate\": \"2026-04-02T09:00\",\n  \"endDate\": \"2026-06-30T18:00\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/plans/10",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "plans",
+                "10"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Shreya Gupta (user_id: 17) — Finance",
+      "item": [
+        {
+          "name": "Login - Shreya Gupta",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const json = pm.response.json();",
+                  "pm.collectionVariables.set('authToken_17', json.token);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"Shreya@company.com\",\n  \"password\": \"Shreya@123\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/auth/login",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "auth",
+                "login"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "PUT Plan 11 → COMPLETED",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken_17}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Quarterly Financial Close Q2 FY26\",\n  \"description\": \"Close process, accruals, reconciliations, variances, and audit support.\",\n  \"priority\": \"HIGH\",\n  \"status\": \"COMPLETED\",\n  \"startDate\": \"2026-04-01T09:00\",\n  \"endDate\": \"2026-06-15T18:00\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/plans/11",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "plans",
+                "11"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "PUT Plan 12 → COMPLETED",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken_17}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Cost Optimization Program\",\n  \"description\": \"Vendor renegotiations, cloud rightsizing, and waste reduction.\",\n  \"priority\": \"MEDIUM\",\n  \"status\": \"COMPLETED\",\n  \"startDate\": \"2026-04-10T09:00\",\n  \"endDate\": \"2026-07-10T18:00\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/plans/12",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "plans",
+                "12"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "PUT Plan 13 → COMPLETED",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken_17}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Billing System Revamp\",\n  \"description\": \"Modernize rating, invoicing, credit control, and dunning workflows.\",\n  \"priority\": \"HIGH\",\n  \"status\": \"COMPLETED\",\n  \"startDate\": \"2026-04-15T09:00\",\n  \"endDate\": \"2026-09-15T18:00\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/plans/13",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "plans",
+                "13"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Alok Maurya (user_id: 22) — IT",
+      "item": [
+        {
+          "name": "Login - Alok Maurya",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const json = pm.response.json();",
+                  "pm.collectionVariables.set('authToken_22', json.token);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"Alok@company.com\",\n  \"password\": \"Alok@123\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/auth/login",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "auth",
+                "login"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "PUT Plan 15 → COMPLETED",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken_22}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Enterprise SSO Rollout\",\n  \"description\": \"OIDC/SAML SSO for internal apps; MFA and device posture checks.\",\n  \"priority\": \"HIGH\",\n  \"status\": \"COMPLETED\",\n  \"startDate\": \"2026-04-05T09:00\",\n  \"endDate\": \"2026-07-05T18:00\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/plans/15",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "plans",
+                "15"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseURL",
+      "value": "http://localhost:8765/api"
+    },
+    {
+      "key": "authToken_2",
+      "value": ""
+    },
+    {
+      "key": "authToken_7",
+      "value": ""
+    },
+    {
+      "key": "authToken_12",
+      "value": ""
+    },
+    {
+      "key": "authToken_17",
+      "value": ""
+    },
+    {
+      "key": "authToken_22",
+      "value": ""
+    }
+  ]
+}

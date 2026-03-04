@@ -1,0 +1,6285 @@
+{
+  "info": {
+    "_postman_id": "b6271148-4c15-4a9b-88cb-eab90f3fe04c",
+    "name": "X_2-Manager-Creating Plans, Milestones, Initiatives (with assignments)",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "52265164",
+    "_collection_link": "https://go.postman.co/collection/52265164-b6271148-4c15-4a9b-88cb-eab90f3fe04c?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "Development — Aditya Rao",
+      "item": [
+        {
+          "name": "Login (Aditya Rao - Development Manager)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "let json = pm.response.json();",
+                  "pm.collectionVariables.set(\"authToken\", json.token);",
+                  "pm.collectionVariables.set(\"currentUserId\", json.userId);"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"Aditya@company.com\",\n  \"password\": \"Aditya@123\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/auth/login",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "auth",
+                "login"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create Plan A1 (DEV-only): Microservices Migration - Phase 1",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "let json=pm.response.json();",
+                  "pm.collectionVariables.set(\"planId_aditya_1\", json.planId);"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Microservices Migration - Phase 1\",\n  \"description\": \"Decompose monolith into services; service mesh, authN/Z, CI/CD foundations.\",\n  \"priority\": \"HIGH\",\n  \"status\": \"IN_PROGRESS\",\n  \"startDate\": \"2026-03-10T09:00:00\",\n  \"endDate\": \"2026-06-30T18:00:00\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/users/{{currentUserId}}/plans",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "users",
+                "{{currentUserId}}",
+                "plans"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "A1 - Milestone 1: Domain Modeling & Service Contracts",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "let json=pm.response.json();",
+                  "pm.collectionVariables.set(\"currentMilestoneId\", json.milestoneId);"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Domain Modeling & Service Contracts\",\n  \"dueDate\": \"2026-03-31T18:00:00\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/plans/{{planId_aditya_1}}/milestones",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "plans",
+                "{{planId_aditya_1}}",
+                "milestones"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "A1.M1 - Initiative: Event-storming workshops",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Event-storming workshops\",\n  \"description\": \"Facilitate bounded context discovery with cross-functional teams.\",\n  \"status\": \"IN_PROGRESS\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/milestones/{{currentMilestoneId}}/initiatives?assignedUserIds=3,4",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "milestones",
+                "{{currentMilestoneId}}",
+                "initiatives"
+              ],
+              "query": [
+                {
+                  "key": "assignedUserIds",
+                  "value": "3,4"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "A1.M1 - Initiative: Draft OpenAPI contracts & versioning",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Draft OpenAPI contracts & versioning\",\n  \"description\": \"Baseline schemas; choose versioning strategy & deprecation policy.\",\n  \"status\": \"IN_PROGRESS\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/milestones/{{currentMilestoneId}}/initiatives?assignedUserIds=5,6",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "milestones",
+                "{{currentMilestoneId}}",
+                "initiatives"
+              ],
+              "query": [
+                {
+                  "key": "assignedUserIds",
+                  "value": "5,6"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "A1.M1 - Initiative: Data ownership & event schema registry",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Data ownership & event schema registry\",\n  \"description\": \"Define golden sources; implement a schema registry for events.\",\n  \"status\": \"IN_PROGRESS\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/milestones/{{currentMilestoneId}}/initiatives?assignedUserIds=3,5",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "milestones",
+                "{{currentMilestoneId}}",
+                "initiatives"
+              ],
+              "query": [
+                {
+                  "key": "assignedUserIds",
+                  "value": "3,5"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "A1 - Milestone 2: Security & Observability Foundations",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "let json=pm.response.json();",
+                  "pm.collectionVariables.set(\"currentMilestoneId\", json.milestoneId);"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Security & Observability Foundations\",\n  \"dueDate\": \"2026-04-20T18:00:00\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/plans/{{planId_aditya_1}}/milestones",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "plans",
+                "{{planId_aditya_1}}",
+                "milestones"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "A1.M2 - Initiative: OAuth2/JWT for service-to-service calls",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"OAuth2/JWT for service-to-service calls\",\n  \"description\": \"Centralize identity; propagate claims securely across services.\",\n  \"status\": \"IN_PROGRESS\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/milestones/{{currentMilestoneId}}/initiatives?assignedUserIds=3,6",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "milestones",
+                "{{currentMilestoneId}}",
+                "initiatives"
+              ],
+              "query": [
+                {
+                  "key": "assignedUserIds",
+                  "value": "3,6"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "A1.M2 - Initiative: Distributed tracing & log aggregation (OTel)",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Distributed tracing & log aggregation (OTel)\",\n  \"description\": \"Deploy collectors and dashboards for latency/error budgets.\",\n  \"status\": \"IN_PROGRESS\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/milestones/{{currentMilestoneId}}/initiatives?assignedUserIds=4,5",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "milestones",
+                "{{currentMilestoneId}}",
+                "initiatives"
+              ],
+              "query": [
+                {
+                  "key": "assignedUserIds",
+                  "value": "4,5"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "A1 - Milestone 3: CI/CD Foundations",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "let json=pm.response.json();",
+                  "pm.collectionVariables.set(\"currentMilestoneId\", json.milestoneId);"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"CI/CD Foundations\",\n  \"dueDate\": \"2026-04-30T18:00:00\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/plans/{{planId_aditya_1}}/milestones",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "plans",
+                "{{planId_aditya_1}}",
+                "milestones"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "A1.M3 - Initiative: Build/test pipelines with caching & matrices",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Build/test pipelines with caching & matrices\",\n  \"description\": \"Introduce matrix builds, cache dependencies, and parallel tests.\",\n  \"status\": \"IN_PROGRESS\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/milestones/{{currentMilestoneId}}/initiatives?assignedUserIds=5,6",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "milestones",
+                "{{currentMilestoneId}}",
+                "initiatives"
+              ],
+              "query": [
+                {
+                  "key": "assignedUserIds",
+                  "value": "5,6"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "A1.M3 - Initiative: Artifact repository & SBOM generation",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Artifact repository & SBOM generation\",\n  \"description\": \"Store immutable artifacts and publish SBOM for compliance.\",\n  \"status\": \"IN_PROGRESS\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/milestones/{{currentMilestoneId}}/initiatives?assignedUserIds=3,4",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "milestones",
+                "{{currentMilestoneId}}",
+                "initiatives"
+              ],
+              "query": [
+                {
+                  "key": "assignedUserIds",
+                  "value": "3,4"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "A1 - Milestone 4: Service Decomposition & Data Strategy",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "let json=pm.response.json();",
+                  "pm.collectionVariables.set(\"currentMilestoneId\", json.milestoneId);"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Service Decomposition & Data Strategy\",\n  \"dueDate\": \"2026-05-20T18:00:00\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/plans/{{planId_aditya_1}}/milestones",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "plans",
+                "{{planId_aditya_1}}",
+                "milestones"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "A1.M4 - Initiative: Strangler pattern implementation (blue/green)",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Strangler pattern implementation (blue/green)\",\n  \"description\": \"Incrementally route traffic to the new services with safety nets.\",\n  \"status\": \"IN_PROGRESS\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/milestones/{{currentMilestoneId}}/initiatives?assignedUserIds=3,5",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "milestones",
+                "{{currentMilestoneId}}",
+                "initiatives"
+              ],
+              "query": [
+                {
+                  "key": "assignedUserIds",
+                  "value": "3,5"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "A1.M4 - Initiative: CDC patterns & outbox/inbox relay",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"CDC patterns & outbox/inbox relay\",\n  \"description\": \"Ensure reliable event publication and data synchronization.\",\n  \"status\": \"IN_PROGRESS\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/milestones/{{currentMilestoneId}}/initiatives?assignedUserIds=4,6",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "milestones",
+                "{{currentMilestoneId}}",
+                "initiatives"
+              ],
+              "query": [
+                {
+                  "key": "assignedUserIds",
+                  "value": "4,6"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "A1.M4 - Initiative: Saga orchestration POC",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Saga orchestration POC\",\n  \"description\": \"Demonstrate eventual consistency across multi-service transactions.\",\n  \"status\": \"IN_PROGRESS\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/milestones/{{currentMilestoneId}}/initiatives?assignedUserIds=3,4",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "milestones",
+                "{{currentMilestoneId}}",
+                "initiatives"
+              ],
+              "query": [
+                {
+                  "key": "assignedUserIds",
+                  "value": "3,4"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "A1.M4 - Initiative: Read models & caching strategy",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Read models & caching strategy\",\n  \"description\": \"Optimize query paths with denormalized views and caches.\",\n  \"status\": \"IN_PROGRESS\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/milestones/{{currentMilestoneId}}/initiatives?assignedUserIds=5,6",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "milestones",
+                "{{currentMilestoneId}}",
+                "initiatives"
+              ],
+              "query": [
+                {
+                  "key": "assignedUserIds",
+                  "value": "5,6"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "A1.M4 - Initiative: Service discovery & config management",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Service discovery & config management\",\n  \"description\": \"Implement dynamic discovery and central config (per env).\",\n  \"status\": \"IN_PROGRESS\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/milestones/{{currentMilestoneId}}/initiatives?assignedUserIds=3,6",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "milestones",
+                "{{currentMilestoneId}}",
+                "initiatives"
+              ],
+              "query": [
+                {
+                  "key": "assignedUserIds",
+                  "value": "3,6"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "A1.M4 - Initiative: Release readiness & rollback drills",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Release readiness & rollback drills\",\n  \"description\": \"Tabletop exercises and automated rollback validation.\",\n  \"status\": \"IN_PROGRESS\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/milestones/{{currentMilestoneId}}/initiatives?assignedUserIds=4,5",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "milestones",
+                "{{currentMilestoneId}}",
+                "initiatives"
+              ],
+              "query": [
+                {
+                  "key": "assignedUserIds",
+                  "value": "4,5"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "A1.M4 - Initiative: Observability SLOs post-migration",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Observability SLOs post-migration\",\n  \"description\": \"Recalibrate alert thresholds and update runbooks for SRE.\",\n  \"status\": \"IN_PROGRESS\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/milestones/{{currentMilestoneId}}/initiatives?assignedUserIds=3,5",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "milestones",
+                "{{currentMilestoneId}}",
+                "initiatives"
+              ],
+              "query": [
+                {
+                  "key": "assignedUserIds",
+                  "value": "3,5"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "A1 - Milestone 5: First Cutover & Hypercare",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "let json=pm.response.json();",
+                  "pm.collectionVariables.set(\"currentMilestoneId\", json.milestoneId);"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"First Cutover & Hypercare\",\n  \"dueDate\": \"2026-06-10T18:00:00\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/plans/{{planId_aditya_1}}/milestones",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "plans",
+                "{{planId_aditya_1}}",
+                "milestones"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "A1.M5 - Initiative: Canary rollout & metrics guardrails",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Canary rollout & metrics guardrails\",\n  \"description\": \"Automate progressive delivery with rollback conditions.\",\n  \"status\": \"IN_PROGRESS\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/milestones/{{currentMilestoneId}}/initiatives?assignedUserIds=5,6",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "milestones",
+                "{{currentMilestoneId}}",
+                "initiatives"
+              ],
+              "query": [
+                {
+                  "key": "assignedUserIds",
+                  "value": "5,6"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "A1.M5 - Initiative: Post-go-live monitoring & incident review",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Post-go-live monitoring & incident review\",\n  \"description\": \"SLO tracking, runbook updates, and RCA for early incidents.\",\n  \"status\": \"IN_PROGRESS\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/milestones/{{currentMilestoneId}}/initiatives?assignedUserIds=3,4",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "milestones",
+                "{{currentMilestoneId}}",
+                "initiatives"
+              ],
+              "query": [
+                {
+                  "key": "assignedUserIds",
+                  "value": "3,4"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create Plan A2 (Mixed): Developer Experience Platform",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "let json=pm.response.json();",
+                  "pm.collectionVariables.set(\"planId_aditya_2\", json.planId);"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Developer Experience Platform\",\n  \"description\": \"Golden paths, templates, and paved roads to boost delivery velocity.\",\n  \"priority\": \"MEDIUM\",\n  \"status\": \"IN_PROGRESS\",\n  \"startDate\": \"2026-03-20T09:00:00\",\n  \"endDate\": \"2026-05-30T18:00:00\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/users/{{currentUserId}}/plans",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "users",
+                "{{currentUserId}}",
+                "plans"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "A2 - Milestone 1: Dev Container Templates",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "let json=pm.response.json();",
+                  "pm.collectionVariables.set(\"currentMilestoneId\", json.milestoneId);"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Dev Container Templates\",\n  \"dueDate\": \"2026-04-05T18:00:00\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/plans/{{planId_aditya_2}}/milestones",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "plans",
+                "{{planId_aditya_2}}",
+                "milestones"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "A2.M1 - Initiative: Base images with toolchains",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Base images with toolchains\",\n  \"description\": \"Pre-bake JDK, Node, Python; add security patches.\",\n  \"status\": \"IN_PROGRESS\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/milestones/{{currentMilestoneId}}/initiatives?assignedUserIds=3,9",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "milestones",
+                "{{currentMilestoneId}}",
+                "initiatives"
+              ],
+              "query": [
+                {
+                  "key": "assignedUserIds",
+                  "value": "3,9"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "A2.M1 - Initiative: Standard devcontainer.json templates",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Standard devcontainer.json templates\",\n  \"description\": \"VS Code, ports, and extension packs for common stacks.\",\n  \"status\": \"IN_PROGRESS\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/milestones/{{currentMilestoneId}}/initiatives?assignedUserIds=14,24",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "milestones",
+                "{{currentMilestoneId}}",
+                "initiatives"
+              ],
+              "query": [
+                {
+                  "key": "assignedUserIds",
+                  "value": "14,24"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "A2 - Milestone 2: Pre-commit & Linting Standards",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "let json=pm.response.json();",
+                  "pm.collectionVariables.set(\"currentMilestoneId\", json.milestoneId);"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Pre-commit & Linting Standards\",\n  \"dueDate\": \"2026-04-20T18:00:00\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/plans/{{planId_aditya_2}}/milestones",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "plans",
+                "{{planId_aditya_2}}",
+                "milestones"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "A2.M2 - Initiative: Pre-commit hooks rollout",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Pre-commit hooks rollout\",\n  \"description\": \"Enable style/security checks; enforce contributor guidelines.\",\n  \"status\": \"IN_PROGRESS\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/milestones/{{currentMilestoneId}}/initiatives?assignedUserIds=11,21",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "milestones",
+                "{{currentMilestoneId}}",
+                "initiatives"
+              ],
+              "query": [
+                {
+                  "key": "assignedUserIds",
+                  "value": "11,21"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "A2 - Milestone 3: CI Template Library",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "let json=pm.response.json();",
+                  "pm.collectionVariables.set(\"currentMilestoneId\", json.milestoneId);"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"CI Template Library\",\n  \"dueDate\": \"2026-05-10T18:00:00\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/plans/{{planId_aditya_2}}/milestones",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "plans",
+                "{{planId_aditya_2}}",
+                "milestones"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "A2.M3 - Initiative: Reusable pipelines for build/test/deploy",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Reusable pipelines for build/test/deploy\",\n  \"description\": \"Templates with approvals, gates, and artifact promotions.\",\n  \"status\": \"IN_PROGRESS\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/milestones/{{currentMilestoneId}}/initiatives?assignedUserIds=9,23",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "milestones",
+                "{{currentMilestoneId}}",
+                "initiatives"
+              ],
+              "query": [
+                {
+                  "key": "assignedUserIds",
+                  "value": "9,23"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "A2 - Milestone 4: Golden Path Docs & Samples",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "let json=pm.response.json();",
+                  "pm.collectionVariables.set(\"currentMilestoneId\", json.milestoneId);"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Golden Path Docs & Samples\",\n  \"dueDate\": \"2026-05-25T18:00:00\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/plans/{{planId_aditya_2}}/milestones",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "plans",
+                "{{planId_aditya_2}}",
+                "milestones"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "A2.M4 - Initiative: Reference repos and templates publication",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Reference repos and templates publication\",\n  \"description\": \"Publish golden repos for common stacks; keep updated via bots.\",\n  \"status\": \"IN_PROGRESS\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/milestones/{{currentMilestoneId}}/initiatives?assignedUserIds=10,24",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "milestones",
+                "{{currentMilestoneId}}",
+                "initiatives"
+              ],
+              "query": [
+                {
+                  "key": "assignedUserIds",
+                  "value": "10,24"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create Plan A3 (Mixed): Payments Gateway Integration",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "let json=pm.response.json();",
+                  "pm.collectionVariables.set(\"planId_aditya_3\", json.planId);"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Payments Gateway Integration\",\n  \"description\": \"Integrate new PSP with tokenization, retries, 3DS, and reconciliation.\",\n  \"priority\": \"HIGH\",\n  \"status\": \"IN_PROGRESS\",\n  \"startDate\": \"2026-04-01T09:00:00\",\n  \"endDate\": \"2026-08-01T18:00:00\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/users/{{currentUserId}}/plans",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "users",
+                "{{currentUserId}}",
+                "plans"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "A3 - Milestone 1: PCI Scope & Tokenization",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "let json=pm.response.json();",
+                  "pm.collectionVariables.set(\"currentMilestoneId\", json.milestoneId);"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"PCI Scope & Tokenization\",\n  \"dueDate\": \"2026-04-20T18:00:00\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/plans/{{planId_aditya_3}}/milestones",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "plans",
+                "{{planId_aditya_3}}",
+                "milestones"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "A3.M1 - Initiative: Vault provider integration POC",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Vault provider integration POC\",\n  \"description\": \"Evaluate tokenization latency and SLA adherence.\",\n  \"status\": \"IN_PROGRESS\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/milestones/{{currentMilestoneId}}/initiatives?assignedUserIds=8,18",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "milestones",
+                "{{currentMilestoneId}}",
+                "initiatives"
+              ],
+              "query": [
+                {
+                  "key": "assignedUserIds",
+                  "value": "8,18"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "A3.M1 - Initiative: PCI gap analysis & compensating controls",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"PCI gap analysis & compensating controls\",\n  \"description\": \"Scope reduction via tokenization and network segmentation.\",\n  \"status\": \"IN_PROGRESS\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/milestones/{{currentMilestoneId}}/initiatives?assignedUserIds=19,24",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "milestones",
+                "{{currentMilestoneId}}",
+                "initiatives"
+              ],
+              "query": [
+                {
+                  "key": "assignedUserIds",
+                  "value": "19,24"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "A3 - Milestone 2: Payment Flows & Retry Logic",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "let json=pm.response.json();",
+                  "pm.collectionVariables.set(\"currentMilestoneId\", json.milestoneId);"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Payment Flows & Retry Logic\",\n  \"dueDate\": \"2026-05-15T18:00:00\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/plans/{{planId_aditya_3}}/milestones",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "plans",
+                "{{planId_aditya_3}}",
+                "milestones"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "A3.M2 - Initiative: Idempotency & reconciliation",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Idempotency & reconciliation\",\n  \"description\": \"Ensure safe retries and ledger alignment for settlements.\",\n  \"status\": \"IN_PROGRESS\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/milestones/{{currentMilestoneId}}/initiatives?assignedUserIds=20,24",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "milestones",
+                "{{currentMilestoneId}}",
+                "initiatives"
+              ],
+              "query": [
+                {
+                  "key": "assignedUserIds",
+                  "value": "20,24"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "A3.M2 - Initiative: Exception handling & refund workflows",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Exception handling & refund workflows\",\n  \"description\": \"Design fault-tolerant flows for declines, chargebacks, and refunds.\",\n  \"status\": \"IN_PROGRESS\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/milestones/{{currentMilestoneId}}/initiatives?assignedUserIds=11,21",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "milestones",
+                "{{currentMilestoneId}}",
+                "initiatives"
+              ],
+              "query": [
+                {
+                  "key": "assignedUserIds",
+                  "value": "11,21"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "A3 - Milestone 3: 3DS & Fraud Controls",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "let json=pm.response.json();",
+                  "pm.collectionVariables.set(\"currentMilestoneId\", json.milestoneId);"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"3DS & Fraud Controls\",\n  \"dueDate\": \"2026-06-05T18:00:00\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/plans/{{planId_aditya_3}}/milestones",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "plans",
+                "{{planId_aditya_3}}",
+                "milestones"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "A3.M3 - Initiative: 3DS challenge flow & exemptions",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"3DS challenge flow & exemptions\",\n  \"description\": \"Support SCA exemptions and seamless challenge UX.\",\n  \"status\": \"IN_PROGRESS\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/milestones/{{currentMilestoneId}}/initiatives?assignedUserIds=10,21",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "milestones",
+                "{{currentMilestoneId}}",
+                "initiatives"
+              ],
+              "query": [
+                {
+                  "key": "assignedUserIds",
+                  "value": "10,21"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Quality Assurance — Kavya Iyer",
+      "item": [
+        {
+          "name": "Login (Kavya Iyer - QA Manager)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "let json=pm.response.json();",
+                  "pm.collectionVariables.set(\"authToken\", json.token);",
+                  "pm.collectionVariables.set(\"currentUserId\", json.userId);"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"Kavya@company.com\",\n  \"password\": \"Kavya@123\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/auth/login",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "auth",
+                "login"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create Plan K1 (QA-only): QA Automation Framework Upgrade",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "let json=pm.response.json();",
+                  "pm.collectionVariables.set(\"planId_kavya_1\", json.planId);"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"QA Automation Framework Upgrade\",\n  \"description\": \"Playwright migration, stability ≥95%, parallel execution, and rich reports.\",\n  \"priority\": \"HIGH\",\n  \"status\": \"IN_PROGRESS\",\n  \"startDate\": \"2026-03-08T09:00:00\",\n  \"endDate\": \"2026-05-20T18:00:00\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/users/{{currentUserId}}/plans",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "users",
+                "{{currentUserId}}",
+                "plans"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "K1 - Milestone 1: Framework Spike & POC",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "let json=pm.response.json();",
+                  "pm.collectionVariables.set(\"currentMilestoneId\", json.milestoneId);"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Framework Spike & POC\",\n  \"dueDate\": \"2026-03-25T18:00:00\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/plans/{{planId_kavya_1}}/milestones",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "plans",
+                "{{planId_kavya_1}}",
+                "milestones"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "K1.M1 - Initiative: Evaluate Playwright vs Cypress",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Evaluate Playwright vs Cypress\",\n  \"description\": \"Reliability, flake rate, and cross-browser support benchmarking.\",\n  \"status\": \"IN_PROGRESS\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/milestones/{{currentMilestoneId}}/initiatives?assignedUserIds=8,9",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "milestones",
+                "{{currentMilestoneId}}",
+                "initiatives"
+              ],
+              "query": [
+                {
+                  "key": "assignedUserIds",
+                  "value": "8,9"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "K1.M1 - Initiative: Test data management & fixtures library",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Test data management & fixtures library\",\n  \"description\": \"Deterministic data, factories, and anonymized snapshots for tests.\",\n  \"status\": \"IN_PROGRESS\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/milestones/{{currentMilestoneId}}/initiatives?assignedUserIds=10,11",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "milestones",
+                "{{currentMilestoneId}}",
+                "initiatives"
+              ],
+              "query": [
+                {
+                  "key": "assignedUserIds",
+                  "value": "10,11"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "K1 - Milestone 2: Parallel Execution & Reports",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "let json=pm.response.json();",
+                  "pm.collectionVariables.set(\"currentMilestoneId\", json.milestoneId);"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Parallel Execution & Reports\",\n  \"dueDate\": \"2026-04-15T18:00:00\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/plans/{{planId_kavya_1}}/milestones",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "plans",
+                "{{planId_kavya_1}}",
+                "milestones"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "K1.M2 - Initiative: Shard suites & aggregate dashboards",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Shard suites & aggregate dashboards\",\n  \"description\": \"Distribute tests across workers; Grafana dashboards for trends.\",\n  \"status\": \"IN_PROGRESS\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/milestones/{{currentMilestoneId}}/initiatives?assignedUserIds=8,11",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "milestones",
+                "{{currentMilestoneId}}",
+                "initiatives"
+              ],
+              "query": [
+                {
+                  "key": "assignedUserIds",
+                  "value": "8,11"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "K1.M2 - Initiative: Screenshot/video artifacts & trace viewer",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Screenshot/video artifacts & trace viewer\",\n  \"description\": \"Collect media on failures and enable trace-based debugging.\",\n  \"status\": \"IN_PROGRESS\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/milestones/{{currentMilestoneId}}/initiatives?assignedUserIds=9,10",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "milestones",
+                "{{currentMilestoneId}}",
+                "initiatives"
+              ],
+              "query": [
+                {
+                  "key": "assignedUserIds",
+                  "value": "9,10"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "K1 - Milestone 3: Stability ≥ 95%",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "let json=pm.response.json();",
+                  "pm.collectionVariables.set(\"currentMilestoneId\", json.milestoneId);"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Stability ≥ 95%\",\n  \"dueDate\": \"2026-05-10T18:00:00\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/plans/{{planId_kavya_1}}/milestones",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "plans",
+                "{{planId_kavya_1}}",
+                "milestones"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "K1.M3 - Initiative: Flake quarantine & auto-ticketing",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Flake quarantine & auto-ticketing\",\n  \"description\": \"Isolate flaky specs; open JIRA with logs/trace on failure.\",\n  \"status\": \"IN_PROGRESS\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/milestones/{{currentMilestoneId}}/initiatives?assignedUserIds=9,10",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "milestones",
+                "{{currentMilestoneId}}",
+                "initiatives"
+              ],
+              "query": [
+                {
+                  "key": "assignedUserIds",
+                  "value": "9,10"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "K1 - Milestone 4: Accessibility & Visual Regression",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "let json=pm.response.json();",
+                  "pm.collectionVariables.set(\"currentMilestoneId\", json.milestoneId);"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Accessibility & Visual Regression\",\n  \"dueDate\": \"2026-05-25T18:00:00\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/plans/{{planId_kavya_1}}/milestones",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "plans",
+                "{{planId_kavya_1}}",
+                "milestones"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "K1.M4 - Initiative: Axe-core integration and contrast checks",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Axe-core integration and contrast checks\",\n  \"description\": \"Baseline a11y compliance and block regressions in CI.\",\n  \"status\": \"IN_PROGRESS\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/milestones/{{currentMilestoneId}}/initiatives?assignedUserIds=8,11",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "milestones",
+                "{{currentMilestoneId}}",
+                "initiatives"
+              ],
+              "query": [
+                {
+                  "key": "assignedUserIds",
+                  "value": "8,11"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "K1 - Milestone 5: Test Debt Reduction (7 initiatives)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "let json=pm.response.json();",
+                  "pm.collectionVariables.set(\"currentMilestoneId\", json.milestoneId);"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Test Debt Reduction\",\n  \"dueDate\": \"2026-06-05T18:00:00\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/plans/{{planId_kavya_1}}/milestones",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "plans",
+                "{{planId_kavya_1}}",
+                "milestones"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "K1.M5 - I1: Refactor brittle locators to test-ids",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Refactor brittle locators to test-ids\",\n  \"description\": \"Replace xpath/css tied to layout with resilient data-testids.\",\n  \"status\": \"IN_PROGRESS\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/milestones/{{currentMilestoneId}}/initiatives?assignedUserIds=8,9",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "milestones",
+                "{{currentMilestoneId}}",
+                "initiatives"
+              ],
+              "query": [
+                {
+                  "key": "assignedUserIds",
+                  "value": "8,9"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "K1.M5 - I2: Merge duplicate test flows & remove flakes",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Merge duplicate test flows & remove flakes\",\n  \"description\": \"Consolidate similar specs, stabilize network waits and timeouts.\",\n  \"status\": \"IN_PROGRESS\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/milestones/{{currentMilestoneId}}/initiatives?assignedUserIds=10,11",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "milestones",
+                "{{currentMilestoneId}}",
+                "initiatives"
+              ],
+              "query": [
+                {
+                  "key": "assignedUserIds",
+                  "value": "10,11"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "K1.M5 - I3: Test prioritization with historical failure data",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Test prioritization with historical failure data\",\n  \"description\": \"Run risky specs first; shorten feedback cycle on PRs.\",\n  \"status\": \"IN_PROGRESS\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/milestones/{{currentMilestoneId}}/initiatives?assignedUserIds=9,10",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "milestones",
+                "{{currentMilestoneId}}",
+                "initiatives"
+              ],
+              "query": [
+                {
+                  "key": "assignedUserIds",
+                  "value": "9,10"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "K1.M5 - I4: Test data seeding for parallel envs",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Test data seeding for parallel envs\",\n  \"description\": \"Scripted factory seeds supporting isolated parallel test runs.\",\n  \"status\": \"IN_PROGRESS\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/milestones/{{currentMilestoneId}}/initiatives?assignedUserIds=8,11",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "milestones",
+                "{{currentMilestoneId}}",
+                "initiatives"
+              ],
+              "query": [
+                {
+                  "key": "assignedUserIds",
+                  "value": "8,11"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "K1.M5 - I5: Visual regression baselines per theme/locale",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Visual regression baselines per theme/locale\",\n  \"description\": \"Baseline screenshots for primary UIs; allow threshold tolerances.\",\n  \"status\": \"IN_PROGRESS\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/milestones/{{currentMilestoneId}}/initiatives?assignedUserIds=9,10",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "milestones",
+                "{{currentMilestoneId}}",
+                "initiatives"
+              ],
+              "query": [
+                {
+                  "key": "assignedUserIds",
+                  "value": "9,10"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "K1.M5 - I6: Accessibility ruleset & CI gate > AA WCAG",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Accessibility ruleset & CI gate > AA WCAG\",\n  \"description\": \"Block PRs on severe a11y violations (contrast/labels/landmarks).\",\n  \"status\": \"IN_PROGRESS\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/milestones/{{currentMilestoneId}}/initiatives?assignedUserIds=8,11",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "milestones",
+                "{{currentMilestoneId}}",
+                "initiatives"
+              ],
+              "query": [
+                {
+                  "key": "assignedUserIds",
+                  "value": "8,11"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "K1.M5 - I7: Synthetic monitoring for critical journeys",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Synthetic monitoring for critical journeys\",\n  \"description\": \"Run smoke scenarios hourly; alert on SLA breaches.\",\n  \"status\": \"IN_PROGRESS\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/milestones/{{currentMilestoneId}}/initiatives?assignedUserIds=10,11",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "milestones",
+                "{{currentMilestoneId}}",
+                "initiatives"
+              ],
+              "query": [
+                {
+                  "key": "assignedUserIds",
+                  "value": "10,11"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create Plan K2 (Mixed): Performance & Security Testing Program",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "let json=pm.response.json();",
+                  "pm.collectionVariables.set(\"planId_kavya_2\", json.planId);"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Performance & Security Testing Program\",\n  \"description\": \"SLAs, performance baselines, SAST/DAST and threat modeling.\",\n  \"priority\": \"MEDIUM\",\n  \"status\": \"IN_PROGRESS\",\n  \"startDate\": \"2026-04-01T09:00:00\",\n  \"endDate\": \"2026-06-15T18:00:00\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/users/{{currentUserId}}/plans",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "users",
+                "{{currentUserId}}",
+                "plans"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "K2 - Milestone 1: Load Testing Baseline",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "let json=pm.response.json();",
+                  "pm.collectionVariables.set(\"currentMilestoneId\", json.milestoneId);"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Load Testing Baseline\",\n  \"dueDate\": \"2026-04-20T18:00:00\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/plans/{{planId_kavya_2}}/milestones",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "plans",
+                "{{planId_kavya_2}}",
+                "milestones"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "K2.M1 - Initiative: JMeter/Gatling scenarios & SLAs",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"JMeter/Gatling scenarios & SLAs\",\n  \"description\": \"User journey workloads; publish baseline SLAs in Confluence.\",\n  \"status\": \"IN_PROGRESS\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/milestones/{{currentMilestoneId}}/initiatives?assignedUserIds=8,18",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "milestones",
+                "{{currentMilestoneId}}",
+                "initiatives"
+              ],
+              "query": [
+                {
+                  "key": "assignedUserIds",
+                  "value": "8,18"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "K2 - Milestone 2: SAST/DAST Integration",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "let json=pm.response.json();",
+                  "pm.collectionVariables.set(\"currentMilestoneId\", json.milestoneId);"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"SAST/DAST Integration\",\n  \"dueDate\": \"2026-05-10T18:00:00\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/plans/{{planId_kavya_2}}/milestones",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "plans",
+                "{{planId_kavya_2}}",
+                "milestones"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "K2.M2 - Initiative: Pipeline gating on severity thresholds",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Pipeline gating on severity thresholds\",\n  \"description\": \"Fail builds on HIGH+ vulns; auto-create remediation tickets.\",\n  \"status\": \"IN_PROGRESS\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/milestones/{{currentMilestoneId}}/initiatives?assignedUserIds=14,24",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "milestones",
+                "{{currentMilestoneId}}",
+                "initiatives"
+              ],
+              "query": [
+                {
+                  "key": "assignedUserIds",
+                  "value": "14,24"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create Plan K3 (Mixed): Release Qualification Program",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "let json=pm.response.json();",
+                  "pm.collectionVariables.set(\"planId_kavya_3\", json.planId);"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Release Qualification Program\",\n  \"description\": \"Define exit criteria, smoke packs, and rollback readiness checks.\",\n  \"priority\": \"LOW\",\n  \"status\": \"IN_PROGRESS\",\n  \"startDate\": \"2026-04-12T09:00:00\",\n  \"endDate\": \"2026-06-30T18:00:00\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/users/{{currentUserId}}/plans",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "users",
+                "{{currentUserId}}",
+                "plans"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "K3 - Milestone 1: Exit Criteria & Smoke Packs",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "let json=pm.response.json();",
+                  "pm.collectionVariables.set(\"currentMilestoneId\", json.milestoneId);"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Exit Criteria & Smoke Packs\",\n  \"dueDate\": \"2026-04-30T18:00:00\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/plans/{{planId_kavya_3}}/milestones",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "plans",
+                "{{planId_kavya_3}}",
+                "milestones"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "K3.M1 - Initiative: Define critical smoke scenarios per app",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Define critical smoke scenarios per app\",\n  \"description\": \"Identify top 10 flows per product for release qualification.\",\n  \"status\": \"IN_PROGRESS\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/milestones/{{currentMilestoneId}}/initiatives?assignedUserIds=8,20",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "milestones",
+                "{{currentMilestoneId}}",
+                "initiatives"
+              ],
+              "query": [
+                {
+                  "key": "assignedUserIds",
+                  "value": "8,20"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Human Resources — Rohan Malhotra",
+      "item": [
+        {
+          "name": "Login (Rohan Malhotra - HR Manager)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "let json=pm.response.json();",
+                  "pm.collectionVariables.set(\"authToken\", json.token);",
+                  "pm.collectionVariables.set(\"currentUserId\", json.userId);"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"Rohan@company.com\",\n  \"password\": \"Rohan@123\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/auth/login",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "auth",
+                "login"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create Plan R1 (HR-only): Campus Hiring 2026",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "let json=pm.response.json();",
+                  "pm.collectionVariables.set(\"planId_rohan_1\", json.planId);"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Campus Hiring 2026\",\n  \"description\": \"Outreach, assessments, interviews, offers, and onboarding.\",\n  \"priority\": \"HIGH\",\n  \"status\": \"IN_PROGRESS\",\n  \"startDate\": \"2026-03-05T09:00:00\",\n  \"endDate\": \"2026-06-10T18:00:00\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/users/{{currentUserId}}/plans",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "users",
+                "{{currentUserId}}",
+                "plans"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "R1 - Milestone 1: College Outreach & MoUs",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "let json=pm.response.json();",
+                  "pm.collectionVariables.set(\"currentMilestoneId\", json.milestoneId);"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"College Outreach & MoUs\",\n  \"dueDate\": \"2026-03-25T18:00:00\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/plans/{{planId_rohan_1}}/milestones",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "plans",
+                "{{planId_rohan_1}}",
+                "milestones"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "R1.M1 - Initiative: Outreach schedule & brochures",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Outreach schedule & brochures\",\n  \"description\": \"Finalize target colleges and share hiring collateral.\",\n  \"status\": \"IN_PROGRESS\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/milestones/{{currentMilestoneId}}/initiatives?assignedUserIds=13,14",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "milestones",
+                "{{currentMilestoneId}}",
+                "initiatives"
+              ],
+              "query": [
+                {
+                  "key": "assignedUserIds",
+                  "value": "13,14"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "R1.M1 - Initiative: Employer branding & campus talks",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Employer branding & campus talks\",\n  \"description\": \"Prepare decks, alumni connects, and Thought Leadership sessions.\",\n  \"status\": \"IN_PROGRESS\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/milestones/{{currentMilestoneId}}/initiatives?assignedUserIds=15,16",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "milestones",
+                "{{currentMilestoneId}}",
+                "initiatives"
+              ],
+              "query": [
+                {
+                  "key": "assignedUserIds",
+                  "value": "15,16"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "R1 - Milestone 2: Assessments & Interviews",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "let json=pm.response.json();",
+                  "pm.collectionVariables.set(\"currentMilestoneId\", json.milestoneId);"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Assessments & Interviews\",\n  \"dueDate\": \"2026-04-20T18:00:00\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/plans/{{planId_rohan_1}}/milestones",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "plans",
+                "{{planId_rohan_1}}",
+                "milestones"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "R1.M2 - Initiative: Online test vendor onboarding & pilot",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Online test vendor onboarding & pilot\",\n  \"description\": \"Finalize SLAs; pilot with 200 candidates across 3 colleges.\",\n  \"status\": \"IN_PROGRESS\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/milestones/{{currentMilestoneId}}/initiatives?assignedUserIds=13,16",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "milestones",
+                "{{currentMilestoneId}}",
+                "initiatives"
+              ],
+              "query": [
+                {
+                  "key": "assignedUserIds",
+                  "value": "13,16"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "R1.M2 - Initiative: Interview panel readiness & scheduling",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Interview panel readiness & scheduling\",\n  \"description\": \"Train panels, calibrate rubrics, and auto-schedule slots.\",\n  \"status\": \"IN_PROGRESS\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/milestones/{{currentMilestoneId}}/initiatives?assignedUserIds=14,15",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "milestones",
+                "{{currentMilestoneId}}",
+                "initiatives"
+              ],
+              "query": [
+                {
+                  "key": "assignedUserIds",
+                  "value": "14,15"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "R1 - Milestone 3: Offers & Onboarding (7 initiatives)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "let json=pm.response.json();",
+                  "pm.collectionVariables.set(\"currentMilestoneId\", json.milestoneId);"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Offers & Onboarding\",\n  \"dueDate\": \"2026-05-10T18:00:00\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/plans/{{planId_rohan_1}}/milestones",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "plans",
+                "{{planId_rohan_1}}",
+                "milestones"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "R1.M3 - I1: Offer letters & comp approvals",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Offer letters & comp approvals\",\n  \"description\": \"Generate offers, route for approvals, and e-signature workflows.\",\n  \"status\": \"IN_PROGRESS\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/milestones/{{currentMilestoneId}}/initiatives?assignedUserIds=13,14",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "milestones",
+                "{{currentMilestoneId}}",
+                "initiatives"
+              ],
+              "query": [
+                {
+                  "key": "assignedUserIds",
+                  "value": "13,14"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "R1.M3 - I2: Background checks & document collection",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Background checks & document collection\",\n  \"description\": \"Initiate BG checks and collect KYC, education, and experience proofs.\",\n  \"status\": \"IN_PROGRESS\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/milestones/{{currentMilestoneId}}/initiatives?assignedUserIds=15,16",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "milestones",
+                "{{currentMilestoneId}}",
+                "initiatives"
+              ],
+              "query": [
+                {
+                  "key": "assignedUserIds",
+                  "value": "15,16"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "R1.M3 - I3: Onboarding schedule & IT provisioning",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Onboarding schedule & IT provisioning\",\n  \"description\": \"Plan induction; trigger SSO/email/laptop provisioning requests.\",\n  \"status\": \"IN_PROGRESS\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/milestones/{{currentMilestoneId}}/initiatives?assignedUserIds=13,16",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "milestones",
+                "{{currentMilestoneId}}",
+                "initiatives"
+              ],
+              "query": [
+                {
+                  "key": "assignedUserIds",
+                  "value": "13,16"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "R1.M3 - I4: Buddy allocation & training enrollment",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Buddy allocation & training enrollment\",\n  \"description\": \"Assign buddies and enroll new hires to mandatory training tracks.\",\n  \"status\": \"IN_PROGRESS\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/milestones/{{currentMilestoneId}}/initiatives?assignedUserIds=14,15",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "milestones",
+                "{{currentMilestoneId}}",
+                "initiatives"
+              ],
+              "query": [
+                {
+                  "key": "assignedUserIds",
+                  "value": "14,15"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "R1.M3 - I5: Offer acceptance tracking & risk coverage",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Offer acceptance tracking & risk coverage\",\n  \"description\": \"Track acceptances, drop-offs; maintain backup candidate pool.\",\n  \"status\": \"IN_PROGRESS\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/milestones/{{currentMilestoneId}}/initiatives?assignedUserIds=13,15",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "milestones",
+                "{{currentMilestoneId}}",
+                "initiatives"
+              ],
+              "query": [
+                {
+                  "key": "assignedUserIds",
+                  "value": "13,15"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "R1.M3 - I6: Pre-joining engagement & FAQs",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Pre-joining engagement & FAQs\",\n  \"description\": \"Regular touchpoints; address queries on relocation, HR policies.\",\n  \"status\": \"IN_PROGRESS\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/milestones/{{currentMilestoneId}}/initiatives?assignedUserIds=14,16",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "milestones",
+                "{{currentMilestoneId}}",
+                "initiatives"
+              ],
+              "query": [
+                {
+                  "key": "assignedUserIds",
+                  "value": "14,16"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "R1.M3 - I7: Day-1 experience & feedback loop",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Day-1 experience & feedback loop\",\n  \"description\": \"Welcome kit, induction, and feedback capture for continuous improvement.\",\n  \"status\": \"IN_PROGRESS\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/milestones/{{currentMilestoneId}}/initiatives?assignedUserIds=13,14",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "milestones",
+                "{{currentMilestoneId}}",
+                "initiatives"
+              ],
+              "query": [
+                {
+                  "key": "assignedUserIds",
+                  "value": "13,14"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create Plan R2 (Mixed): L&D Curriculum Refresh",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "let json=pm.response.json();",
+                  "pm.collectionVariables.set(\"planId_rohan_2\", json.planId);"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"L&D Curriculum Refresh\",\n  \"description\": \"Revise role-based learning paths, curate materials, vouchers & labs.\",\n  \"priority\": \"MEDIUM\",\n  \"status\": \"IN_PROGRESS\",\n  \"startDate\": \"2026-04-05T09:00:00\",\n  \"endDate\": \"2026-06-25T18:00:00\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/users/{{currentUserId}}/plans",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "users",
+                "{{currentUserId}}",
+                "plans"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "R2 - Milestone 1: Role Mapping",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "let json=pm.response.json();",
+                  "pm.collectionVariables.set(\"currentMilestoneId\", json.milestoneId);"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Role Mapping\",\n  \"dueDate\": \"2026-04-25T18:00:00\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/plans/{{planId_rohan_2}}/milestones",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "plans",
+                "{{planId_rohan_2}}",
+                "milestones"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "R2.M1 - Initiative: Map skills matrix by role",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Map skills matrix by role\",\n  \"description\": \"Identify core and elective skills by job family.\",\n  \"status\": \"IN_PROGRESS\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/milestones/{{currentMilestoneId}}/initiatives?assignedUserIds=4,19",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "milestones",
+                "{{currentMilestoneId}}",
+                "initiatives"
+              ],
+              "query": [
+                {
+                  "key": "assignedUserIds",
+                  "value": "4,19"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "R2 - Milestone 2: Learning Paths & Certification",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "let json=pm.response.json();",
+                  "pm.collectionVariables.set(\"currentMilestoneId\", json.milestoneId);"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Learning Paths & Certification\",\n  \"dueDate\": \"2026-05-12T18:00:00\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/plans/{{planId_rohan_2}}/milestones",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "plans",
+                "{{planId_rohan_2}}",
+                "milestones"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "R2.M2 - Initiative: Curate prep materials & vouchers",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Curate prep materials & vouchers\",\n  \"description\": \"Provide courseware, practice tests, and exam vouchers.\",\n  \"status\": \"IN_PROGRESS\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/milestones/{{currentMilestoneId}}/initiatives?assignedUserIds=11,23",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "milestones",
+                "{{currentMilestoneId}}",
+                "initiatives"
+              ],
+              "query": [
+                {
+                  "key": "assignedUserIds",
+                  "value": "11,23"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create Plan R3 (Mixed): HRMS Rollout",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "let json=pm.response.json();",
+                  "pm.collectionVariables.set(\"planId_rohan_3\", json.planId);"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"HRMS Rollout\",\n  \"description\": \"Roll out attendance, payroll integration, and self-service modules.\",\n  \"priority\": \"HIGH\",\n  \"status\": \"IN_PROGRESS\",\n  \"startDate\": \"2026-04-10T09:00:00\",\n  \"endDate\": \"2026-08-15T18:00:00\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/users/{{currentUserId}}/plans",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "users",
+                "{{currentUserId}}",
+                "plans"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "R3 - Milestone 1: Payroll & Attendance Integration",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "let json=pm.response.json();",
+                  "pm.collectionVariables.set(\"currentMilestoneId\", json.milestoneId);"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Payroll & Attendance Integration\",\n  \"dueDate\": \"2026-05-05T18:00:00\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/plans/{{planId_rohan_3}}/milestones",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "plans",
+                "{{planId_rohan_3}}",
+                "milestones"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "R3.M1 - Initiative: Attendance sync & reconciliation",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Attendance sync & reconciliation\",\n  \"description\": \"Ensure time entries sync to payroll with zero drift.\",\n  \"status\": \"IN_PROGRESS\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/milestones/{{currentMilestoneId}}/initiatives?assignedUserIds=16,20",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "milestones",
+                "{{currentMilestoneId}}",
+                "initiatives"
+              ],
+              "query": [
+                {
+                  "key": "assignedUserIds",
+                  "value": "16,20"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create Plan R4 (Mixed): Employee Engagement Q2",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "let json=pm.response.json();",
+                  "pm.collectionVariables.set(\"planId_rohan_4\", json.planId);"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Employee Engagement Q2\",\n  \"description\": \"Pulse surveys, townhalls, recognition, and action tracking.\",\n  \"priority\": \"LOW\",\n  \"status\": \"IN_PROGRESS\",\n  \"startDate\": \"2026-04-02T09:00:00\",\n  \"endDate\": \"2026-06-30T18:00:00\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/users/{{currentUserId}}/plans",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "users",
+                "{{currentUserId}}",
+                "plans"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "R4 - Milestone 1: Q2 Pulse Survey & Analysis",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "let json=pm.response.json();",
+                  "pm.collectionVariables.set(\"currentMilestoneId\", json.milestoneId);"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Q2 Pulse Survey & Analysis\",\n  \"dueDate\": \"2026-04-18T18:00:00\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/plans/{{planId_rohan_4}}/milestones",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "plans",
+                "{{planId_rohan_4}}",
+                "milestones"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "R4.M1 - Initiative: Survey design & rollout",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Survey design & rollout\",\n  \"description\": \"Design questionnaire; coordinate communications and launch windows.\",\n  \"status\": \"IN_PROGRESS\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/milestones/{{currentMilestoneId}}/initiatives?assignedUserIds=13,24",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "milestones",
+                "{{currentMilestoneId}}",
+                "initiatives"
+              ],
+              "query": [
+                {
+                  "key": "assignedUserIds",
+                  "value": "13,24"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Finance — Shreya Gupta",
+      "item": [
+        {
+          "name": "Login (Shreya Gupta - Finance Manager)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "let json=pm.response.json();",
+                  "pm.collectionVariables.set(\"authToken\", json.token);",
+                  "pm.collectionVariables.set(\"currentUserId\", json.userId);"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"Shreya@company.com\",\n  \"password\": \"Shreya@123\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/auth/login",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "auth",
+                "login"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create Plan S1 (FIN-only): Quarterly Financial Close Q2 FY26",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "let json=pm.response.json();",
+                  "pm.collectionVariables.set(\"planId_shreya_1\", json.planId);"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Quarterly Financial Close Q2 FY26\",\n  \"description\": \"Close process, accruals, reconciliations, variances, and audit support.\",\n  \"priority\": \"HIGH\",\n  \"status\": \"IN_PROGRESS\",\n  \"startDate\": \"2026-04-01T09:00:00\",\n  \"endDate\": \"2026-06-15T18:00:00\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/users/{{currentUserId}}/plans",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "users",
+                "{{currentUserId}}",
+                "plans"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "S1 - Milestone 1: Trial Balance & Accruals",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "let json=pm.response.json();",
+                  "pm.collectionVariables.set(\"currentMilestoneId\", json.milestoneId);"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Trial Balance & Accruals\",\n  \"dueDate\": \"2026-04-20T18:00:00\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/plans/{{planId_shreya_1}}/milestones",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "plans",
+                "{{planId_shreya_1}}",
+                "milestones"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "S1.M1 - Initiative: Accrual entries & reconciliations",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Accrual entries & reconciliations\",\n  \"description\": \"Book accruals and reconcile control accounts for key balances.\",\n  \"status\": \"IN_PROGRESS\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/milestones/{{currentMilestoneId}}/initiatives?assignedUserIds=18,21",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "milestones",
+                "{{currentMilestoneId}}",
+                "initiatives"
+              ],
+              "query": [
+                {
+                  "key": "assignedUserIds",
+                  "value": "18,21"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "S1 - Milestone 2: Variance Analysis & Commentary",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "let json=pm.response.json();",
+                  "pm.collectionVariables.set(\"currentMilestoneId\", json.milestoneId);"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Variance Analysis & Commentary\",\n  \"dueDate\": \"2026-05-05T18:00:00\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/plans/{{planId_shreya_1}}/milestones",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "plans",
+                "{{planId_shreya_1}}",
+                "milestones"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "S1.M2 - Initiative: P&L variance deep-dive",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"P&L variance deep-dive\",\n  \"description\": \"Explain deviations vs budget and prior period across business lines.\",\n  \"status\": \"IN_PROGRESS\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/milestones/{{currentMilestoneId}}/initiatives?assignedUserIds=19,16",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "milestones",
+                "{{currentMilestoneId}}",
+                "initiatives"
+              ],
+              "query": [
+                {
+                  "key": "assignedUserIds",
+                  "value": "19,16"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create Plan S2 (Mixed): Cost Optimization Program",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "let json=pm.response.json();",
+                  "pm.collectionVariables.set(\"planId_shreya_2\", json.planId);"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Cost Optimization Program\",\n  \"description\": \"Vendor renegotiations, cloud rightsizing, and waste reduction.\",\n  \"priority\": \"MEDIUM\",\n  \"status\": \"IN_PROGRESS\",\n  \"startDate\": \"2026-04-10T09:00:00\",\n  \"endDate\": \"2026-07-10T18:00:00\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/users/{{currentUserId}}/plans",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "users",
+                "{{currentUserId}}",
+                "plans"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "S2 - Milestone 1: Cloud Spend Analysis (7 initiatives)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "let json=pm.response.json();",
+                  "pm.collectionVariables.set(\"currentMilestoneId\", json.milestoneId);"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Cloud Spend Analysis\",\n  \"dueDate\": \"2026-05-01T18:00:00\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/plans/{{planId_shreya_2}}/milestones",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "plans",
+                "{{planId_shreya_2}}",
+                "milestones"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "S2.M1 - I1: Idle resource cleanup",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Idle resource cleanup\",\n  \"description\": \"Identify and decommission unused VMs/volumes to cut costs.\",\n  \"status\": \"IN_PROGRESS\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/milestones/{{currentMilestoneId}}/initiatives?assignedUserIds=23,20",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "milestones",
+                "{{currentMilestoneId}}",
+                "initiatives"
+              ],
+              "query": [
+                {
+                  "key": "assignedUserIds",
+                  "value": "23,20"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "S2.M1 - I2: Rightsize compute/storage tiers",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Rightsize compute/storage tiers\",\n  \"description\": \"Tune instance types, autoscaling thresholds, and storage classes.\",\n  \"status\": \"IN_PROGRESS\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/milestones/{{currentMilestoneId}}/initiatives?assignedUserIds=24,18",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "milestones",
+                "{{currentMilestoneId}}",
+                "initiatives"
+              ],
+              "query": [
+                {
+                  "key": "assignedUserIds",
+                  "value": "24,18"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "S2.M1 - I3: Reserved/spot instance portfolio strategy",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Reserved/spot instance portfolio strategy\",\n  \"description\": \"Blend RIs/Savings Plans with spot for optimal coverage & risk.\",\n  \"status\": \"IN_PROGRESS\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/milestones/{{currentMilestoneId}}/initiatives?assignedUserIds=21,9",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "milestones",
+                "{{currentMilestoneId}}",
+                "initiatives"
+              ],
+              "query": [
+                {
+                  "key": "assignedUserIds",
+                  "value": "21,9"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "S2.M1 - I4: Cost allocation tags & showback reports",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Cost allocation tags & showback reports\",\n  \"description\": \"Enforce tagging; monthly showback to business owners.\",\n  \"status\": \"IN_PROGRESS\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/milestones/{{currentMilestoneId}}/initiatives?assignedUserIds=10,20",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "milestones",
+                "{{currentMilestoneId}}",
+                "initiatives"
+              ],
+              "query": [
+                {
+                  "key": "assignedUserIds",
+                  "value": "10,20"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "S2.M1 - I5: Data transfer and egress optimization",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Data transfer and egress optimization\",\n  \"description\": \"Reduce cross-region chatter; use CDNs/peering where applicable.\",\n  \"status\": \"IN_PROGRESS\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/milestones/{{currentMilestoneId}}/initiatives?assignedUserIds=23,19",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "milestones",
+                "{{currentMilestoneId}}",
+                "initiatives"
+              ],
+              "query": [
+                {
+                  "key": "assignedUserIds",
+                  "value": "23,19"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "S2.M1 - I6: License optimization & consolidation",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"License optimization & consolidation\",\n  \"description\": \"Eliminate unused seats; consolidate vendor contracts for volume.\",\n  \"status\": \"IN_PROGRESS\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/milestones/{{currentMilestoneId}}/initiatives?assignedUserIds=18,11",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "milestones",
+                "{{currentMilestoneId}}",
+                "initiatives"
+              ],
+              "query": [
+                {
+                  "key": "assignedUserIds",
+                  "value": "18,11"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "S2.M1 - I7: KPI dashboard for cost & utilization trends",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"KPI dashboard for cost & utilization trends\",\n  \"description\": \"Publish monthly cost per product, per environment KPIs.\",\n  \"status\": \"IN_PROGRESS\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/milestones/{{currentMilestoneId}}/initiatives?assignedUserIds=21,24",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "milestones",
+                "{{currentMilestoneId}}",
+                "initiatives"
+              ],
+              "query": [
+                {
+                  "key": "assignedUserIds",
+                  "value": "21,24"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create Plan S3 (Mixed): Billing System Revamp",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "let json=pm.response.json();",
+                  "pm.collectionVariables.set(\"planId_shreya_3\", json.planId);"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Billing System Revamp\",\n  \"description\": \"Modernize rating, invoicing, credit control, and dunning workflows.\",\n  \"priority\": \"HIGH\",\n  \"status\": \"IN_PROGRESS\",\n  \"startDate\": \"2026-04-15T09:00:00\",\n  \"endDate\": \"2026-09-15T18:00:00\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/users/{{currentUserId}}/plans",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "users",
+                "{{currentUserId}}",
+                "plans"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "S3 - Milestone 1: Rating Engine POC",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "let json=pm.response.json();",
+                  "pm.collectionVariables.set(\"currentMilestoneId\", json.milestoneId);"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Rating Engine POC\",\n  \"dueDate\": \"2026-05-05T18:00:00\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/plans/{{planId_shreya_3}}/milestones",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "plans",
+                "{{planId_shreya_3}}",
+                "milestones"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "S3.M1 - Initiative: Tiered pricing scenarios & tests",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Tiered pricing scenarios & tests\",\n  \"description\": \"Design rating pipeline for tiered/usage-based models with fixtures.\",\n  \"status\": \"IN_PROGRESS\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/milestones/{{currentMilestoneId}}/initiatives?assignedUserIds=18,9",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "milestones",
+                "{{currentMilestoneId}}",
+                "initiatives"
+              ],
+              "query": [
+                {
+                  "key": "assignedUserIds",
+                  "value": "18,9"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "IT — Alok Maurya",
+      "item": [
+        {
+          "name": "Login (Alok Maurya - IT Manager)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "let json=pm.response.json();",
+                  "pm.collectionVariables.set(\"authToken\", json.token);",
+                  "pm.collectionVariables.set(\"currentUserId\", json.userId);"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"Alok@company.com\",\n  \"password\": \"Alok@123\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/auth/login",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "auth",
+                "login"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create Plan L1 (IT-only): Cloud Infrastructure Hardening",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "let json=pm.response.json();",
+                  "pm.collectionVariables.set(\"planId_alok_1\", json.planId);"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Cloud Infrastructure Hardening\",\n  \"description\": \"CIS benchmarks, patching, network micro-segmentation, and secrets mgmt.\",\n  \"priority\": \"HIGH\",\n  \"status\": \"IN_PROGRESS\",\n  \"startDate\": \"2026-03-12T09:00:00\",\n  \"endDate\": \"2026-06-20T18:00:00\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/users/{{currentUserId}}/plans",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "users",
+                "{{currentUserId}}",
+                "plans"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "L1 - Milestone 1: CIS Benchmarking & Patching (7 initiatives)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "let json=pm.response.json();",
+                  "pm.collectionVariables.set(\"currentMilestoneId\", json.milestoneId);"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"CIS Benchmarking & Patching\",\n  \"dueDate\": \"2026-03-30T18:00:00\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/plans/{{planId_alok_1}}/milestones",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "plans",
+                "{{planId_alok_1}}",
+                "milestones"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "L1.M1 - I1: Patch baseline across fleets",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Patch baseline across fleets\",\n  \"description\": \"Automate monthly patch windows for OS/runtime fleets.\",\n  \"status\": \"IN_PROGRESS\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/milestones/{{currentMilestoneId}}/initiatives?assignedUserIds=23,24",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "milestones",
+                "{{currentMilestoneId}}",
+                "initiatives"
+              ],
+              "query": [
+                {
+                  "key": "assignedUserIds",
+                  "value": "23,24"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "L1.M1 - I2: CIS hardening for Linux/Windows baselines",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"CIS hardening for Linux/Windows baselines\",\n  \"description\": \"Apply CIS Level-1 settings; validate with automated scans.\",\n  \"status\": \"IN_PROGRESS\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/milestones/{{currentMilestoneId}}/initiatives?assignedUserIds=24,25",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "milestones",
+                "{{currentMilestoneId}}",
+                "initiatives"
+              ],
+              "query": [
+                {
+                  "key": "assignedUserIds",
+                  "value": "24,25"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "L1.M1 - I3: Patch compliance dashboard & alerts",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Patch compliance dashboard & alerts\",\n  \"description\": \"Real-time compliance posture and breach alerts for fleets.\",\n  \"status\": \"IN_PROGRESS\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/milestones/{{currentMilestoneId}}/initiatives?assignedUserIds=25,23",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "milestones",
+                "{{currentMilestoneId}}",
+                "initiatives"
+              ],
+              "query": [
+                {
+                  "key": "assignedUserIds",
+                  "value": "25,23"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "L1.M1 - I4: Secrets rotation & key management SOPs",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Secrets rotation & key management SOPs\",\n  \"description\": \"Define rotation cadence; integrate with secret managers/PKI.\",\n  \"status\": \"IN_PROGRESS\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/milestones/{{currentMilestoneId}}/initiatives?assignedUserIds=23,25",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "milestones",
+                "{{currentMilestoneId}}",
+                "initiatives"
+              ],
+              "query": [
+                {
+                  "key": "assignedUserIds",
+                  "value": "23,25"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "L1.M1 - I5: Vulnerability scanning integration (OS/containers)",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Vulnerability scanning integration (OS/containers)\",\n  \"description\": \"Schedule scans, dedupe findings, and route to owners automatically.\",\n  \"status\": \"IN_PROGRESS\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/milestones/{{currentMilestoneId}}/initiatives?assignedUserIds=24,23",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "milestones",
+                "{{currentMilestoneId}}",
+                "initiatives"
+              ],
+              "query": [
+                {
+                  "key": "assignedUserIds",
+                  "value": "24,23"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "L1.M1 - I6: Baseline images hardening & drift control",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Baseline images hardening & drift control\",\n  \"description\": \"Bake hardened base images; detect and remediate config drift.\",\n  \"status\": \"IN_PROGRESS\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/milestones/{{currentMilestoneId}}/initiatives?assignedUserIds=25,24",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "milestones",
+                "{{currentMilestoneId}}",
+                "initiatives"
+              ],
+              "query": [
+                {
+                  "key": "assignedUserIds",
+                  "value": "25,24"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "L1.M1 - I7: OS/DB patch runbooks & rollback validation",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"OS/DB patch runbooks & rollback validation\",\n  \"description\": \"Standardize patch SOPs and automated rollback tests in lower envs.\",\n  \"status\": \"IN_PROGRESS\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/milestones/{{currentMilestoneId}}/initiatives?assignedUserIds=23,24",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "milestones",
+                "{{currentMilestoneId}}",
+                "initiatives"
+              ],
+              "query": [
+                {
+                  "key": "assignedUserIds",
+                  "value": "23,24"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "L1 - Milestone 2: Network Segmentation",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "let json=pm.response.json();",
+                  "pm.collectionVariables.set(\"currentMilestoneId\", json.milestoneId);"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Network Segmentation\",\n  \"dueDate\": \"2026-04-18T18:00:00\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/plans/{{planId_alok_1}}/milestones",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "plans",
+                "{{planId_alok_1}}",
+                "milestones"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "L1.M2 - Initiative: Micro-segmentation policies & firewalls",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Micro-segmentation policies & firewalls\",\n  \"description\": \"Define app tiers and east-west ACLs with zero-trust defaults.\",\n  \"status\": \"IN_PROGRESS\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/milestones/{{currentMilestoneId}}/initiatives?assignedUserIds=25,23",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "milestones",
+                "{{currentMilestoneId}}",
+                "initiatives"
+              ],
+              "query": [
+                {
+                  "key": "assignedUserIds",
+                  "value": "25,23"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "L1.M2 - Initiative: WAF rules & DDoS protections",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"WAF rules & DDoS protections\",\n  \"description\": \"Harden edge; configure rate limits, bot challenges, and WAF rulesets.\",\n  \"status\": \"IN_PROGRESS\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/milestones/{{currentMilestoneId}}/initiatives?assignedUserIds=24,25",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "milestones",
+                "{{currentMilestoneId}}",
+                "initiatives"
+              ],
+              "query": [
+                {
+                  "key": "assignedUserIds",
+                  "value": "24,25"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create Plan L2 (Mixed): Enterprise SSO Rollout",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "let json=pm.response.json();",
+                  "pm.collectionVariables.set(\"planId_alok_2\", json.planId);"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Enterprise SSO Rollout\",\n  \"description\": \"OIDC/SAML SSO for internal apps; MFA and device posture checks.\",\n  \"priority\": \"HIGH\",\n  \"status\": \"IN_PROGRESS\",\n  \"startDate\": \"2026-04-05T09:00:00\",\n  \"endDate\": \"2026-07-05T18:00:00\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/users/{{currentUserId}}/plans",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "users",
+                "{{currentUserId}}",
+                "plans"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "L2 - Milestone 1: IdP Integration & Policies",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "let json=pm.response.json();",
+                  "pm.collectionVariables.set(\"currentMilestoneId\", json.milestoneId);"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"IdP Integration & Policies\",\n  \"dueDate\": \"2026-04-25T18:00:00\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/plans/{{planId_alok_2}}/milestones",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "plans",
+                "{{planId_alok_2}}",
+                "milestones"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "L2.M1 - Initiative: MFA rollout & device checks",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"MFA rollout & device checks\",\n  \"description\": \"Enforce MFA and device compliance across org apps; phased rollout.\",\n  \"status\": \"IN_PROGRESS\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/milestones/{{currentMilestoneId}}/initiatives?assignedUserIds=24,11",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "milestones",
+                "{{currentMilestoneId}}",
+                "initiatives"
+              ],
+              "query": [
+                {
+                  "key": "assignedUserIds",
+                  "value": "24,11"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          ""
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          ""
+        ]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseURL",
+      "value": "http://localhost:8765/api"
+    },
+    {
+      "key": "authToken",
+      "value": ""
+    },
+    {
+      "key": "currentUserId",
+      "value": ""
+    },
+    {
+      "key": "planId_aditya_1",
+      "value": ""
+    },
+    {
+      "key": "currentMilestoneId",
+      "value": ""
+    },
+    {
+      "key": "planId_aditya_2",
+      "value": ""
+    },
+    {
+      "key": "planId_aditya_3",
+      "value": ""
+    },
+    {
+      "key": "planId_kavya_1",
+      "value": ""
+    },
+    {
+      "key": "planId_kavya_2",
+      "value": ""
+    },
+    {
+      "key": "planId_kavya_3",
+      "value": ""
+    },
+    {
+      "key": "planId_rohan_1",
+      "value": ""
+    },
+    {
+      "key": "planId_rohan_2",
+      "value": ""
+    },
+    {
+      "key": "planId_rohan_3",
+      "value": ""
+    },
+    {
+      "key": "planId_rohan_4",
+      "value": ""
+    },
+    {
+      "key": "planId_shreya_1",
+      "value": ""
+    },
+    {
+      "key": "planId_shreya_2",
+      "value": ""
+    },
+    {
+      "key": "planId_shreya_3",
+      "value": ""
+    },
+    {
+      "key": "planId_alok_1",
+      "value": ""
+    },
+    {
+      "key": "planId_alok_2",
+      "value": ""
+    }
+  ]
+}

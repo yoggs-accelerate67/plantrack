@@ -1,0 +1,3829 @@
+{
+  "info": {
+    "_postman_id": "bf1583f8-f065-4fd5-9737-e5711716e92d",
+    "name": "X_3-Employee-UpdatingInitiatives",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "52265164",
+    "_collection_link": "https://go.postman.co/collection/52265164-bf1583f8-f065-4fd5-9737-e5711716e92d?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "Rahul Simha (user_id: 3)",
+      "item": [
+        {
+          "name": "Login - Rahul Simha",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const json = pm.response.json();",
+                  "pm.collectionVariables.set('authToken_3', json.token);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"Rahul@company.com\",\n  \"password\": \"Rahul@123\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/auth/login",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "auth",
+                "login"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "PUT 1 → COMPLETED",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken_3}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"title\":\"Event-storming workshops\",\"description\":\"Facilitate bounded context discovery with cross-functional teams.\",\"status\":\"COMPLETED\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/initiatives/1",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "initiatives",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "PUT 3 → COMPLETED",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken_3}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"title\":\"Data ownership & event schema registry\",\"description\":\"Define golden sources; implement a schema registry for events.\",\"status\":\"COMPLETED\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/initiatives/3",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "initiatives",
+                "3"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "PUT 4 → IN_PROGRESS",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken_3}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"title\":\"OAuth2/JWT for service-to-service calls\",\"description\":\"Centralize identity; propagate claims securely across services.\",\"status\":\"IN_PROGRESS\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/initiatives/4",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "initiatives",
+                "4"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "PUT 7 → COMPLETED",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken_3}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"title\":\"Artifact repository & SBOM generation\",\"description\":\"Store immutable artifacts and publish SBOM for compliance.\",\"status\":\"COMPLETED\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/initiatives/7",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "initiatives",
+                "7"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "PUT 8 → IN_PROGRESS",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken_3}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"title\":\"Strangler pattern implementation (blue/green)\",\"description\":\"Incrementally route traffic to the new services with safety nets.\",\"status\":\"IN_PROGRESS\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/initiatives/8",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "initiatives",
+                "8"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "PUT 10 → PLANNED",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken_3}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"title\":\"Saga orchestration POC\",\"description\":\"Demonstrate eventual consistency across multi-service transactions.\",\"status\":\"PLANNED\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/initiatives/10",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "initiatives",
+                "10"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "PUT 14 → PLANNED",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken_3}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"title\":\"Observability SLOs post-migration\",\"description\":\"Recalibrate alert thresholds and update runbooks for SRE.\",\"status\":\"PLANNED\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/initiatives/14",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "initiatives",
+                "14"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "PUT 16 → PLANNED",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken_3}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"title\":\"Post-go-live monitoring & incident review\",\"description\":\"SLO tracking, runbook updates, and RCA for early incidents.\",\"status\":\"PLANNED\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/initiatives/16",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "initiatives",
+                "16"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "PUT 17 → COMPLETED",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken_3}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"title\":\"Base images with toolchains\",\"description\":\"Pre-bake JDK, Node, Python; add security patches.\",\"status\":\"COMPLETED\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/initiatives/17",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "initiatives",
+                "17"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Neha Kapoor (user_id: 4)",
+      "item": [
+        {
+          "name": "Login - Neha Kapoor",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const json=pm.response.json(); pm.collectionVariables.set('authToken_4', json.token);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"Neha@company.com\",\n  \"password\": \"Neha@123\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/auth/login",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "auth",
+                "login"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "PUT 5 → IN_PROGRESS",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken_4}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"title\":\"Distributed tracing & log aggregation (OTel)\",\"description\":\"Deploy collectors and dashboards for latency/error budgets.\",\"status\":\"IN_PROGRESS\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/initiatives/5",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "initiatives",
+                "5"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "PUT 9 → IN_PROGRESS",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken_4}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"title\":\"CDC patterns & outbox/inbox relay\",\"description\":\"Ensure reliable event publication and data synchronization.\",\"status\":\"IN_PROGRESS\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/initiatives/9",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "initiatives",
+                "9"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "PUT 13 → PLANNED",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken_4}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"title\":\"Release readiness & rollback drills\",\"description\":\"Tabletop exercises and automated rollback validation.\",\"status\":\"PLANNED\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/initiatives/13",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "initiatives",
+                "13"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "PUT 54 → COMPLETED",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken_4}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"title\":\"Map skills matrix by role\",\"description\":\"Identify core and elective skills by job family.\",\"status\":\"COMPLETED\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/initiatives/54",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "initiatives",
+                "54"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Vivek Nair (user_id: 5)",
+      "item": [
+        {
+          "name": "Login - Vivek Nair",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const json = pm.response.json();",
+                  "pm.collectionVariables.set('authToken_5', json.token);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"Vivek@company.com\",\n  \"password\": \"Vivek@123\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/auth/login",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "auth",
+                "login"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "PUT 2 → COMPLETED",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken_5}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"title\":\"Draft OpenAPI contracts & versioning\",\"description\":\"Baseline schemas; choose versioning strategy & deprecation policy.\",\"status\":\"COMPLETED\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/initiatives/2",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "initiatives",
+                "2"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "PUT 6 → COMPLETED",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken_5}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"title\":\"Build/test pipelines with caching & matrices\",\"description\":\"Introduce matrix builds, cache dependencies, and parallel tests.\",\"status\":\"COMPLETED\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/initiatives/6",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "initiatives",
+                "6"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "PUT 11 → PLANNED",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken_5}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"title\":\"Read models & caching strategy\",\"description\":\"Optimize query paths with denormalized views and caches.\",\"status\":\"PLANNED\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/initiatives/11",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "initiatives",
+                "11"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "PUT 15 → PLANNED",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken_5}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"title\":\"Canary rollout & metrics guardrails\",\"description\":\"Automate progressive delivery with rollback conditions.\",\"status\":\"PLANNED\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/initiatives/15",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "initiatives",
+                "15"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Priya Menon (user_id: 6)",
+      "item": [
+        {
+          "name": "Login - Priya Menon",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const json = pm.response.json();",
+                  "pm.collectionVariables.set('authToken_6', json.token);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"Priya@company.com\",\n  \"password\": \"Priya@123\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/auth/login",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "auth",
+                "login"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "PUT 12 → PLANNED",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken_6}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"title\":\"Service discovery & config management\",\"description\":\"Implement dynamic discovery and central config (per env).\",\"status\":\"PLANNED\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/initiatives/12",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "initiatives",
+                "12"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Arjun Shah (user_id: 8)",
+      "item": [
+        {
+          "name": "Login - Arjun Shah",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const json = pm.response.json();",
+                  "pm.collectionVariables.set('authToken_8', json.token);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"Arjun@company.com\",\n  \"password\": \"Arjun@123\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/auth/login",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "auth",
+                "login"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "PUT 22 → COMPLETED",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken_8}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"title\":\"Vault provider integration POC\",\"description\":\"Evaluate tokenization latency and SLA adherence.\",\"status\":\"COMPLETED\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/initiatives/22",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "initiatives",
+                "22"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "PUT 27 → IN_PROGRESS",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken_8}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"title\":\"Evaluate Playwright vs Cypress\",\"description\":\"Reliability, flake rate, and cross-browser support benchmarking.\",\"status\":\"IN_PROGRESS\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/initiatives/27",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "initiatives",
+                "27"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "PUT 29 → IN_PROGRESS",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken_8}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"title\":\"Shard suites & aggregate dashboards\",\"description\":\"Distribute tests across workers; Grafana dashboards for trends.\",\"status\":\"IN_PROGRESS\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/initiatives/29",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "initiatives",
+                "29"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "PUT 32 → IN_PROGRESS",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken_8}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"title\":\"Axe-core integration and contrast checks\",\"description\":\"Baseline a11y compliance and block regressions in CI.\",\"status\":\"IN_PROGRESS\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/initiatives/32",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "initiatives",
+                "32"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "PUT 33 → PLANNED",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken_8}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"title\":\"Refactor brittle locators to test-ids\",\"description\":\"Replace xpath/css tied to layout with resilient data-testids.\",\"status\":\"PLANNED\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/initiatives/33",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "initiatives",
+                "33"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "PUT 36 → PLANNED",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken_8}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"title\":\"Test data seeding for parallel envs\",\"description\":\"Scripted factory seeds supporting isolated parallel test runs.\",\"status\":\"PLANNED\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/initiatives/36",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "initiatives",
+                "36"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "PUT 38 → PLANNED",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken_8}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"title\":\"Accessibility ruleset & CI gate > AA WCAG\",\"description\":\"Block PRs on severe a11y violations (contrast/labels/landmarks).\",\"status\":\"PLANNED\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/initiatives/38",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "initiatives",
+                "38"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "PUT 40 → COMPLETED",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken_8}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"title\":\"JMeter/Gatling scenarios & SLAs\",\"description\":\"User journey workloads; publish baseline SLAs in Confluence.\",\"status\":\"COMPLETED\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/initiatives/40",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "initiatives",
+                "40"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "PUT 42 → COMPLETED",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken_8}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"title\":\"Define critical smoke scenarios per app\",\"description\":\"Identify top 10 flows per product for release qualification.\",\"status\":\"COMPLETED\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/initiatives/42",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "initiatives",
+                "42"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Meera Joshi (user_id: 9)",
+      "item": [
+        {
+          "name": "Login - Meera Joshi",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const json = pm.response.json();",
+                  "pm.collectionVariables.set('authToken_9', json.token);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"Meera@company.com\",\n  \"password\": \"Meera@123\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/auth/login",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "auth",
+                "login"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "PUT 20 → COMPLETED",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken_9}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"title\":\"Reusable pipelines for build/test/deploy\",\"description\":\"Templates with approvals, gates, and artifact promotions.\",\"status\":\"COMPLETED\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/initiatives/20",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "initiatives",
+                "20"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "PUT 30 → IN_PROGRESS",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken_9}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"title\":\"Screenshot/video artifacts & trace viewer\",\"description\":\"Collect media on failures and enable trace-based debugging.\",\"status\":\"IN_PROGRESS\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/initiatives/30",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "initiatives",
+                "30"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "PUT 31 → IN_PROGRESS",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken_9}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"title\":\"Flake quarantine & auto-ticketing\",\"description\":\"Isolate flaky specs; open JIRA with logs/trace on failure.\",\"status\":\"IN_PROGRESS\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/initiatives/31",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "initiatives",
+                "31"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "PUT 35 → PLANNED",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken_9}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"title\":\"Test prioritization with historical failure data\",\"description\":\"Run risky specs first; shorten feedback cycle on PRs.\",\"status\":\"PLANNED\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/initiatives/35",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "initiatives",
+                "35"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "PUT 37 → PLANNED",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken_9}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"title\":\"Visual regression baselines per theme/locale\",\"description\":\"Baseline screenshots for primary UIs; allow threshold tolerances.\",\"status\":\"PLANNED\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/initiatives/37",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "initiatives",
+                "37"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "PUT 62 → COMPLETED",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken_9}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"title\":\"Reserved/spot instance portfolio strategy\",\"description\":\"Blend RIs/Savings Plans with spot for optimal coverage & risk.\",\"status\":\"COMPLETED\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/initiatives/62",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "initiatives",
+                "62"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "PUT 67 → COMPLETED",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken_9}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"title\":\"Tiered pricing scenarios & tests\",\"description\":\"Design rating pipeline for tiered/usage-based models with fixtures.\",\"status\":\"COMPLETED\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/initiatives/67",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "initiatives",
+                "67"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Suresh Patil (user_id: 10)",
+      "item": [
+        {
+          "name": "Login - Suresh Patil",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const json = pm.response.json();",
+                  "pm.collectionVariables.set('authToken_10', json.token);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"Suresh@company.com\",\n  \"password\": \"Suresh@123\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/auth/login",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "auth",
+                "login"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "PUT 21 → COMPLETED",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken_10}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"title\":\"Reference repos and templates publication\",\"description\":\"Publish golden repos for common stacks; keep updated via bots.\",\"status\":\"COMPLETED\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/initiatives/21",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "initiatives",
+                "21"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "PUT 26 → COMPLETED",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken_10}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"title\":\"3DS challenge flow & exemptions\",\"description\":\"Support SCA exemptions and seamless challenge UX.\",\"status\":\"COMPLETED\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/initiatives/26",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "initiatives",
+                "26"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "PUT 28 → IN_PROGRESS",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken_10}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"title\":\"Test data management & fixtures library\",\"description\":\"Deterministic data, factories, and anonymized snapshots for tests.\",\"status\":\"IN_PROGRESS\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/initiatives/28",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "initiatives",
+                "28"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "PUT 34 → PLANNED",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken_10}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"title\":\"Merge duplicate test flows & remove flakes\",\"description\":\"Consolidate similar specs, stabilize network waits and timeouts.\",\"status\":\"PLANNED\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/initiatives/34",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "initiatives",
+                "34"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "PUT 39 → PLANNED",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken_10}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"title\":\"Synthetic monitoring for critical journeys\",\"description\":\"Run smoke scenarios hourly; alert on SLA breaches.\",\"status\":\"PLANNED\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/initiatives/39",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "initiatives",
+                "39"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "PUT 63 → COMPLETED",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken_10}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"title\":\"Cost allocation tags & showback reports\",\"description\":\"Enforce tagging; monthly showback to business owners.\",\"status\":\"COMPLETED\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/initiatives/63",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "initiatives",
+                "63"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Tanvi Desai (user_id: 11)",
+      "item": [
+        {
+          "name": "Login - Tanvi Desai",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const json = pm.response.json();",
+                  "pm.collectionVariables.set('authToken_11', json.token);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"Tanvi@company.com\",\n  \"password\": \"Tanvi@123\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/auth/login",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "auth",
+                "login"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "PUT 19 → COMPLETED",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken_11}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"title\":\"Pre-commit hooks rollout\",\"description\":\"Enable style/security checks; enforce contributor guidelines.\",\"status\":\"COMPLETED\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/initiatives/19",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "initiatives",
+                "19"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "PUT 25 → COMPLETED",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken_11}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"title\":\"Exception handling & refund workflows\",\"description\":\"Design fault-tolerant flows for declines, chargebacks, and refunds.\",\"status\":\"COMPLETED\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/initiatives/25",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "initiatives",
+                "25"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "PUT 55 → COMPLETED",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken_11}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"title\":\"Curate prep materials & vouchers\",\"description\":\"Provide courseware, practice tests, and exam vouchers.\",\"status\":\"COMPLETED\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/initiatives/55",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "initiatives",
+                "55"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "PUT 65 → COMPLETED",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken_11}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"title\":\"License optimization & consolidation\",\"description\":\"Eliminate unused seats; consolidate vendor contracts for volume.\",\"status\":\"COMPLETED\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/initiatives/65",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "initiatives",
+                "65"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "PUT 77 → COMPLETED",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken_11}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"title\":\"MFA rollout & device checks\",\"description\":\"Enforce MFA and device compliance across org apps; phased rollout.\",\"status\":\"COMPLETED\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/initiatives/77",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "initiatives",
+                "77"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Ananya Sen (user_id: 13)",
+      "item": [
+        {
+          "name": "Login - Ananya Sen",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const json=pm.response.json(); pm.collectionVariables.set('authToken_13', json.token);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"Ananya@company.com\",\n  \"password\": \"Ananya@123\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/auth/login",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "auth",
+                "login"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "PUT 43 → COMPLETED",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken_13}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"title\":\"Outreach schedule & brochures\",\"description\":\"Finalize target colleges and share hiring collateral.\",\"status\":\"COMPLETED\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/initiatives/43",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "initiatives",
+                "43"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "PUT 45 → COMPLETED",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken_13}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"title\":\"Online test vendor onboarding & pilot\",\"description\":\"Finalize SLAs; pilot with 200 candidates across 3 colleges.\",\"status\":\"COMPLETED\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/initiatives/45",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "initiatives",
+                "45"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "PUT 47 → COMPLETED",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken_13}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"title\":\"Offer letters & comp approvals\",\"description\":\"Generate offers, route for approvals, and e-signature workflows.\",\"status\":\"COMPLETED\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/initiatives/47",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "initiatives",
+                "47"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "PUT 49 → COMPLETED",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken_13}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"title\":\"Onboarding schedule & IT provisioning\",\"description\":\"Plan induction; trigger SSO/email/laptop provisioning requests.\",\"status\":\"COMPLETED\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/initiatives/49",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "initiatives",
+                "49"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "PUT 51 → COMPLETED",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken_13}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"title\":\"Offer acceptance tracking & risk coverage\",\"description\":\"Track acceptances, drop-offs; maintain backup candidate pool.\",\"status\":\"COMPLETED\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/initiatives/51",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "initiatives",
+                "51"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "PUT 53 → COMPLETED",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken_13}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"title\":\"Day-1 experience & feedback loop\",\"description\":\"Welcome kit, induction, and feedback capture for continuous improvement.\",\"status\":\"COMPLETED\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/initiatives/53",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "initiatives",
+                "53"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "PUT 57 → COMPLETED",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken_13}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"title\":\"Survey design & rollout\",\"description\":\"Design questionnaire; coordinate communications and launch windows.\",\"status\":\"COMPLETED\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/initiatives/57",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "initiatives",
+                "57"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Kiran Bhat (user_id: 14)",
+      "item": [
+        {
+          "name": "Login - Kiran Bhat",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const json=pm.response.json(); pm.collectionVariables.set('authToken_14', json.token);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"Kiran@company.com\",\n  \"password\": \"Kiran@123\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/auth/login",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "auth",
+                "login"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "PUT 18 → COMPLETED",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken_14}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"title\":\"Standard devcontainer.json templates\",\"description\":\"VS Code, ports, and extension packs for common stacks.\",\"status\":\"COMPLETED\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/initiatives/18",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "initiatives",
+                "18"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "PUT 41 → COMPLETED",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken_14}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"title\":\"Pipeline gating on severity thresholds\",\"description\":\"Fail builds on HIGH+ vulns; auto-create remediation tickets.\",\"status\":\"COMPLETED\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/initiatives/41",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "initiatives",
+                "41"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "PUT 46 → COMPLETED",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken_14}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"title\":\"Interview panel readiness & scheduling\",\"description\":\"Train panels, calibrate rubrics, and auto-schedule slots.\",\"status\":\"COMPLETED\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/initiatives/46",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "initiatives",
+                "46"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "PUT 50 → COMPLETED",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken_14}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"title\":\"Buddy allocation & training enrollment\",\"description\":\"Assign buddies and enroll new hires to mandatory training tracks.\",\"status\":\"COMPLETED\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/initiatives/50",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "initiatives",
+                "50"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "PUT 52 → COMPLETED",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken_14}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"title\":\"Pre-joining engagement & FAQs\",\"description\":\"Regular touchpoints; address queries on relocation, HR policies.\",\"status\":\"COMPLETED\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/initiatives/52",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "initiatives",
+                "52"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Ishita Roy (user_id: 15)",
+      "item": [
+        {
+          "name": "Login - Ishita Roy",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const json=pm.response.json(); pm.collectionVariables.set('authToken_15', json.token);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"Ishita@company.com\",\n  \"password\": \"Ishita@123\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/auth/login",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "auth",
+                "login"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "PUT 44 → COMPLETED",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken_15}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"title\":\"Employer branding & campus talks\",\"description\":\"Prepare decks, alumni connects, and Thought Leadership sessions.\",\"status\":\"COMPLETED\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/initiatives/44",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "initiatives",
+                "44"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "PUT 48 → COMPLETED",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken_15}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"title\":\"Background checks & document collection\",\"description\":\"Initiate BG checks and collect KYC, education, and experience proofs.\",\"status\":\"COMPLETED\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/initiatives/48",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "initiatives",
+                "48"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Nikhil Chandra (user_id: 16)",
+      "item": [
+        {
+          "name": "Login - Nikhil Chandra",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const json=pm.response.json(); pm.collectionVariables.set('authToken_16', json.token);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"Nikhil@company.com\",\n  \"password\": \"Nikhil@123\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/auth/login",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "auth",
+                "login"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "PUT 56 → COMPLETED",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken_16}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"title\":\"Attendance sync & reconciliation\",\"description\":\"Ensure time entries sync to payroll with zero drift.\",\"status\":\"COMPLETED\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/initiatives/56",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "initiatives",
+                "56"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "PUT 59 → COMPLETED",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken_16}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"title\":\"P&L variance deep-dive\",\"description\":\"Explain deviations vs budget and prior period across business lines.\",\"status\":\"COMPLETED\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/initiatives/59",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "initiatives",
+                "59"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Manish Verma (user_id: 18)",
+      "item": [
+        {
+          "name": "Login - Manish Verma",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const json = pm.response.json();",
+                  "pm.collectionVariables.set('authToken_18', json.token);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"Manish@company.com\",\n  \"password\": \"Manish@123\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/auth/login",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "auth",
+                "login"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "PUT 58 → COMPLETED",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken_18}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"title\":\"Accrual entries & reconciliations\",\"description\":\"Book accruals and reconcile control accounts for key balances.\",\"status\":\"COMPLETED\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/initiatives/58",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "initiatives",
+                "58"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "PUT 61 → COMPLETED",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken_18}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"title\":\"Rightsize compute/storage tiers\",\"description\":\"Tune instance types, autoscaling thresholds, and storage classes.\",\"status\":\"COMPLETED\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/initiatives/61",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "initiatives",
+                "61"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Pooja Reddy (user_id: 19)",
+      "item": [
+        {
+          "name": "Login - Pooja Reddy",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const json = pm.response.json();",
+                  "pm.collectionVariables.set('authToken_19', json.token);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"Pooja@company.com\",\n  \"password\": \"Pooja@123\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/auth/login",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "auth",
+                "login"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "PUT 23 → COMPLETED",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken_19}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"title\":\"PCI gap analysis & compensating controls\",\"description\":\"Scope reduction via tokenization and network segmentation.\",\"status\":\"COMPLETED\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/initiatives/23",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "initiatives",
+                "23"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "PUT 64 → COMPLETED",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken_19}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"title\":\"Data transfer and egress optimization\",\"description\":\"Reduce cross-region chatter; use CDNs/peering where applicable.\",\"status\":\"COMPLETED\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/initiatives/64",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "initiatives",
+                "64"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Tarun Khanna (user_id: 20)",
+      "item": [
+        {
+          "name": "Login - Tarun Khanna",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const json = pm.response.json();",
+                  "pm.collectionVariables.set('authToken_20', json.token);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"Tarun@company.com\",\n  \"password\": \"Tarun@123\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/auth/login",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "auth",
+                "login"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "PUT 24 → COMPLETED",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken_20}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"title\":\"Idempotency & reconciliation\",\"description\":\"Ensure safe retries and ledger alignment for settlements.\",\"status\":\"COMPLETED\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/initiatives/24",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "initiatives",
+                "24"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "PUT 60 → COMPLETED",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken_20}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"title\":\"Idle resource cleanup\",\"description\":\"Identify and decommission unused VMs/volumes to cut costs.\",\"status\":\"COMPLETED\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/initiatives/60",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "initiatives",
+                "60"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Devika Pillai (user_id: 21)",
+      "item": [
+        {
+          "name": "Login - Devika Pillai",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const json=pm.response.json(); pm.collectionVariables.set('authToken_21', json.token);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"Devika@company.com\",\n  \"password\": \"Devika@123\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/auth/login",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "auth",
+                "login"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "PUT 66 → COMPLETED",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken_21}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"title\":\"KPI dashboard for cost & utilization trends\",\"description\":\"Publish monthly cost per product, per environment KPIs.\",\"status\":\"COMPLETED\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/initiatives/66",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "initiatives",
+                "66"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Yoga Simha (user_id: 23)",
+      "item": [
+        {
+          "name": "Login - Yoga Simha",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const json = pm.response.json();",
+                  "pm.collectionVariables.set('authToken_23', json.token);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"Yoga@company.com\",\n  \"password\": \"Yoga@123\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/auth/login",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "auth",
+                "login"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "PUT 68 → COMPLETED",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken_23}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"title\":\"Patch baseline across fleets\",\"description\":\"Automate monthly patch windows for OS/runtime fleets.\",\"status\":\"COMPLETED\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/initiatives/68",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "initiatives",
+                "68"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "PUT 70 → IN_PROGRESS",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken_23}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"title\":\"Patch compliance dashboard & alerts\",\"description\":\"Real-time compliance posture and breach alerts for fleets.\",\"status\":\"IN_PROGRESS\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/initiatives/70",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "initiatives",
+                "70"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "PUT 71 → PLANNED",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken_23}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"title\":\"Secrets rotation & key management SOPs\",\"description\":\"Define rotation cadence; integrate with secret managers/PKI.\",\"status\":\"PLANNED\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/initiatives/71",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "initiatives",
+                "71"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "PUT 72 → PLANNED",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken_23}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"title\":\"Vulnerability scanning integration (OS/containers)\",\"description\":\"Schedule scans, dedupe findings, and route to owners automatically.\",\"status\":\"PLANNED\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/initiatives/72",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "initiatives",
+                "72"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "PUT 74 → PLANNED",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken_23}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"title\":\"OS/DB patch runbooks & rollback validation\",\"description\":\"Standardize patch SOPs and automated rollback tests in lower envs.\",\"status\":\"PLANNED\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/initiatives/74",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "initiatives",
+                "74"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "PUT 75 → COMPLETED",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken_23}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"title\":\"Micro-segmentation policies & firewalls\",\"description\":\"Define app tiers and east-west ACLs with zero-trust defaults.\",\"status\":\"COMPLETED\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/initiatives/75",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "initiatives",
+                "75"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Bharath G (user_id: 24)",
+      "item": [
+        {
+          "name": "Login - Bharath G",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const json = pm.response.json();",
+                  "pm.collectionVariables.set('authToken_24', json.token);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"Bharath@company.com\",\n  \"password\": \"Bharath@123\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/auth/login",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "auth",
+                "login"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "PUT 69 → IN_PROGRESS",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken_24}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"title\":\"CIS hardening for Linux/Windows baselines\",\"description\":\"Apply CIS Level-1 settings; validate with automated scans.\",\"status\":\"IN_PROGRESS\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/initiatives/69",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "initiatives",
+                "69"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "PUT 73 → PLANNED",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken_24}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"title\":\"Baseline images hardening & drift control\",\"description\":\"Bake hardened base images; detect and remediate config drift.\",\"status\":\"PLANNED\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/initiatives/73",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "initiatives",
+                "73"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Ranajit Malick (user_id: 25)",
+      "item": [
+        {
+          "name": "Login - Ranajit Malick",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const json = pm.response.json();",
+                  "pm.collectionVariables.set('authToken_25', json.token);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"Ranajit@company.com\",\n  \"password\": \"Ranajit@123\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/auth/login",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "auth",
+                "login"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "PUT 76 → PLANNED",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken_25}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"title\":\"WAF rules & DDoS protections\",\"description\":\"Harden edge; configure rate limits, bot challenges, and WAF rulesets.\",\"status\":\"PLANNED\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/initiatives/76",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "initiatives",
+                "76"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseURL",
+      "value": "http://localhost:8765/api"
+    },
+    {
+      "key": "authToken_3",
+      "value": ""
+    },
+    {
+      "key": "authToken_4",
+      "value": ""
+    },
+    {
+      "key": "authToken_5",
+      "value": ""
+    },
+    {
+      "key": "authToken_6",
+      "value": ""
+    },
+    {
+      "key": "authToken_8",
+      "value": ""
+    },
+    {
+      "key": "authToken_9",
+      "value": ""
+    },
+    {
+      "key": "authToken_10",
+      "value": ""
+    },
+    {
+      "key": "authToken_11",
+      "value": ""
+    },
+    {
+      "key": "authToken_13",
+      "value": ""
+    },
+    {
+      "key": "authToken_14",
+      "value": ""
+    },
+    {
+      "key": "authToken_15",
+      "value": ""
+    },
+    {
+      "key": "authToken_16",
+      "value": ""
+    },
+    {
+      "key": "authToken_18",
+      "value": ""
+    },
+    {
+      "key": "authToken_19",
+      "value": ""
+    },
+    {
+      "key": "authToken_20",
+      "value": ""
+    },
+    {
+      "key": "authToken_21",
+      "value": ""
+    },
+    {
+      "key": "authToken_23",
+      "value": ""
+    },
+    {
+      "key": "authToken_24",
+      "value": ""
+    },
+    {
+      "key": "authToken_25",
+      "value": ""
+    }
+  ]
+}

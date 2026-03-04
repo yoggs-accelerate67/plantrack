@@ -1,0 +1,288 @@
+{
+  "info": {
+    "_postman_id": "dd4f097f-56be-4af9-b16f-89d318860e5b",
+    "name": "X_6-Admin-GeneratingReports",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "52265164",
+    "_collection_link": "https://go.postman.co/collection/52265164-dd4f097f-56be-4af9-b16f-89d318860e5b?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "Admin (Anand SP, user_id: 1)",
+      "item": [
+        {
+          "name": "Login - Admin (Anand SP)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const json = pm.response.json();",
+                  "pm.collectionVariables.set('authToken_1', json.token);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"anand@company.com\",\n  \"password\": \"Anand@123\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/auth/login",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "auth",
+                "login"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Generate Report → IT",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken_1}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/analytics/generate/all?department=IT",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "analytics",
+                "generate",
+                "all"
+              ],
+              "query": [
+                {
+                  "key": "department",
+                  "value": "IT"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Generate Report → Development",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken_1}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/analytics/generate/all?department=Development",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "analytics",
+                "generate",
+                "all"
+              ],
+              "query": [
+                {
+                  "key": "department",
+                  "value": "Development"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Generate Report → Quality Assurance",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken_1}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/analytics/generate/all?department=Quality Assurance",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "analytics",
+                "generate",
+                "all"
+              ],
+              "query": [
+                {
+                  "key": "department",
+                  "value": "Quality Assurance"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Generate Report → Human Resources",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken_1}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/analytics/generate/all?department=Human Resources",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "analytics",
+                "generate",
+                "all"
+              ],
+              "query": [
+                {
+                  "key": "department",
+                  "value": "Human Resources"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Generate Report → Finance",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken_1}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/analytics/generate/all?department=Finance",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "analytics",
+                "generate",
+                "all"
+              ],
+              "query": [
+                {
+                  "key": "department",
+                  "value": "Finance"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseURL",
+      "value": "http://localhost:8765/api"
+    },
+    {
+      "key": "authToken_1",
+      "value": ""
+    }
+  ]
+}
