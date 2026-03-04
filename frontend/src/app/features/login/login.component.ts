@@ -28,10 +28,11 @@ export class LoginComponent {
   ) {
     // Redirect if already authenticated
     if (this.authService.isAuthenticated()) {
-      if(this.authService.isEmployee()) {
+      if (this.authService.isEmployee()) {
         this.router.navigate(['/my-initiatives']);
+      } else {
+        this.router.navigate(['/dashboard']);
       }
-      this.router.navigate(['/dashboard']);
     }
   }
 
@@ -51,10 +52,11 @@ export class LoginComponent {
           this.loadingService.hide();
           console.log('Login successful:', response);
           this.toastService.showSuccess('Login successful!');
-          if(this.authService.isEmployee()) {
-            this.router.navigate(['/my-initiatives'])
+          if (this.authService.isEmployee()) {
+            this.router.navigate(['/my-initiatives']);
+          } else {
+            this.router.navigate(['/dashboard']);
           }
-          this.router.navigate(['/dashboard']);
         },
         error: (error) => {
           this.loadingService.hide();
