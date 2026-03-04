@@ -43,7 +43,7 @@ export class NotificationService {
 
     const token = this.authService.getToken();
     // Pass token as query param for SSE
-    const url = `${this.apiUrl}/notifications/stream?userId=${userId}&token=${token}`;
+    const url = `${this.apiUrl}/stream?userId=${userId}&token=${token}`;
 
     console.log('Connecting to SSE:', url);
     this.eventSource = new EventSource(url);
@@ -86,17 +86,17 @@ export class NotificationService {
   // --- CRUD Methods ---
 
   getAllNotifications(userId: number): Observable<Notification[]> {
-    return this.http.get<Notification[]>(`${this.apiUrl}/users/${userId}/notifications`);
+    return this.http.get<Notification[]>(`${this.apiUrl}/${userId}`);
   }
 
   getUnreadCount(userId: number): Observable<number> {
-    return this.http.get<number>(`${this.apiUrl}/users/${userId}/notifications/unread-count`).pipe(
+    return this.http.get<number>(`${this.apiUrl}/${userId}/unread-count`).pipe(
       tap(count => this.unreadCountSubject.next(count))
     );
   }
 
   markAsRead(notificationId: number): Observable<void> {
-    return this.http.put<void>(`${this.apiUrl}/notifications/${notificationId}/read`, {}).pipe(
+    return this.http.put<void>(`${this.apiUrl}/${notificationId}/read`, {}).pipe(
       tap(() => {
         // Optimistic UI update
         const current = this.unreadCountSubject.value;
@@ -106,7 +106,7 @@ export class NotificationService {
   }
 
   markAllAsRead(userId: number): Observable<void> {
-    return this.http.put<void>(`${this.apiUrl}/users/${userId}/notifications/read-all`, {}).pipe(
+    return this.http.put<void>(`${this.apiUrl}/${userId}/read-all`, {}).pipe(
       tap(() => this.unreadCountSubject.next(0))
     );
   }
