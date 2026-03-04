@@ -1,7 +1,7 @@
 
 package com.plantrack.backend.service;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import com.plantrack.backend.model.AnalyticsReport;
@@ -32,5 +32,5 @@ public interface AnalyticsService {
     /**
      * Get reports for date range
      */
-    List<AnalyticsReport> getReportsByDateRange(String department, LocalDate startDate, LocalDate endDate);
+    List<AnalyticsReport> getReportsByDateRange(String department, LocalDateTime startDate, LocalDateTime endDate);
 }

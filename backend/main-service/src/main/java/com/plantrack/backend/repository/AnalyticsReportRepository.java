@@ -5,7 +5,7 @@ import com.plantrack.backend.model.AnalyticsReport;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -25,8 +25,8 @@ public interface AnalyticsReportRepository extends JpaRepository<AnalyticsReport
            "ORDER BY r.generatedDate DESC")
     List<AnalyticsReport> findByDepartmentAndDateRange(
         @Param("department") String department,
-        @Param("startDate") LocalDate startDate,
-        @Param("endDate") LocalDate endDate);
+        @Param("startDate") LocalDateTime startDate,
+        @Param("endDate") LocalDateTime endDate);
 
     // Get all unique departments
     @Query("SELECT DISTINCT r.department FROM AnalyticsReport r")

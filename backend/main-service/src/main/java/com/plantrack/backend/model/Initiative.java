@@ -40,7 +40,7 @@ public class Initiative {
     // --- RELATIONSHIP: Initiative belongs to a Milestone ---
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "milestone_id", nullable = false)
-    @JsonIgnoreProperties({"initiatives", "plan"}) // Prevent circular reference but allow milestone data
+    @JsonIgnoreProperties({"initiatives"}) // Prevent circular reference but allow milestone data
     @JsonProperty(access = JsonProperty.Access.READ_ONLY) // Allow serialization, prevent deserialization (milestone is set via service, not request body)
     private Milestone milestone;
 

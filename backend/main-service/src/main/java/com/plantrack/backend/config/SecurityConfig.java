@@ -43,10 +43,10 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.GET, "/api/users/mentions").hasAnyRole("EMPLOYEE", "MANAGER", "ADMIN")
                 // Allow Managers and Admins to GET full users list (for assigning initiatives)
                 .requestMatchers(HttpMethod.GET, "/api/users").hasAnyRole("MANAGER", "ADMIN")
-                
+                // Allow Managers and Admins to GET departments list
+                .requestMatchers(HttpMethod.GET, "/api/users/departments").hasAnyRole("MANAGER", "ADMIN")
                 // Allow Employees, Managers, and Admins to GET their own initiatives
                 .requestMatchers(HttpMethod.GET, "/api/users/*/initiatives").hasAnyRole("EMPLOYEE", "MANAGER", "ADMIN")
-                
                 // Allow Employees, Managers, and Admins to GET their assigned plans
                 .requestMatchers(HttpMethod.GET, "/api/users/*/assigned-plans").hasAnyRole("EMPLOYEE", "MANAGER", "ADMIN")
 
@@ -76,8 +76,8 @@ public class SecurityConfig {
                 // DASHBOARD STATS
                 .requestMatchers("/api/dashboard/**").hasAnyRole("MANAGER", "EMPLOYEE", "ADMIN")
 
-                // ANALYTICS (All authenticated users - Employees, Managers, and Admins)
-                .requestMatchers("/api/analytics/**").hasAnyRole("EMPLOYEE", "MANAGER", "ADMIN")
+                // ANALYTICS
+                .requestMatchers("/api/analytics/**").hasAnyRole("MANAGER", "ADMIN")
 
                 // AUDIT LOGS (Admin only)
                 .requestMatchers("/api/audit-logs/**").hasRole("ADMIN")

@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -73,8 +73,8 @@ public class AnalyticsController {
     @GetMapping("/reports")
     public ResponseEntity<List<AnalyticsReport>> getReportsByDateRange(
             @RequestParam String department,
-            @RequestParam LocalDate startDate,
-            @RequestParam LocalDate endDate) {
+            @RequestParam LocalDateTime startDate,
+            @RequestParam LocalDateTime endDate) {
         List<AnalyticsReport> reports = analyticsService.getReportsByDateRange(department, startDate, endDate);
         return ResponseEntity.ok(reports);
     }

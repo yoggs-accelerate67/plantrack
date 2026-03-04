@@ -11,5 +11,6 @@ public interface UserService {
     public User getUserById(Long id);
     public User updateUser(Long id, User userDetails);
     public void deleteUser(Long id);
+    public List<String> getAllDepartments();
 
 }

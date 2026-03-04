@@ -9,8 +9,11 @@ import com.plantrack.backend.repository.MilestoneRepository;
 import com.plantrack.backend.repository.InitiativeRepository;    
 import jakarta.persistence.EntityManager;    
 import jakarta.transaction.Transactional;    
-import org.springframework.beans.factory.annotation.Autowired;    
-import org.springframework.security.crypto.password.PasswordEncoder;    
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;    
 import com.plantrack.backend.service.AuditService;
 import java.util.List;    
@@ -188,5 +191,39 @@ public class UserServiceImpl implements UserService {
             
         // Audit Log    
         auditService.logDelete("USER", id, "Deleted user: " + userName + " (" + userEmail + ")");    
-    }    
+    }
+
+    @Override
+    public List<String> getAllDepartments() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+
+        // If auth is missing, safest fallback is "all" (or empty list if you prefer)
+        if (auth == null) {
+            return userRepository.findDistinctDepartments();
+        }
+
+        // Check if current user has ROLE_MANAGER using the same pattern you shared
+        boolean isManager = auth.getAuthorities().stream()
+                .anyMatch(a -> a.getAuthority().equals("ROLE_MANAGER"));
+
+        String email = auth.getName();
+
+        // If manager, return only their department
+        if (isManager) {
+            if (email == null || email.isBlank()) {
+                // No principal email available → safest policy: return empty or fallback
+                return List.of();
+            }
+
+            String dept = userRepository.findByEmail(email).get().getDepartment();
+            if (dept != null && !dept.isBlank()) {
+                return List.of(dept);
+            }
+            // Manager without a department configured → return empty
+            return List.of();
+        }
+
+        // Non‑manager (e.g., ADMIN) → return all distinct departments
+        return userRepository.findDistinctDepartments();
+    }
 }

@@ -3,6 +3,7 @@ package com.plantrack.backend.service.impl;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -218,7 +219,7 @@ public class AnalyticsServiceImpl implements AnalyticsService {
     }
 
     @Override
-    public List<AnalyticsReport> getReportsByDateRange(String department, java.time.LocalDate startDate, java.time.LocalDate endDate) {
+    public List<AnalyticsReport> getReportsByDateRange(String department, LocalDateTime startDate, LocalDateTime endDate) {
         return analyticsReportRepository.findByDepartmentAndDateRange(department, startDate, endDate);
     }
 

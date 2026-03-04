@@ -114,10 +114,6 @@ export class MyInitiativesComponent implements OnInit {
     });
   }
 
-  filterInitiatives(): void {
-    // Filtering is handled by computed signal
-  }
-
   updateStatus(initiative: Initiative, event: Event): void {
     const newStatus = (event.target as HTMLSelectElement).value;
 

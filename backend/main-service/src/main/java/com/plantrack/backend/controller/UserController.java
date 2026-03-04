@@ -56,6 +56,12 @@ public class UserController {
                 .orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).build());
     }
 
+    @GetMapping("/departments")
+    public ResponseEntity<List<String>> getAllDepartments() {
+        List<String> departments = userService.getAllDepartments();
+        return ResponseEntity.ok(departments);
+    }
+
     @PutMapping("/{id}")
     public ResponseEntity<User> updateUser(@PathVariable Long id, @Valid @RequestBody User userDetails) {
         User updatedUser = userService.updateUser(id, userDetails);
