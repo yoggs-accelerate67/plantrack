@@ -35,8 +35,17 @@ export interface Plan {
   status?: PlanStatus;
   startDate?: string;
   endDate?: string;
+  
+  // Keeping this as it is for backward compatibility (if used anywhere in the project)
   userId?: number;
   userName?: string;
+
+  // Fix: Add the nested user object to match the nested backend response
+  user?: {
+    userId?: number;
+    name?: string;
+    email?: string;
+  };
 }
 
 export interface PlanDetail extends Plan {

@@ -92,12 +92,12 @@
                   plan()!.status
                 }}</strong></span
               >
-              <span
-                >Assigned to:
-                <strong class="text-slate-900 dark:text-slate-100">{{
-                  plan()!.userName
-                }}</strong></span
-              >
+              <span>
+                Assigned to:
+                <strong class="text-slate-900 dark:text-slate-100">
+                  {{ plan()!.user?.name || 'Unassigned' }}
+                </strong>
+              </span>
             </div>
           </div>
           <div class="ml-6">

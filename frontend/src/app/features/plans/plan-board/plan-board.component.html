@@ -120,9 +120,9 @@
                       class="text-xs px-2 py-1 rounded-md bg-slate-200 dark:bg-slate-600 text-slate-700 dark:text-slate-300 font-medium"
                       >{{ plan.priority }}</span
                     >
-                    <span class="text-xs text-slate-500 dark:text-slate-400">{{
-                      plan.userName
-                    }}</span>
+                    <span class="text-xs text-slate-500 dark:text-slate-400">
+                      {{ plan.user?.name || 'Unassigned' }}
+                    </span>
                   </div>
                 </div>
               }
