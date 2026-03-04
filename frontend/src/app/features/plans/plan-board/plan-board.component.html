@@ -1,136 +1,103 @@
-<div
-  class="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50/30 to-indigo-50/50 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900"
->
-  <!-- Navigation Header -->
+<div class="min-h-screen bg-slate-50 dark:bg-slate-900 transition-colors duration-200">
   <app-navbar />
+  
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-    <div class="mb-8">
+    <div class="mb-10">
       <h2 class="text-3xl font-bold text-slate-900 dark:text-slate-100 mb-2">
         Plan Board
       </h2>
       <p class="text-slate-600 dark:text-slate-400">
-        Kanban view of all plans organized by status
+        Vertical backlog view. 
+        @if (authService.isManager() || authService.isAdmin()) {
+          Drag and drop cards to update their status.
+        } @else {
+          Click on a card to view its details and your assigned initiatives.
+        }
       </p>
     </div>
 
     @if (loadingService.isLoading()) {
-      <div class="flex justify-center items-center py-12">
-        <div
-          class="animate-spin rounded-full h-12 w-12 border-b-2 border-teal-600"
-        ></div>
+      <div class="flex justify-center items-center py-20">
+        <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-teal-600"></div>
       </div>
     } @else {
-      <div class="grid grid-cols-1 md:grid-cols-5 gap-6">
+      <div cdkDropListGroup class="space-y-10 pb-12">
+        
         @for (status of statusColumns; track status) {
-          <div class="card">
-            <div
-              class="mb-4 pb-3 border-b border-slate-200 dark:border-slate-700"
-            >
-              <div class="flex items-center justify-between">
-                <div>
-                  <h3
-                    class="font-bold text-slate-900 dark:text-slate-100 text-sm uppercase tracking-wide"
-                  >
-                    {{ status.replace("_", " ") }}
-                  </h3>
-                  <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">
-                    {{ getPlansByStatus(status).length }} plans
-                  </p>
-                </div>
+          <div class="flex flex-col">
+            <div class="flex items-center space-x-3 mb-4 border-b border-slate-200 dark:border-slate-700 pb-3">
+              <h3 class="text-lg font-bold text-slate-800 dark:text-slate-200 uppercase tracking-wider flex items-center">
+                {{ status.replace("_", " ") }}
+                
                 @if (status === "ON_HOLD") {
-                  <div
-                    class="w-2 h-2 bg-orange-500 rounded-full animate-pulse"
-                    title="Plans on hold are temporarily paused"
-                  ></div>
+                  <div class="ml-2 w-2.5 h-2.5 bg-orange-500 rounded-full animate-pulse" title="Plans on hold"></div>
                 }
                 @if (status === "CANCELLED") {
-                  <svg
-                    class="w-4 h-4 text-red-500"
-                    fill="currentColor"
-                    viewBox="0 0 20 20"
-                    title="Cancelled plans are no longer active"
-                  >
-                    <path
-                      fill-rule="evenodd"
-                      d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
-                      clip-rule="evenodd"
-                    />
+                  <svg class="ml-2 w-4 h-4 text-red-500" fill="currentColor" viewBox="0 0 20 20" title="Cancelled">
+                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
                   </svg>
                 }
-              </div>
+              </h3>
+              <span class="bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-300 py-0.5 px-3 rounded-full text-sm font-semibold">
+                {{ groupedPlans[status].length }}
+              </span>
             </div>
-            <div class="space-y-3 min-h-[200px]">
-              @for (plan of getPlansByStatus(status); track plan.planId) {
-                <div
+
+            <div 
+              cdkDropList
+              [cdkDropListData]="groupedPlans[status]"
+              (cdkDropListDropped)="drop($event, status)"
+              class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 rounded-xl min-h-[120px] transition-colors p-2 -mx-2"
+              [class.bg-slate-100]="authService.isManager() || authService.isAdmin()"
+              [class.dark:bg-slate-800]="authService.isManager() || authService.isAdmin()"
+            >
+              @for (plan of groupedPlans[status]; track plan.planId) {
+                <div 
+                  cdkDrag
+                  [cdkDragData]="plan"
+                  [cdkDragDisabled]="!(authService.isManager() || authService.isAdmin())"
                   (click)="navigateToPlan(plan.planId!)"
-                  class="rounded-lg p-4 hover:shadow-lg transition-all cursor-pointer border-2 group"
+                  class="bg-white dark:bg-slate-800 rounded-xl p-5 shadow-sm hover:shadow-md transition-all duration-200 border-y border-r border-slate-200 dark:border-slate-700 hover:-translate-y-1 relative group border-l-4"
                   [ngClass]="{
-                    'bg-gradient-to-br from-slate-50 to-white dark:from-slate-700 dark:to-slate-800 border-slate-200 dark:border-slate-600 hover:border-teal-300 dark:hover:border-teal-600':
-                      plan.status === 'PLANNED' ||
-                      plan.status === 'IN_PROGRESS' ||
-                      plan.status === 'COMPLETED',
-                    'bg-gradient-to-br from-orange-50 to-orange-100/50 dark:from-orange-900/30 dark:to-orange-800/20 border-orange-300 dark:border-orange-700 hover:border-orange-400 dark:hover:border-orange-600 opacity-90':
-                      plan.status === 'ON_HOLD',
-                    'bg-gradient-to-br from-red-50 to-red-100/50 dark:from-red-900/30 dark:to-red-800/20 border-red-300 dark:border-red-700 hover:border-red-400 dark:hover:border-red-600 opacity-75':
-                      plan.status === 'CANCELLED',
+                    'border-l-slate-400 dark:border-l-slate-500': plan.status === 'PLANNED',
+                    'border-l-teal-500 dark:border-l-teal-400': plan.status === 'IN_PROGRESS',
+                    'border-l-green-500 dark:border-l-green-400': plan.status === 'COMPLETED',
+                    'border-l-orange-400 dark:border-l-orange-500 opacity-90': plan.status === 'ON_HOLD',
+                    'border-l-red-500 dark:border-l-red-400 opacity-75': plan.status === 'CANCELLED',
+                    'cursor-grab active:cursor-grabbing': authService.isManager() || authService.isAdmin(),
+                    'cursor-pointer': !(authService.isManager() || authService.isAdmin())
                   }"
                 >
-                  <div class="flex items-start justify-between mb-2">
-                    <h4
-                      class="font-semibold text-slate-900 dark:text-slate-100 group-hover:text-teal-600 dark:group-hover:text-teal-400 transition-colors flex-1 pr-2"
-                    >
+                  <div class="flex items-start justify-between mb-3">
+                    <h4 class="font-bold text-slate-800 dark:text-slate-100 group-hover:text-teal-600 dark:group-hover:text-teal-400 transition-colors leading-tight pr-2">
                       {{ plan.title }}
                     </h4>
-                    @if (plan.status === "ON_HOLD") {
-                      <svg
-                        class="w-4 h-4 text-orange-600 dark:text-orange-400 flex-shrink-0 mt-0.5"
-                        fill="currentColor"
-                        viewBox="0 0 20 20"
-                      >
-                        <path
-                          fill-rule="evenodd"
-                          d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
-                          clip-rule="evenodd"
-                        />
-                      </svg>
-                    }
-                    @if (plan.status === "CANCELLED") {
-                      <svg
-                        class="w-4 h-4 text-red-600 dark:text-red-400 flex-shrink-0 mt-0.5"
-                        fill="currentColor"
-                        viewBox="0 0 20 20"
-                      >
-                        <path
-                          fill-rule="evenodd"
-                          d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
-                          clip-rule="evenodd"
-                        />
-                      </svg>
-                    }
+                    <span class="text-[10px] font-bold uppercase tracking-wide px-2 py-1 rounded-md bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 shrink-0">
+                      {{ plan.priority }}
+                    </span>
                   </div>
-                  <p
-                    class="text-xs text-slate-600 dark:text-slate-400 mb-3 line-clamp-2 min-h-[2rem]"
-                  >
-                    {{ plan.description || "No description" }}
+
+                  <p class="text-sm text-slate-500 dark:text-slate-400 mb-5 line-clamp-2">
+                    {{ plan.description || "No description provided." }}
                   </p>
-                  <div
-                    class="flex justify-between items-center pt-2 border-t border-slate-100 dark:border-slate-700"
-                  >
-                    <span
-                      class="text-xs px-2 py-1 rounded-md bg-slate-200 dark:bg-slate-600 text-slate-700 dark:text-slate-300 font-medium"
-                      >{{ plan.priority }}</span
-                    >
-                    <span class="text-xs text-slate-500 dark:text-slate-400">
-                      {{ plan.user?.name || 'Unassigned' }}
+
+                  <div class="mt-auto pt-3 border-t border-slate-100 dark:border-slate-700/60 flex items-center">
+                    <span class="text-xs font-medium text-slate-500 dark:text-slate-400">
+                      Assigned to: 
+                      <span class="text-slate-800 dark:text-slate-200 ml-1 font-semibold">
+                        {{ plan.user?.name || 'Unassigned' }}
+                      </span>
                     </span>
                   </div>
                 </div>
               }
-              @if (getPlansByStatus(status).length === 0) {
-                <div
-                  class="text-center py-8 text-slate-400 dark:text-slate-500"
-                >
-                  <p class="text-xs">No plans</p>
+
+              @if (groupedPlans[status].length === 0) {
+                <div class="col-span-full flex flex-col items-center justify-center py-10 border-2 border-dashed border-slate-300 dark:border-slate-700 rounded-xl text-slate-400 dark:text-slate-500 bg-slate-50/50 dark:bg-slate-800/50">
+                  <p class="text-sm font-medium">No plans in this status</p>
+                  @if (authService.isManager() || authService.isAdmin()) {
+                    <p class="text-xs mt-1">Drag and drop a plan here to update it</p>
+                  }
                 </div>
               }
             </div>

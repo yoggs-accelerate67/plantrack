@@ -2,6 +2,12 @@ import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
+import { 
+  CdkDragDrop, 
+  moveItemInArray, 
+  transferArrayItem, 
+  DragDropModule 
+} from '@angular/cdk/drag-drop';
 
 import { AuthService } from '@core/services/auth.service';
 import { PlanService } from '../services/plan.service';
@@ -13,11 +19,12 @@ import { NavbarComponent } from '@core/layout/navbar/navbar.component';
 @Component({
   selector: 'app-plan-board',
   standalone: true,
-  imports: [CommonModule, RouterModule, FormsModule, NavbarComponent],
+  imports: [CommonModule, RouterModule, FormsModule, NavbarComponent, DragDropModule],
   templateUrl: './plan-board.component.html',
 })
 export class PlanBoardComponent implements OnInit {
   plans = signal<Plan[]>([]);
+  
   statusColumns = [
     'PLANNED',
     'IN_PROGRESS',
@@ -25,6 +32,15 @@ export class PlanBoardComponent implements OnInit {
     'ON_HOLD',
     'CANCELLED',
   ];
+
+  // Group plans into distinct arrays so CDK Drag & Drop can transfer items
+  groupedPlans: Record<string, Plan[]> = {
+    'PLANNED': [],
+    'IN_PROGRESS': [],
+    'COMPLETED': [],
+    'ON_HOLD': [],
+    'CANCELLED': []
+  };
 
   constructor(
     public authService: AuthService,
@@ -46,8 +62,8 @@ export class PlanBoardComponent implements OnInit {
     if (this.authService.isEmployee() && userId) {
       this.planService.getPlansWithAssignedInitiatives(userId).subscribe({
         next: (plans) => {
-          console.log(plans);
           this.plans.set(plans);
+          this.organizePlansByStatus(plans);
           this.loadingService.hide();
         },
         error: (error) => {
@@ -60,19 +76,61 @@ export class PlanBoardComponent implements OnInit {
       this.planService.getAllPlans(0, 100).subscribe({
         next: (response) => {
           this.plans.set(response.content);
+          this.organizePlansByStatus(response.content);
           this.loadingService.hide();
         },
         error: (error) => {
           console.error('Failed to load plans:', error);
           this.loadingService.hide();
-          // Error interceptor will handle the toast
         },
       });
     }
   }
 
-  getPlansByStatus(status: string): Plan[] {
-    return this.plans().filter((p) => p.status === status);
+  organizePlansByStatus(plans: Plan[]): void {
+    this.statusColumns.forEach(status => {
+      this.groupedPlans[status] = plans.filter(p => p.status === status);
+    });
+  }
+
+  drop(event: CdkDragDrop<Plan[]>, newStatus: string): void {
+    // If dropping in the same container, just reorder
+    if (event.previousContainer === event.container) {
+      moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
+    } else {
+      // Moving to a new status container
+      const planToMove = event.previousContainer.data[event.previousIndex];
+      const oldStatus = planToMove.status;
+      
+      // 1. Optimistic UI Update
+      planToMove.status = newStatus as PlanStatus;
+      transferArrayItem(
+        event.previousContainer.data,
+        event.container.data,
+        event.previousIndex,
+        event.currentIndex,
+      );
+
+      // 2. Call backend to save
+      this.planService.updatePlan(planToMove.planId!, planToMove).subscribe({
+        next: () => {
+          const friendlyStatus = newStatus.replace('_', ' ').toLowerCase();
+          this.toastService.showSuccess(`Plan moved to ${friendlyStatus}`);
+        },
+        error: (err) => {
+          // Rollback if the API call fails
+          planToMove.status = oldStatus;
+          transferArrayItem(
+            event.container.data,
+            event.previousContainer.data,
+            event.currentIndex,
+            event.previousIndex,
+          );
+          this.toastService.showError('Failed to update plan status. Card returned to original position.');
+          console.error(err);
+        }
+      });
+    }
   }
 
   navigateToPlan(planId: number): void {
