@@ -280,7 +280,7 @@
                         </svg>
                         <span
                           >Progress:
-                          {{ milestone.completionPercent || 0 }}%</span
+                          {{ (milestone.completionPercent || 0) | number:'1.0-0'}}%</span
                         >
                       </span>
                       <span
