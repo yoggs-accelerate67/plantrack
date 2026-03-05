@@ -213,7 +213,13 @@ export class PlanDetailComponent implements OnInit {
             return milestone;
           });
         }
+
+        // Update userName field from user object
+        data.userName = data.user?.name || data.userName || 'Unknown';
+        data.userId = data.user?.userId || data.userId;
+
         this.plan.set(data);
+        console.log(this.plan());
         this.expandedMilestones.set(
           new Array(data.milestones?.length || 0).fill(false),
         );

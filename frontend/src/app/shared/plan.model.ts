@@ -102,13 +102,6 @@ export interface Initiative {
   };
 }
 
-export interface DashboardStats {
-  totalPlans: number;
-  activeInitiatives: number;
-  completedMilestones: number;
-  totalUsers: number;
-}
-
 export interface LoginRequest {
   email: string;
   password: string;

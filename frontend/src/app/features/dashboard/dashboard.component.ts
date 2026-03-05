@@ -4,12 +4,10 @@ import { FormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 
 import { AuthService } from '@core/services/auth.service';
-import { DashboardService } from './dashboard.service';
 import { PlanService } from '../plans/services/plan.service';
 import { ToastService } from '@core/services/toast.service';
 import { LoadingService } from '@core/services/loading.service';
 import {
-  DashboardStats,
   Plan,
   PlanStatus,
   PlanPriority,
@@ -37,7 +35,6 @@ export class DashboardComponent implements OnInit {
 
   constructor(
     public authService: AuthService,
-    private dashboardService: DashboardService,
     private planService: PlanService,
     private toastService: ToastService,
     public loadingService: LoadingService,
@@ -105,6 +102,7 @@ export class DashboardComponent implements OnInit {
             userName: plan.user?.name || plan.userName || 'Unknown',
             userId: plan.user?.userId || plan.userId,
           }));
+          console.log(response);
           this.plans.set(mappedPlans);
           plansLoaded = true;
           hideLoading();
