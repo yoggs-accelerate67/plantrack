@@ -362,19 +362,17 @@ export class PlanDetailComponent implements OnInit {
   }
 
   updateInitiativeStatus(initiative: Initiative, event: Event): void {
-    const select = event.target as HTMLSelectElement;
-    const newStatus = select.value;
+      const select = event.target as HTMLSelectElement;
+      const newStatus = select.value;
 
-    // Create update payload with only status (employees can only update status)
-    const updated: any = {
-      status: newStatus,
-    };
+      // Create the update payload with ALL required fields, regardless of user role
+      const updated: any = {
+        title: initiative.title,
+        description: initiative.description || '',
+        status: newStatus,
+      };
 
-    // If manager/admin, include other fields; if employee, only status
-    if (this.authService.isManager() || this.authService.isAdmin()) {
-      updated.title = initiative.title;
-      updated.description = initiative.description;
-      // Handle multiple assignees (new format)
+      // Ensure assigned users are kept intact in the payload
       if (
         initiative.assignedUsers &&
         Array.isArray(initiative.assignedUsers) &&
@@ -386,34 +384,32 @@ export class PlanDetailComponent implements OnInit {
       else if (initiative.assignedUserId || initiative.assignedUser?.userId) {
         updated.assignedUsers = [
           {
-            userId:
-              initiative.assignedUserId || initiative.assignedUser?.userId,
+            userId: initiative.assignedUserId || initiative.assignedUser?.userId,
           },
         ];
       }
-    }
 
-    this.loadingService.show();
-    this.initiativeService
-      .updateInitiative(initiative.initiativeId!, updated)
-      .subscribe({
-        next: () => {
-          this.loadingService.hide();
-          this.toastService.showSuccess('Initiative status updated!');
-          const planId = this.plan()!.planId!;
-          this.loadPlan(planId);
-        },
-        error: (error) => {
-          console.error('Failed to update initiative status:', error);
-          this.loadingService.hide();
-          const errorMsg =
-            error.error?.message || 'Failed to update initiative status';
-          this.toastService.showError(errorMsg);
-          // Revert the select value
-          select.value = initiative.status || 'PLANNED';
-        },
-      });
-  }
+      this.loadingService.show();
+      this.initiativeService
+        .updateInitiative(initiative.initiativeId!, updated)
+        .subscribe({
+          next: () => {
+            this.loadingService.hide();
+            this.toastService.showSuccess('Initiative status updated!');
+            const planId = this.plan()!.planId!;
+            this.loadPlan(planId);
+          },
+          error: (error) => {
+            console.error('Failed to update initiative status:', error);
+            this.loadingService.hide();
+            const errorMsg =
+              error.error?.message || 'Failed to update initiative status';
+            this.toastService.showError(errorMsg);
+            // Revert the select value visually if it fails
+            select.value = initiative.status || 'PLANNED';
+          },
+        });
+    }
 
   editMilestone(milestone: MilestoneDetail, event: Event): void {
     event.stopPropagation();
