@@ -8,6 +8,7 @@ import {
   transferArrayItem, 
   DragDropModule 
 } from '@angular/cdk/drag-drop';
+import { CdkScrollable } from '@angular/cdk/scrolling'; // ADD THIS LINE
 
 import { AuthService } from '@core/services/auth.service';
 import { PlanService } from '../services/plan.service';
@@ -19,7 +20,7 @@ import { NavbarComponent } from '@core/layout/navbar/navbar.component';
 @Component({
   selector: 'app-plan-board',
   standalone: true,
-  imports: [CommonModule, RouterModule, FormsModule, NavbarComponent, DragDropModule],
+  imports: [CommonModule, RouterModule, FormsModule, NavbarComponent, DragDropModule, CdkScrollable],
   templateUrl: './plan-board.component.html',
 })
 export class PlanBoardComponent implements OnInit {

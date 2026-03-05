@@ -1,20 +1,25 @@
-<div class="min-h-screen bg-slate-50 dark:bg-slate-900 transition-colors duration-200">
-  <app-navbar />
+<div class="relative h-screen overflow-hidden bg-slate-50 dark:bg-slate-900 transition-colors duration-200">
   
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-    <div class="mb-10">
-      <h2 class="text-3xl font-bold text-slate-900 dark:text-slate-100 mb-2">
-        Plan Board
-      </h2>
-      <p class="text-slate-600 dark:text-slate-400">
-        Vertical backlog view. 
-        @if (authService.isManager() || authService.isAdmin()) {
-          Drag and drop cards to update their status.
-        } @else {
-          Click on a card to view its details and your assigned initiatives.
-        }
-      </p>
-    </div>
+  <div class="absolute top-0 left-0 w-full z-50 shadow-sm">
+    <app-navbar />
+  </div>
+  
+  <div class="h-full overflow-y-auto custom-scrollbar pt-24 pb-32" cdkScrollable>
+    
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="mb-10">
+        <h2 class="text-3xl font-bold text-slate-900 dark:text-slate-100 mb-2">
+          Plan Board
+        </h2>
+        <p class="text-slate-600 dark:text-slate-400">
+          Vertical backlog view. 
+          @if (authService.isManager() || authService.isAdmin()) {
+            Drag and drop cards to update their status.
+          } @else {
+            Click on a card to view its details and your assigned initiatives.
+          }
+        </p>
+      </div>
 
     @if (loadingService.isLoading()) {
       <div class="flex justify-center items-center py-20">
@@ -47,6 +52,7 @@
               cdkDropList
               [cdkDropListData]="groupedPlans[status]"
               (cdkDropListDropped)="drop($event, status)"
+              [cdkDropListAutoScrollStep]="35"
               class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 rounded-xl min-h-[120px] transition-colors p-2 -mx-2"
               [class.bg-slate-100]="authService.isManager() || authService.isAdmin()"
               [class.dark:bg-slate-800]="authService.isManager() || authService.isAdmin()"

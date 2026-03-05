@@ -124,43 +124,58 @@
   background: rgba(148, 163, 184, 0.6);
 }
 /* ==========================================================
-   CDK Drag and Drop Custom Animations & Styles
+   CDK Drag and Drop Custom Animations & Styles (ULTRA SMOOTH)
    ========================================================== */
 
-/* The card currently being dragged */
+/* 1. The card currently being dragged (The "In-Air" physics) */
 .cdk-drag-preview {
   box-sizing: border-box;
-  border-radius: 0.75rem; /* Matches Tailwind rounded-xl */
-  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  border-radius: 0.75rem; 
+  /* Deep, soft shadow makes it feel like it's floating much higher */
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25), 0 0 15px rgba(0,0,0,0.05);
   opacity: 0.95;
-  transform: scale(1.02); /* Pop out effect */
   background-color: white;
   border-left-width: 4px;
-}
-.dark .cdk-drag-preview {
-  background-color: #1e293b; /* slate-800 */
-  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5);
+  
+  /* THE SECRET SAUCE: Scale it up slightly and add a 3-degree tilt */
+  transform: scale(1.04) rotate(3deg) !important; 
+  
+  /* Ensure the cursor stays as a grabbing hand even if the mouse slips */
+  cursor: grabbing !important;
 }
 
-/* The empty space where the card will land if dropped */
-.cdk-drag-placeholder {
-  opacity: 0.4;
-  border: 2px dashed #94a3b8; /* slate-400 */
-  background-color: #f1f5f9; /* slate-100 */
-  border-radius: 0.75rem;
-  transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+.dark .cdk-drag-preview {
+  background-color: #1e293b; /* slate-800 */
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
 }
+
+/* 2. The empty space where the card will land */
+.cdk-drag-placeholder {
+  opacity: 0.3;
+  border: 2px dashed #cbd5e1; /* slate-300 */
+  background-color: #f8fafc; /* slate-50 */
+  border-radius: 0.75rem;
+  /* Smoothly animate the gap opening up */
+  transition: transform 300ms cubic-bezier(0.2, 1, 0.1, 1);
+}
+
 .dark .cdk-drag-placeholder {
   background-color: #0f172a; /* slate-900 */
   border-color: #475569; /* slate-600 */
 }
 
-/* Animate the card snapping into place when dropped */
+/* 3. Animate the card snapping into its final place when dropped */
 .cdk-drag-animating {
-  transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+  /* Using a custom bezier curve for a 'springy' snap into place */
+  transition: transform 300ms cubic-bezier(0.2, 1, 0.1, 1) !important;
 }
 
-/* Animate the surrounding cards moving out of the way */
+/* 4. Animate the surrounding cards sliding smoothly out of the way */
 .cdk-drop-list-dragging .cdk-drag {
-  transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+  transition: transform 300ms cubic-bezier(0.2, 1, 0.1, 1);
+}
+
+/* Optional: Prevent text highlighting while furiously dragging */
+.cdk-drop-list-dragging {
+  user-select: none;
 }
