@@ -105,6 +105,13 @@ public class MilestoneServiceImpl implements MilestoneService {
                         .setParameter("initiativeId", initiativeId)
                         .executeUpdate();
 
+
+                entityManager.createNativeQuery("DELETE cm FROM comment_mentions cm " +
+                        "INNER JOIN comments c ON cm.comment_id = c.comment_id " +
+                        "WHERE c.initiative_id = :initiativeId")
+                        .setParameter("initiativeId", initiativeId)
+                        .executeUpdate();
+
                 // Delete comments using native SQL
                 entityManager.createNativeQuery("DELETE FROM comments WHERE initiative_id = :initiativeId")
                         .setParameter("initiativeId", initiativeId)

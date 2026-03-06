@@ -19,7 +19,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -41,6 +42,10 @@ public class InitiativeServiceImpl implements InitiativeService{
 
     @Autowired
     private AuditService auditService;
+
+
+    @PersistenceContext
+    private EntityManager entityManager;
 
     @Autowired
     private NotificationService notificationService;
@@ -381,8 +386,8 @@ public class InitiativeServiceImpl implements InitiativeService{
         logger.debug("Saved milestone progress update: milestoneId={}", milestone.getMilestoneId());
     }
 
-    // Add this method inside the class
     @Override
+    @Transactional 
     public void deleteInitiative(Long id) {
         logger.debug("Deleting initiative: initiativeId={}", id);
 
@@ -395,8 +400,28 @@ public class InitiativeServiceImpl implements InitiativeService{
         Milestone milestone = initiative.getMilestone();
 
         // Audit the deletion
-        // Note: Assuming auditService has a generic log method or you can use logUpdate as a fallback if logDelete isn't defined
         auditService.logUpdate("INITIATIVE", id, "Deleted initiative: " + initiative.getTitle());
+
+        // --- NEW CODE: Clean up dependencies to prevent Foreign Key Constraints ---
+        
+        // 1. Clear assignees
+        entityManager.createNativeQuery("DELETE FROM initiative_assignees WHERE initiative_id = :initiativeId")
+                .setParameter("initiativeId", id)
+                .executeUpdate();
+
+        // 2. Delete comment mentions
+        entityManager.createNativeQuery("DELETE cm FROM comment_mentions cm " +
+                "INNER JOIN comments c ON cm.comment_id = c.comment_id " +
+                "WHERE c.initiative_id = :initiativeId")
+                .setParameter("initiativeId", id)
+                .executeUpdate();
+
+        // 3. Delete comments
+        entityManager.createNativeQuery("DELETE FROM comments WHERE initiative_id = :initiativeId")
+                .setParameter("initiativeId", id)
+                .executeUpdate();
+                
+        // -------------------------------------------------------------------------
 
         // Delete the initiative
         initiativeRepository.deleteById(id);

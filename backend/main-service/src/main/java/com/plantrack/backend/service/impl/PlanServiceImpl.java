@@ -13,7 +13,8 @@ import com.plantrack.backend.repository.PlanRepository;
 import com.plantrack.backend.repository.UserRepository;
 import com.plantrack.backend.service.PlanService;
 import com.plantrack.backend.service.AuditService;
-
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,6 +49,9 @@ public class PlanServiceImpl implements PlanService {
     private NotificationService notificationService;
     @Autowired
     private AuditService auditService;
+    
+    @PersistenceContext
+    private EntityManager entityManager;
 
     // --- SECURITY HELPER METHOD ---
     private User getCurrentUser() {
@@ -311,6 +315,7 @@ public class PlanServiceImpl implements PlanService {
     }
 
     // 6. Logic to Delete Plan
+    @Transactional 
     public void deletePlan(Long planId) {
         Plan plan = planRepository.findById(planId)
                 .orElseThrow(() -> new RuntimeException("Plan not found with id: " + planId));
@@ -324,6 +329,28 @@ public class PlanServiceImpl implements PlanService {
         }
 
         String planTitle = plan.getTitle();
+
+        // --- NEW CODE: Clean up deep dependencies to prevent Foreign Key Constraints ---
+        
+        // 1. Clear assignees for all initiatives in this plan
+        entityManager.createNativeQuery("DELETE ia FROM initiative_assignees ia " +
+                "INNER JOIN initiatives i ON ia.initiative_id = i.initiative_id " +
+                "INNER JOIN milestones m ON i.milestone_id = m.milestone_id " +
+                "WHERE m.plan_id = :planId")
+                .setParameter("planId", planId)
+                .executeUpdate();
+
+        // 2. Clear comment mentions for all comments in all initiatives in this plan
+        entityManager.createNativeQuery("DELETE cm FROM comment_mentions cm " +
+                "INNER JOIN comments c ON cm.comment_id = c.comment_id " +
+                "INNER JOIN initiatives i ON c.initiative_id = i.initiative_id " +
+                "INNER JOIN milestones m ON i.milestone_id = m.milestone_id " +
+                "WHERE m.plan_id = :planId")
+                .setParameter("planId", planId)
+                .executeUpdate();
+                
+        // -----------------------------------------------------------------------------
+
         planRepository.deleteById(planId);
 
         auditService.logDelete("PLAN", planId, "Deleted plan: " + planTitle);
