@@ -246,13 +246,12 @@
       </div>
     }
 
-    <!-- Add/Edit User Modal -->
-    @if (showUserModal()) {
+    <!-- Add/Edit User Modal -->@if (showUserModal()) {
       <div
         class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4"
       >
         <div
-          class="bg-white dark:bg-slate-800 rounded-3xl shadow-2xl max-w-md w-full p-8 border border-slate-200 dark:border-slate-700"
+          class="bg-white dark:bg-slate-800 rounded-3xl shadow-2xl max-w-md w-full p-8 border border-slate-200 dark:border-slate-700 max-h-[90vh] overflow-y-auto"
         >
           <div class="flex items-center space-x-3 mb-6">
             <div
@@ -383,5 +382,6 @@
         </div>
       </div>
     }
+    
   </div>
 </div>
