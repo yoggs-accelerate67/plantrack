@@ -4,7 +4,7 @@ import com.plantrack.notificationservice.model.Notification;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-
+import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 public interface NotificationRepository extends JpaRepository<Notification, Long> {
@@ -14,4 +14,8 @@ public interface NotificationRepository extends JpaRepository<Notification, Long
 
     @Query("SELECT COUNT(n) FROM Notification n WHERE n.user = :userId AND n.status = 'UNREAD'")
     Long countUnreadByUserId(@Param("userId") Long userId);
+
+
+    @Transactional
+    void deleteByUser(Long userId);
 }

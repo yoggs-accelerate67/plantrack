@@ -8,7 +8,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
-
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 @FeignClient("notification-service")
 public interface NotificationService {
     @PostMapping("/api/notifications/create")
@@ -22,5 +23,8 @@ public interface NotificationService {
     @PostMapping("/api/notifications/status-update")
     @ResponseStatus(HttpStatus.CREATED)
     public void notifyStatusUpdate(@RequestBody StatusUpdateRequest req);
+
+    @DeleteMapping("/api/notifications/user/{userId}")
+    void deleteNotificationsByUserId(@PathVariable("userId") Long userId);
 
 }

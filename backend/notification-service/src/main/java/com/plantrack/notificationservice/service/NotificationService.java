@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class NotificationService {
@@ -121,7 +122,10 @@ public class NotificationService {
     public Long getUnreadCount(Long userId) {
         return notificationRepository.countUnreadByUserId(userId);
     }
-
+    @Transactional
+    public void deleteByUserId(Long userId) {
+        notificationRepository.deleteByUser(userId);
+    }
     public void markAsRead(Long notificationId) {
         Notification notification = notificationRepository.findById(notificationId)
                 .orElseThrow(() -> new RuntimeException("Notification not found"));

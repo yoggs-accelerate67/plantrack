@@ -8,7 +8,7 @@ import com.plantrack.notificationservice.service.NotificationService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
-
+import org.springframework.web.bind.annotation.DeleteMapping;
 import java.util.List;
 
 @RestController
@@ -85,6 +85,14 @@ public class NotificationController {
                 req.getInitiativeId()
         );
     }
+
+
+    @DeleteMapping("/user/{userId}")
+    public void deleteNotificationsByUserId(@PathVariable Long userId) {
+        // You will need to make sure this method is implemented in your notification service & repository!
+        notificationService.deleteByUserId(userId);
+    }
+
 
  
 }

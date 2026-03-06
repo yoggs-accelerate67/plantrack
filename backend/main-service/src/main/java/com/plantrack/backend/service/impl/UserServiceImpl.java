@@ -40,7 +40,11 @@ public class UserServiceImpl implements UserService {
     private MilestoneRepository milestoneRepository;    
     
     @Autowired    
-    private InitiativeRepository initiativeRepository;    
+    private InitiativeRepository initiativeRepository; 
+
+    @Autowired
+    private com.plantrack.backend.feign.NotificationService notificationFeignClient;
+
     
     @Autowired    
     private EntityManager entityManager;    
@@ -115,10 +119,13 @@ public class UserServiceImpl implements UserService {
         String userName = user.getName();    
         String userEmail = user.getEmail();    
             
-        // Step 1: Delete notifications for this user    
-        entityManager.createNativeQuery("DELETE FROM notifications WHERE user_id = :userId")    
-            .setParameter("userId", id)    
-            .executeUpdate();    
+        // Step 1: Delete notifications for this user using Feign Client instead of Native Query
+        try {
+            notificationFeignClient.deleteNotificationsByUserId(id);
+        } catch (Exception e) {
+            System.err.println("Failed to delete notifications for user: " + e.getMessage());
+            // Optionally handle the error (e.g., throw exception to rollback)
+        }
             
         // Step 2: Delete comment_mentions for comments authored by this user    
         entityManager.createNativeQuery("DELETE cm FROM comment_mentions cm " +    
@@ -161,6 +168,14 @@ public class UserServiceImpl implements UserService {
                     "WHERE i.milestone_id = :milestoneId")    
                     .setParameter("milestoneId", milestoneId)    
                     .executeUpdate();    
+
+                // ---> NEW CODE: Delete comment_mentions for comments on these initiatives <---
+                entityManager.createNativeQuery("DELETE cm FROM comment_mentions cm " +
+                    "INNER JOIN comments c ON cm.comment_id = c.comment_id " +
+                    "INNER JOIN initiatives i ON c.initiative_id = i.initiative_id " +
+                    "WHERE i.milestone_id = :milestoneId")
+                    .setParameter("milestoneId", milestoneId)
+                    .executeUpdate();
                     
                 // Delete comments for initiatives in this milestone    
                 entityManager.createNativeQuery("DELETE c FROM comments c " +    
